@@ -85,9 +85,15 @@ const orgSchema = {
     </main>
     <Footer />
 
+    {/* Clears the sticky mobile CTA so it never covers the end of the footer. */}
+    {!hideMobileCta && <div class="h-[76px] md:hidden" aria-hidden="true" />}
+
     {
       !hideMobileCta && (
-        <div class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 p-3 backdrop-blur md:hidden">
+        <div
+          id="sticky-cta"
+          class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-white/95 p-3 backdrop-blur transition-transform duration-300 md:hidden"
+        >
           <a href="/start" class="btn btn-primary w-full" data-ev="mobile_sticky_cta_click">
             Start My Financial Profile
             <span aria-hidden="true">→</span>
@@ -95,7 +101,21 @@ const orgSchema = {
         </div>
       )
     }
-    {!hideMobileCta && <div class="h-[76px] md:hidden" aria-hidden="true" />}
+    {
+      !hideMobileCta && (
+        <script is:inline>
+          (function () {
+            var bar = document.getElementById('sticky-cta');
+            if (!bar) return;
+            function toggle() {
+              bar.classList.toggle('translate-y-full', window.scrollY < 520);
+            }
+            addEventListener('scroll', toggle, { passive: true });
+            toggle();
+          })();
+        </script>
+      )
+    }
 
     <script is:inline>
       // ---- Centralized analytics utility -------------------------------

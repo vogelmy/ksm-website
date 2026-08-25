@@ -50,7 +50,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
   </section>
 
   <section class="wrap py-12 md:py-16">
-    <div class="mx-auto max-w-3xl">
+    <div class="max-w-3xl">
       <!-- Progress -->
       <div id="wiz-progress" class="mb-10">
         <div class="flex items-baseline justify-between">
@@ -244,7 +244,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
             </div>
           </div>
 
-          <p class="mt-7 text-[0.8125rem] leading-relaxed text-ink-400">
+          <p class="mt-7 text-[0.8125rem] leading-relaxed text-ink-500">
             By continuing you agree that KSM may contact you about your request. KSM is not a lender and
             does not guarantee financing, rates, limits or any other outcome. See our
             <a href="/privacy" class="underline underline-offset-2">Privacy Policy</a> and
@@ -489,6 +489,8 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       return ok;
     }
 
+    var firstRender = true;
+
     function render() {
       steps.forEach(function (s) {
         s.hidden = Number(s.getAttribute('data-step')) !== current;
@@ -502,7 +504,14 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       submitBtn.hidden = current !== total;
       var legend = steps[current - 1].querySelector('legend');
       if (legend) legend.setAttribute('tabindex', '-1');
-      window.scrollTo({ top: Math.max(0, form.getBoundingClientRect().top + window.scrollY - 160), behavior: 'smooth' });
+      // Never move the page on load — only when the visitor advances a step.
+      if (!firstRender) {
+        window.scrollTo({
+          top: Math.max(0, form.getBoundingClientRect().top + window.scrollY - 140),
+          behavior: 'smooth',
+        });
+      }
+      firstRender = false;
       if (window.ksm) window.ksm.track('profile_step_' + current);
     }
 

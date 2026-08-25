@@ -59,8 +59,9 @@ const articleSchema = {
       </div>
     </header>
 
-    <div class="wrap mt-14">
-      <div class="prose-ksm max-w-2xl">
+    <div class="wrap mt-14 grid gap-14 lg:grid-cols-[minmax(0,44rem)_minmax(0,17rem)] lg:gap-20">
+      <div>
+      <div id="article-body" class="prose-ksm max-w-2xl">
         <slot />
       </div>
 
@@ -73,8 +74,81 @@ const articleSchema = {
           <a href="/disclosures" class="font-semibold text-brand-700 underline underline-offset-2">Disclosures</a>.
         </p>
       </aside>
+      </div>
+
+      <!-- Reading rail -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-28 space-y-5">
+          <nav id="toc-wrap" class="hidden border-l border-line pl-5" aria-label="On this page">
+            <p class="label text-ink-400">In this piece</p>
+            <ol id="article-toc" class="mt-4 space-y-2.5"></ol>
+          </nav>
+
+          <div class="rounded-2xl border border-line bg-cream p-5">
+            <p class="label text-ink-400">Next step</p>
+            <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-700">
+              See which of these patterns are actually operating in your position.
+            </p>
+            <a href="/start" class="btn btn-primary btn-sm mt-5 w-full" data-ev="article_rail_cta_click">
+              Start my profile <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </aside>
     </div>
   </article>
+
+  <script is:inline>
+    (function () {
+      var body = document.getElementById('article-body');
+      var list = document.getElementById('article-toc');
+      var wrap = document.getElementById('toc-wrap');
+      if (!body || !list || !wrap) return;
+
+      var heads = body.querySelectorAll('h2');
+      if (heads.length < 2) return;
+      wrap.classList.remove('hidden');
+
+      var links = [];
+      heads.forEach(function (h, i) {
+        if (!h.id) {
+          h.id =
+            'section-' +
+            (h.textContent || '')
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')
+              .slice(0, 40) +
+            '-' + i;
+        }
+        h.classList.add('scroll-mt-28');
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        a.className =
+          'block text-[0.8125rem] leading-snug text-ink-500 transition-colors hover:text-brand-700';
+        li.appendChild(a);
+        list.appendChild(li);
+        links.push({ a: a, h: h });
+      });
+
+      function markCurrent() {
+        var best = null;
+        links.forEach(function (l) {
+          if (l.h.getBoundingClientRect().top <= 140) best = l;
+        });
+        links.forEach(function (l) {
+          var on = l === best;
+          l.a.classList.toggle('text-brand-700', on);
+          l.a.classList.toggle('font-semibold', on);
+          l.a.classList.toggle('text-ink-500', !on);
+        });
+      }
+      addEventListener('scroll', markCurrent, { passive: true });
+      markCurrent();
+    })();
+  </script>
 
   <section class="wrap mt-20">
     <p class="eyebrow">Keep reading</p>
