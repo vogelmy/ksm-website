@@ -9,15 +9,19 @@
  * durable at that point.
  */
 
+import { handleAdmin } from './admin';
+
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   LEAD_TO: string;
   LEAD_FROM_NAME: string;
   SITE_NAME: string;
+  ADMIN_USER?: string;
   /** Secrets (wrangler secret put) */
   BREVO_API_KEY?: string;
   LEAD_FROM?: string;
+  ADMIN_PASSWORD?: string;
 }
 
 interface LeadPayload {
@@ -303,6 +307,10 @@ export default {
 
     if (url.pathname === '/api/lead') {
       return handleLead(request, env, ctx);
+    }
+
+    if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {
+      return handleAdmin(request, env, url);
     }
 
     if (url.pathname.startsWith('/api/')) {

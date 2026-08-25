@@ -15,7 +15,8 @@
   "vars": {
     "LEAD_TO": "moishyv@gmail.com",
     "LEAD_FROM_NAME": "KSM Website",
-    "SITE_NAME": "Kallus Strategic Management"
+    "SITE_NAME": "Kallus Strategic Management",
+    "ADMIN_USER": "ksm"
   },
   "d1_databases": [
     {

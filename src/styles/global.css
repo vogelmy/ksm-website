@@ -41,6 +41,8 @@
   --color-good-soft: #E7F5ED;
   --color-warn: #C98A22;
   --color-warn-soft: #FBF2DF;
+  --color-bad: #B4483C;
+  --color-bad-soft: #FBEDEB;
 
   --radius-xl2: 1.25rem;
   --shadow-card: 0 1px 2px rgba(15,29,51,.04), 0 8px 24px -12px rgba(15,29,51,.12);
@@ -153,6 +155,56 @@
   }
   .prose-ksm strong { color: var(--color-ink-900); font-weight: 650; }
   .prose-ksm a { color: var(--color-brand-700); text-decoration: underline; text-underline-offset: 3px; }
+}
+
+@layer components {
+  /* Position Index sliders. One markup path: `.is-static` renders the same
+     row as a read-only bar by hiding the thumb and ignoring pointer events. */
+  .ksm-range {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 16px;
+    background: transparent;
+    cursor: grab;
+  }
+  .ksm-range:active { cursor: grabbing; }
+
+  .ksm-range::-webkit-slider-runnable-track {
+    height: 5px; border-radius: 999px;
+    background: var(--track, var(--color-ink-100));
+  }
+  .ksm-range::-moz-range-track {
+    height: 5px; border-radius: 999px;
+    background: var(--track, var(--color-ink-100));
+  }
+
+  .ksm-range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px; margin-top: -4.5px;
+    border-radius: 999px; background: #fff;
+    border: 2px solid var(--thumb, var(--color-brand-600));
+    box-shadow: 0 1px 3px rgba(15, 29, 51, .28);
+    transition: transform .15s ease;
+  }
+  .ksm-range::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 999px; background: #fff;
+    border: 2px solid var(--thumb, var(--color-brand-600));
+    box-shadow: 0 1px 3px rgba(15, 29, 51, .28);
+  }
+  .ksm-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+  .ksm-range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-brand-600); outline-offset: 2px;
+  }
+  .ksm-range:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--color-brand-600); outline-offset: 2px;
+  }
+
+  .ksm-range.is-static { pointer-events: none; }
+  .ksm-range.is-static::-webkit-slider-thumb { opacity: 0; }
+  .ksm-range.is-static::-moz-range-thumb { opacity: 0; }
 }
 
 @layer utilities {
