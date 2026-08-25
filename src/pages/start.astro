@@ -246,8 +246,8 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
 
           <p class="mt-7 text-[0.8125rem] leading-relaxed text-ink-500">
             By continuing you agree that KSM may contact you about your request. KSM is not a lender and
-            does not guarantee financing, rates, limits or any other outcome. See our
-            <a href="/privacy" class="underline underline-offset-2">Privacy Policy</a> and
+            does not guarantee financing, rates, limits or any other outcome. See our{' '}
+            <a href="/privacy" class="underline underline-offset-2">Privacy Policy</a>{' '}and{' '}
             <a href="/disclosures" class="underline underline-offset-2">Disclosures</a>.
           </p>
 
@@ -260,16 +260,18 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
         </fieldset>
 
         <!-- ============ NAV ============ -->
-        <div class="mt-10 flex items-center justify-between gap-4 border-t border-line pt-8">
-          <button type="button" id="wiz-back" class="btn btn-ghost" hidden>
+        <div
+          class="mt-10 flex flex-col-reverse gap-3 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <button type="button" id="wiz-back" class="btn btn-ghost w-full sm:w-auto" hidden>
             <span aria-hidden="true">←</span> Back
           </button>
-          <div class="ml-auto">
-            <button type="button" id="wiz-next" class="btn btn-primary">
+          <div class="w-full sm:ml-auto sm:w-auto">
+            <button type="button" id="wiz-next" class="btn btn-primary w-full sm:w-auto">
               Continue <span aria-hidden="true">→</span>
             </button>
-            <button type="submit" id="wiz-submit" class="btn btn-primary" hidden>
-              <span id="wiz-submit-label">Start my financial profile</span>
+            <button type="submit" id="wiz-submit" class="btn btn-primary w-full sm:w-auto" hidden>
+              <span id="wiz-submit-label">Start my profile</span>
               <span aria-hidden="true">→</span>
             </button>
           </div>
@@ -568,7 +570,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
         })
         .catch(function (err) {
           submitBtn.disabled = false;
-          submitLabel.textContent = 'Start my financial profile';
+          submitLabel.textContent = 'Start my profile';
           submitError.hidden = false;
           submitError.textContent =
             'We could not start your profile just now. Please try again, or email info@ksmstrategy.com and we will pick it up from there.';
