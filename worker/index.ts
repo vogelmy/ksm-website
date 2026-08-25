@@ -262,6 +262,41 @@ ${rows
   }
 }
 
+/**
+ * Security and caching headers for every static response. Applied here rather
+ * than in a _headers file because Workers static assets do not read one.
+ */
+const CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  // Inline scripts are used for the wizard, nav and reveal logic.
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+].join('; ');
+
+function withSecurityHeaders(res: Response, url: URL): Response {
+  const out = new Response(res.body, res);
+  out.headers.set('X-Content-Type-Options', 'nosniff');
+  out.headers.set('X-Frame-Options', 'DENY');
+  out.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  out.headers.set(
+    'Permissions-Policy',
+    'geolocation=(), camera=(), microphone=(), payment=(), browsing-topics=()'
+  );
+  out.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  out.headers.set('Content-Security-Policy', CSP);
+  if (url.pathname.startsWith('/_astro/')) {
+    out.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  return out;
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -274,6 +309,7 @@ export default {
       return json({ ok: false, error: 'Not found' }, 404);
     }
 
-    return env.ASSETS.fetch(request);
+    const asset = await env.ASSETS.fetch(request);
+    return withSecurityHeaders(asset, url);
   },
 } satisfies ExportedHandler<Env>;
