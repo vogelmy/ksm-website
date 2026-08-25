@@ -1,0 +1,36 @@
+---
+import { PROCESS } from '../data/site';
+interface Props {
+  detailed?: boolean;
+}
+const { detailed = false } = Astro.props;
+---
+
+<section id="process" class="wrap mt-24 scroll-mt-24">
+  <div class="max-w-2xl">
+    <p class="eyebrow reveal">The engagement</p>
+    <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+      From financial complexity to a clear next move.
+    </h2>
+    <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+      Five steps. Each one produces something you can see, so you always know where the engagement stands.
+    </p>
+  </div>
+
+  <ol class="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-5">
+    {
+      PROCESS.map((step, i) => (
+        <li class="reveal relative flex flex-col bg-white p-6 md:p-7" data-delay={i * 70}>
+          <span class="num text-[0.8125rem] font-medium tracking-[0.1em] text-brand-600">{step.num}</span>
+          <h3 class="mt-4 text-[1.125rem] leading-snug">{step.title}</h3>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{step.summary}</p>
+          {detailed && <p class="mt-4 text-[0.875rem] leading-relaxed text-ink-500">{step.detail}</p>}
+          <span
+            class="mt-6 hidden h-[2px] w-full rounded-full bg-linear-to-r from-brand-200 to-transparent md:block"
+            aria-hidden="true"
+          />
+        </li>
+      ))
+    }
+  </ol>
+</section>

@@ -1,0 +1,572 @@
+---
+import Base from '../layouts/Base.astro';
+
+const IDENTITY = [
+  { v: 'individual', t: 'Individual or family', d: 'Personal position — mortgage, debt, credit, income, liquidity, a major purchase ahead.' },
+  { v: 'business', t: 'Business owner', d: 'Business and personal together — operating cash flow, guarantees, working capital, growth capital.' },
+];
+
+const GOALS = [
+  'Improve monthly cash flow',
+  'Reduce financial pressure',
+  'Prepare for financing',
+  'Understand my financial position',
+  'Reorganize debt',
+  'A major purchase or investment',
+  'Something else',
+];
+
+const CONCERNS = [
+  'Monthly cash flow',
+  'Debt structure or cost',
+  'Credit exposure',
+  'Liquidity and reserves',
+  'Future financing',
+  'Business obligations',
+  'Not sure yet',
+];
+
+const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More than a year', 'No fixed timeline'];
+---
+
+<Base
+  title="Start Your Financial Profile | Kallus Strategic Management"
+  description="Four short questions to start your KSM Financial Profile. No financial account details, no sensitive information — just what you are trying to accomplish and how to reach you."
+  path="/start"
+  hideMobileCta={true}
+>
+  <section class="relative overflow-hidden border-b border-line bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div class="wrap relative py-12 md:py-16">
+      <p class="eyebrow">Start your profile</p>
+      <h1 class="mt-6 max-w-3xl text-[2rem] leading-[1.08] sm:text-[2.75rem]">
+        Four questions. About a minute.
+      </h1>
+      <p class="mt-5 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-600">
+        We ask what you are trying to accomplish and how to reach you — nothing else. No account numbers,
+        no balances, no Social Security number, and nothing sensitive is collected on this page.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap py-12 md:py-16">
+    <div class="mx-auto max-w-3xl">
+      <!-- Progress -->
+      <div id="wiz-progress" class="mb-10">
+        <div class="flex items-baseline justify-between">
+          <p class="label text-ink-400">Step <span id="wiz-step-num" class="num">1</span> of 4</p>
+          <p class="num text-[0.75rem] text-brand-700"><span id="wiz-pct">0</span>% complete</p>
+        </div>
+        <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-ink-100">
+          <div
+            id="wiz-bar"
+            class="h-full rounded-full bg-brand-600 transition-[width] duration-500 ease-out"
+            style="width:0%"
+          >
+          </div>
+        </div>
+      </div>
+
+      <form id="wiz-form" novalidate>
+        <!-- honeypot -->
+        <div class="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+          <label for="company_website">Do not fill this in</label>
+          <input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <!-- ============ STEP 1 ============ -->
+        <fieldset data-step="1">
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            Who are you planning for?
+          </legend>
+          <p class="mt-3 text-[0.9375rem] text-ink-500">This determines which framework we run.</p>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            {
+              IDENTITY.map((o) => (
+                <label class="wiz-card">
+                  <input type="radio" name="identity" value={o.v} class="sr-only" required />
+                  <span class="wiz-card-inner">
+                    <span class="wiz-check" aria-hidden="true" />
+                    <span>
+                      <span class="block font-display text-[1.0625rem] font-bold text-ink-900">{o.t}</span>
+                      <span class="mt-2 block text-[0.875rem] leading-relaxed text-ink-500">{o.d}</span>
+                    </span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="wiz-error" data-error-for="identity" hidden>Choose one to continue.</p>
+        </fieldset>
+
+        <!-- ============ STEP 2 ============ -->
+        <fieldset data-step="2" hidden>
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            What are you trying to accomplish?
+          </legend>
+          <p class="mt-3 text-[0.9375rem] text-ink-500">Pick the closest fit. We will refine it on the call.</p>
+
+          <div class="mt-8 grid gap-3 sm:grid-cols-2">
+            {
+              GOALS.map((g) => (
+                <label class="wiz-card">
+                  <input type="radio" name="goal" value={g} class="sr-only" />
+                  <span class="wiz-card-inner items-center">
+                    <span class="wiz-check" aria-hidden="true" />
+                    <span class="font-medium text-ink-800">{g}</span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="wiz-error" data-error-for="goal" hidden>Choose one to continue.</p>
+
+          <div class="mt-8">
+            <label for="timeline" class="block text-[0.875rem] font-semibold text-ink-800">
+              What is the timeline?
+            </label>
+            <div class="mt-3 flex flex-wrap gap-2.5">
+              {
+                TIMELINES.map((t) => (
+                  <label class="wiz-pill">
+                    <input type="radio" name="timeline" value={t} class="sr-only" />
+                    <span>{t}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ============ STEP 3 ============ -->
+        <fieldset data-step="3" hidden>
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            What is creating the most pressure right now?
+          </legend>
+          <p class="mt-3 text-[0.9375rem] text-ink-500">
+            Select every one that applies — this shapes where we start.
+          </p>
+
+          <div class="mt-8 grid gap-3 sm:grid-cols-2">
+            {
+              CONCERNS.map((c) => (
+                <label class="wiz-card">
+                  <input type="checkbox" name="concerns" value={c} class="sr-only" />
+                  <span class="wiz-card-inner items-center">
+                    <span class="wiz-check wiz-check-square" aria-hidden="true" />
+                    <span class="font-medium text-ink-800">{c}</span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="wiz-error" data-error-for="concerns" hidden>Select at least one to continue.</p>
+
+          <div class="mt-8">
+            <label for="notes" class="block text-[0.875rem] font-semibold text-ink-800">
+              Anything you want us to know? <span class="font-normal text-ink-400">(optional)</span>
+            </label>
+            <textarea
+              id="notes"
+              name="notes"
+              rows="3"
+              maxlength="1200"
+              placeholder="A sentence or two of context is plenty. Please do not include account numbers or other sensitive details."
+              class="mt-3 w-full rounded-xl border border-line bg-white px-4 py-3.5 text-[0.9375rem] text-ink-800 placeholder:text-ink-300 focus:border-brand-400 focus:outline-none"
+            ></textarea>
+          </div>
+        </fieldset>
+
+        <!-- ============ STEP 4 ============ -->
+        <fieldset data-step="4" hidden>
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            Where should we send your profile?
+          </legend>
+          <p class="mt-3 text-[0.9375rem] text-ink-500">
+            Contact details only. Nothing financial is collected here.
+          </p>
+
+          <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="firstName" class="wiz-label">First name</label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                autocomplete="given-name"
+                maxlength="60"
+                class="wiz-input"
+                required
+              />
+              <p class="wiz-error" data-error-for="firstName" hidden>Please enter your first name.</p>
+            </div>
+            <div>
+              <label for="lastName" class="wiz-label">Last name</label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                autocomplete="family-name"
+                maxlength="60"
+                class="wiz-input"
+                required
+              />
+              <p class="wiz-error" data-error-for="lastName" hidden>Please enter your last name.</p>
+            </div>
+            <div>
+              <label for="email" class="wiz-label">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                maxlength="120"
+                class="wiz-input"
+                required
+              />
+              <p class="wiz-error" data-error-for="email" hidden>Please enter a valid email address.</p>
+            </div>
+            <div>
+              <label for="phone" class="wiz-label">
+                Phone <span class="font-normal text-ink-400">(optional)</span>
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                maxlength="30"
+                class="wiz-input"
+              />
+            </div>
+          </div>
+
+          <p class="mt-7 text-[0.8125rem] leading-relaxed text-ink-400">
+            By continuing you agree that KSM may contact you about your request. KSM is not a lender and
+            does not guarantee financing, rates, limits or any other outcome. See our
+            <a href="/privacy" class="underline underline-offset-2">Privacy Policy</a> and
+            <a href="/disclosures" class="underline underline-offset-2">Disclosures</a>.
+          </p>
+
+          <p
+            id="wiz-submit-error"
+            class="mt-5 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.875rem] text-ink-800"
+            hidden
+          >
+          </p>
+        </fieldset>
+
+        <!-- ============ NAV ============ -->
+        <div class="mt-10 flex items-center justify-between gap-4 border-t border-line pt-8">
+          <button type="button" id="wiz-back" class="btn btn-ghost" hidden>
+            <span aria-hidden="true">←</span> Back
+          </button>
+          <div class="ml-auto">
+            <button type="button" id="wiz-next" class="btn btn-primary">
+              Continue <span aria-hidden="true">→</span>
+            </button>
+            <button type="submit" id="wiz-submit" class="btn btn-primary" hidden>
+              <span id="wiz-submit-label">Start my financial profile</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Reassurance -->
+      <ul class="mt-14 grid gap-6 border-t border-line pt-10 sm:grid-cols-3">
+        {
+          [
+            ['Private', 'Used only to build and discuss your profile. Never sold.'],
+            ['Independent', 'KSM is not a lender and takes no lender compensation.'],
+            ['No obligation', 'There is no cost to establish whether KSM is a fit.'],
+          ].map(([t, d]) => (
+            <li>
+              <h2 class="label text-brand-700">{t}</h2>
+              <p class="mt-2.5 text-[0.875rem] leading-relaxed text-ink-500">{d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .wiz-card {
+    display: block;
+    cursor: pointer;
+  }
+  .wiz-card-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    height: 100%;
+    padding: 1.125rem 1.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    background: #fff;
+    transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .wiz-card:hover .wiz-card-inner {
+    border-color: var(--color-brand-300);
+  }
+  .wiz-card input:focus-visible + .wiz-card-inner {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+  .wiz-card input:checked + .wiz-card-inner {
+    border-color: var(--color-brand-600);
+    background: var(--color-brand-50);
+    box-shadow: inset 0 0 0 1px var(--color-brand-600);
+  }
+  .wiz-check {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.1875rem;
+    border: 1.5px solid var(--color-ink-300);
+    border-radius: 999px;
+    transition: all 0.18s ease;
+  }
+  .wiz-check-square {
+    border-radius: 0.375rem;
+  }
+  .wiz-card input:checked + .wiz-card-inner .wiz-check {
+    border-color: var(--color-brand-600);
+    background: var(--color-brand-600);
+    box-shadow: inset 0 0 0 3px #fff;
+  }
+  .wiz-card input:checked + .wiz-card-inner .wiz-check-square {
+    box-shadow: inset 0 0 0 2px #fff;
+  }
+
+  .wiz-pill span {
+    display: inline-block;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-600);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .wiz-pill:hover span {
+    border-color: var(--color-brand-300);
+  }
+  .wiz-pill input:checked + span {
+    border-color: var(--color-brand-600);
+    background: var(--color-brand-600);
+    color: #fff;
+  }
+
+  .wiz-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-800);
+    margin-bottom: 0.5rem;
+  }
+  .wiz-input {
+    width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    color: var(--color-ink-900);
+    transition: border-color 0.18s ease;
+  }
+  .wiz-input:focus {
+    border-color: var(--color-brand-400);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-brand-50);
+  }
+  .wiz-input[aria-invalid='true'] {
+    border-color: var(--color-warn);
+  }
+  .wiz-error {
+    margin-top: 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #B4650F;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('wiz-form');
+    if (!form) return;
+
+    var steps = Array.from(form.querySelectorAll('[data-step]'));
+    var total = steps.length;
+    var current = 1;
+
+    var backBtn = document.getElementById('wiz-back');
+    var nextBtn = document.getElementById('wiz-next');
+    var submitBtn = document.getElementById('wiz-submit');
+    var submitLabel = document.getElementById('wiz-submit-label');
+    var bar = document.getElementById('wiz-bar');
+    var pct = document.getElementById('wiz-pct');
+    var stepNum = document.getElementById('wiz-step-num');
+    var submitError = document.getElementById('wiz-submit-error');
+
+    var STORAGE = 'ksm-wizard-v1';
+
+    // ---- restore saved answers -------------------------------------
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(STORAGE) || '{}');
+      Object.keys(saved).forEach(function (name) {
+        var val = saved[name];
+        var fields = form.elements[name];
+        if (!fields) return;
+        if (Array.isArray(val)) {
+          Array.from(fields).forEach(function (f) {
+            if (val.indexOf(f.value) > -1) f.checked = true;
+          });
+        } else if (fields.length && fields[0].type === 'radio') {
+          Array.from(fields).forEach(function (f) {
+            if (f.value === val) f.checked = true;
+          });
+        } else if (fields.value !== undefined) {
+          fields.value = val;
+        }
+      });
+    } catch (e) {}
+
+    function persist() {
+      var data = collect();
+      try { sessionStorage.setItem(STORAGE, JSON.stringify(data)); } catch (e) {}
+    }
+
+    function collect() {
+      var fd = new FormData(form);
+      var out = {};
+      out.identity = fd.get('identity') || '';
+      out.goal = fd.get('goal') || '';
+      out.timeline = fd.get('timeline') || '';
+      out.concerns = fd.getAll('concerns');
+      out.notes = (fd.get('notes') || '').toString().trim();
+      out.firstName = (fd.get('firstName') || '').toString().trim();
+      out.lastName = (fd.get('lastName') || '').toString().trim();
+      out.email = (fd.get('email') || '').toString().trim();
+      out.phone = (fd.get('phone') || '').toString().trim();
+      out.company_website = (fd.get('company_website') || '').toString();
+      return out;
+    }
+
+    function showError(name, show) {
+      var el = form.querySelector('[data-error-for="' + name + '"]');
+      if (el) el.hidden = !show;
+      var field = form.elements[name];
+      if (field && field.setAttribute && !field.length) field.setAttribute('aria-invalid', show ? 'true' : 'false');
+    }
+
+    function validate(step) {
+      var d = collect();
+      var ok = true;
+      if (step === 1) {
+        ok = !!d.identity;
+        showError('identity', !ok);
+      } else if (step === 2) {
+        ok = !!d.goal;
+        showError('goal', !ok);
+      } else if (step === 3) {
+        ok = d.concerns.length > 0;
+        showError('concerns', !ok);
+      } else if (step === 4) {
+        var e1 = !!d.firstName, e2 = !!d.lastName;
+        var e3 = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);
+        showError('firstName', !e1);
+        showError('lastName', !e2);
+        showError('email', !e3);
+        ok = e1 && e2 && e3;
+      }
+      return ok;
+    }
+
+    function render() {
+      steps.forEach(function (s) {
+        s.hidden = Number(s.getAttribute('data-step')) !== current;
+      });
+      stepNum.textContent = String(current);
+      var progress = Math.round(((current - 1) / total) * 100);
+      bar.style.width = progress + '%';
+      pct.textContent = String(progress);
+      backBtn.hidden = current === 1;
+      nextBtn.hidden = current === total;
+      submitBtn.hidden = current !== total;
+      var legend = steps[current - 1].querySelector('legend');
+      if (legend) legend.setAttribute('tabindex', '-1');
+      window.scrollTo({ top: Math.max(0, form.getBoundingClientRect().top + window.scrollY - 160), behavior: 'smooth' });
+      if (window.ksm) window.ksm.track('profile_step_' + current);
+    }
+
+    nextBtn.addEventListener('click', function () {
+      if (!validate(current)) return;
+      persist();
+      if (current === 1 && window.ksm) window.ksm.track('profile_start');
+      current = Math.min(current + 1, total);
+      render();
+    });
+
+    backBtn.addEventListener('click', function () {
+      persist();
+      current = Math.max(current - 1, 1);
+      render();
+    });
+
+    form.addEventListener('change', function (e) {
+      persist();
+      var n = e.target && e.target.name;
+      if (n) showError(n, false);
+      // auto-advance on identity choice for a lighter feel
+      if (n === 'identity' && current === 1) {
+        setTimeout(function () { nextBtn.click(); }, 220);
+      }
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validate(4)) return;
+      submitError.hidden = true;
+      submitBtn.disabled = true;
+      submitLabel.textContent = 'Starting your profile…';
+
+      var payload = collect();
+      payload.page = location.pathname;
+      payload.referrer = document.referrer || '';
+
+      fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) {
+          return r.json().then(function (j) { return { ok: r.ok, body: j }; });
+        })
+        .then(function (res) {
+          if (!res.ok || !res.body || res.body.ok !== true) {
+            throw new Error((res.body && res.body.error) || 'Something went wrong.');
+          }
+          if (window.ksm) window.ksm.track('profile_completed', { identity: payload.identity, goal: payload.goal });
+          try { sessionStorage.removeItem(STORAGE); } catch (e2) {}
+          location.href = '/thank-you';
+        })
+        .catch(function (err) {
+          submitBtn.disabled = false;
+          submitLabel.textContent = 'Start my financial profile';
+          submitError.hidden = false;
+          submitError.textContent =
+            'We could not start your profile just now. Please try again, or email info@ksmstrategy.com and we will pick it up from there.';
+          if (window.ksm) window.ksm.track('profile_error', { message: String(err && err.message) });
+        });
+    });
+
+    render();
+  })();
+</script>

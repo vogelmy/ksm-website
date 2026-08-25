@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CTA from '../components/CTA.astro';
+import { SITE } from '../data/site';
+
+const BELIEFS = [
+  {
+    t: 'The relationship between the numbers is the number',
+    d: 'Single-metric thinking is what makes financial decisions feel unpredictable. Almost every surprise we see traces back to a component that was strong on its own and badly matched to the ones around it.',
+  },
+  {
+    t: 'Independence is a structural choice, not a claim',
+    d: 'KSM does not lend, broker, or accept compensation from lenders. That is not a marketing position — it is what makes it possible to recommend doing nothing yet.',
+  },
+  {
+    t: 'Sequence is the deliverable',
+    d: 'Most clients can already list what could be improved. What they do not have is an order, and the order is where the value is.',
+  },
+  {
+    t: 'Say what cannot be promised',
+    d: 'Approvals, rates, limits, score movements and savings are outside anyone’s control but the lender’s. A practice that pretends otherwise is a sales operation.',
+  },
+];
+
+const NOTLIST = [
+  ['A lender or bank', 'KSM does not originate, fund or service loans of any kind.'],
+  ['A loan broker or originator', 'KSM does not submit applications and takes no lender compensation.'],
+  ['A credit repair organization', 'KSM does not dispute credit report entries or promise score changes.'],
+  ['A debt settlement company', 'KSM does not negotiate with creditors or enroll clients in relief programs.'],
+  ['A credit reporting agency', 'KSM does not furnish, sell or produce consumer credit reports or scores.'],
+  ['An investment adviser or accountant', 'KSM does not manage assets or provide tax, audit or legal advice.'],
+];
+---
+
+<Base
+  title="About KSM | Kallus Strategic Management"
+  description="Kallus Strategic Management is an independent financial strategy practice. KSM is not a lender, broker, credit repair organization, debt settlement company or investment adviser."
+  path="/about"
+>
+  <PageHero
+    eyebrow="About KSM"
+    title="An independent practice built around one question: what does this position actually support?"
+    lede="Kallus Strategic Management analyzes complete financial positions — for individuals and for business owners — and produces a prioritized strategy. There is no product at the end of the recommendation, which is the entire point."
+  />
+
+  <section class="wrap mt-20">
+    <div class="prose-ksm reveal max-w-3xl">
+      <h2>Why the practice exists</h2>
+      <p>
+        Nearly everyone offering financial guidance is attached to a product. Lenders are attached to
+        loans, brokers to placements, relief companies to enrollments, advisers to assets under
+        management. Each of those can be legitimate and useful. None of them is well positioned to tell
+        you that the right move this quarter is to change nothing and wait.
+      </p>
+      <p>
+        KSM was set up to occupy that gap. The engagement produces analysis and a sequence. Execution
+        stays with you and whichever institutions or professionals you choose to work with. Because no
+        product sits on the other side of the recommendation, the recommendation can be whatever the
+        position actually calls for.
+      </p>
+
+      <h3>How we work</h3>
+      <p>
+        Every engagement runs the same five steps in the same order, and produces the same four outputs:
+        a written profile, a stated top priority, a ninety-day roadmap, and an explicit list of what to
+        leave alone. Consistency is deliberate — it makes the output comparable over time, and it keeps
+        the recommendation from depending on who happens to be in the room.
+      </p>
+
+      <h3>What we ask of clients</h3>
+      <p>
+        Candor, mostly. The engagement is only as good as the picture it is built on, and the components
+        people are least eager to discuss are usually the ones doing the most damage. Information is
+        handled with discretion, used solely to build and discuss the profile, and never sold or shared
+        with lenders for marketing.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap mt-20">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">What we believe</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        Four positions that shape every engagement.
+      </h2>
+    </div>
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
+      {
+        BELIEFS.map((b, i) => (
+          <div class="card reveal p-8" data-delay={(i % 2) * 70}>
+            <h3 class="text-[1.125rem] leading-snug">{b.t}</h3>
+            <p class="mt-4 text-[0.9375rem] leading-relaxed text-ink-600">{b.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap mt-24">
+    <div class="rounded-[2rem] bg-ink-950 px-6 py-14 sm:px-12 md:py-16">
+      <div class="max-w-2xl">
+        <p class="eyebrow reveal !text-brand-300 before:!bg-brand-400">Plainly stated</p>
+        <h2 class="reveal mt-6 text-[1.875rem] leading-tight text-white sm:text-[2.25rem]" data-delay="60">
+          What KSM is not.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-300" data-delay="120">
+          This list matters more than most of what a firm can say about itself, because it defines what
+          the advice cannot be shaped by.
+        </p>
+      </div>
+
+      <ul class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:grid-cols-2">
+        {
+          NOTLIST.map(([t, d]) => (
+            <li class="bg-ink-950 p-6">
+              <h3 class="text-[1rem] text-white">{t}</h3>
+              <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-400">{d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap mt-24">
+    <div class="grid gap-10 rounded-[2rem] border border-line bg-cream p-8 sm:p-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div>
+        <h2 class="text-[1.75rem] leading-tight sm:text-[2rem]">Talk to KSM directly.</h2>
+        <p class="mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-600">
+          The fastest route is the profile request — it takes about a minute and tells us enough to have
+          a useful first conversation. Email works too.
+        </p>
+        <a
+          href={`mailto:${SITE.email}`}
+          class="mt-6 inline-block text-[0.9375rem] font-semibold text-brand-700 underline underline-offset-4"
+          data-ev="email_click">{SITE.email}</a
+        >
+      </div>
+      <a href="/start" class="btn btn-primary flex-none" data-ev="about_cta_click">
+        Start my profile <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <CTA />
+</Base>

@@ -1,0 +1,42 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  /** Optional list of quick anchors shown beneath the lede */
+  anchors?: { label: string; href: string }[];
+}
+const { eyebrow, title, lede, anchors = [] } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line bg-white">
+  <div class="grid-bg pointer-events-none absolute inset-0 opacity-70" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full border border-line"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="wrap relative py-16 md:py-24">
+    <p class="eyebrow reveal">{eyebrow}</p>
+    <h1 class="reveal mt-6 max-w-4xl text-[2.25rem] leading-[1.06] sm:text-[3rem] lg:text-[3.5rem]" data-delay="60">
+      {title}
+    </h1>
+    <p class="reveal mt-7 max-w-2xl text-lg leading-relaxed text-ink-600" data-delay="120">{lede}</p>
+
+    {
+      anchors.length > 0 && (
+        <div class="reveal mt-9 flex flex-wrap gap-2.5" data-delay="180">
+          {anchors.map((a) => (
+            <a
+              href={a.href}
+              class="rounded-full border border-line bg-white px-4 py-2 text-[0.8125rem] font-medium text-ink-600 transition-colors hover:border-brand-200 hover:text-brand-700"
+            >
+              {a.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,50 @@
+---
+interface Props {
+  title?: string;
+  body?: string;
+  primary?: string;
+  secondary?: { label: string; href: string } | null;
+}
+const {
+  title = 'Start with your financial profile.',
+  body = 'Before chasing the next financing offer, understand what is helping your position, what may be holding it back, and which moves deserve priority.',
+  primary = 'Start my financial profile',
+  secondary = { label: 'See how KSM works', href: '/how-it-works' },
+} = Astro.props;
+---
+
+<section class="wrap mt-24">
+  <div class="relative overflow-hidden rounded-[2rem] bg-ink-950 px-6 py-16 sm:px-12 md:py-20">
+    <div
+      class="grid-bg pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.5)_1px,transparent_1px)]"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="pointer-events-none absolute -left-40 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full border border-white/10"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-2xl text-center">
+      <h2 class="text-[2rem] leading-tight text-white sm:text-[2.75rem]">{title}</h2>
+      <p class="mx-auto mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-ink-300">{body}</p>
+      <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href="/start" class="btn btn-light w-full sm:w-auto" data-ev="cta_primary_click">
+          {primary} <span aria-hidden="true">→</span>
+        </a>
+        {
+          secondary && (
+            <a href={secondary.href} class="btn btn-outline-light w-full sm:w-auto" data-ev="cta_secondary_click">
+              {secondary.label}
+            </a>
+          )
+        }
+      </div>
+      <p class="mt-8 text-[0.8125rem] text-ink-500">
+        No guaranteed approvals. No guaranteed score increases. A clear strategy for a stronger financial
+        position.
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,81 @@
+---
+const BEFORE = [
+  'Multiple debts, tracked separately',
+  'Payments on different dates and terms',
+  'Unclear which obligation matters most',
+  'Liquidity position unknown',
+  'No coordinated strategy',
+  'Financing timing decided by circumstance',
+];
+
+const AFTER = [
+  'One consolidated view of the position',
+  'Obligations ranked by cost and pressure',
+  'A defined first move, and a defined second',
+  'A reserve target with a reason behind it',
+  'A written strategy across the whole picture',
+  'Financing pursued when the profile supports it',
+];
+---
+
+<section class="wrap mt-24">
+  <div class="max-w-2xl">
+    <p class="eyebrow reveal">The shift</p>
+    <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+      The difference is not more information.
+      <span class="text-brand-600">It is knowing what to do with it.</span>
+    </h2>
+  </div>
+
+  <div class="mt-14 grid items-stretch gap-5 lg:grid-cols-[1fr_auto_1fr]">
+    <div class="reveal rounded-[1.5rem] border border-line bg-ink-50/60 p-7 md:p-8">
+      <p class="label text-ink-400">Before KSM</p>
+      <ul class="mt-6 space-y-4">
+        {
+          BEFORE.map((b) => (
+            <li class="flex items-start gap-3 text-[0.9375rem] leading-relaxed text-ink-600">
+              <span
+                class="mt-1 grid h-[18px] w-[18px] flex-none place-items-center rounded-full border border-ink-200 text-ink-400"
+                aria-hidden="true"
+              >
+                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M2 2l5 5M7 2L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+              {b}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="hidden items-center justify-center lg:flex" aria-hidden="true">
+      <span class="grid h-11 w-11 place-items-center rounded-full border border-line bg-white text-brand-600 shadow-[var(--shadow-card)]">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 8h12M9.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </div>
+
+    <div class="reveal rounded-[1.5rem] border border-brand-200 bg-brand-50/50 p-7 md:p-8" data-delay="120">
+      <p class="label text-brand-700">After KSM</p>
+      <ul class="mt-6 space-y-4">
+        {
+          AFTER.map((a) => (
+            <li class="flex items-start gap-3 text-[0.9375rem] leading-relaxed text-ink-700">
+              <span
+                class="mt-1 grid h-[18px] w-[18px] flex-none place-items-center rounded-full bg-brand-600 text-white"
+                aria-hidden="true"
+              >
+                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M1.8 4.6 3.6 6.4 7.2 2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              {a}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

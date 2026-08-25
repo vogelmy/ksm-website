@@ -1,0 +1,94 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+
+const bodyHtml = `
+<h2>The balance is the headline. The structure is the story.</h2>
+<p>
+  Debt gets discussed almost entirely in terms of size. How much is owed, and how quickly can it be
+  reduced. That framing is intuitive and it is frequently the wrong one, because two positions carrying
+  identical balances can be in completely different circumstances depending on how the obligations are
+  <strong>shaped</strong>.
+</p>
+<p>
+  Shape means four things: what each obligation actually costs, how the payment is constructed, when it
+  matures or resets, and how much of the total sits with a single counterparty. Change any one of those
+  and the position changes materially, even if the balance does not move at all.
+</p>
+
+<h3>Cost is not the same as rate</h3>
+<p>
+  A stated rate is one input. What an obligation costs also depends on how the payment is applied, what
+  fees are embedded in it, how frequently it is collected, and what it prevents you from doing while it
+  exists. Short-duration obligations with daily or weekly collection can carry an effective cost far
+  above what the paperwork suggests — and they consume cash flow at exactly the moments a business can
+  least afford it.
+</p>
+
+<h3>Concentration is a risk nobody prices</h3>
+<p>
+  When most of a position sits with one lender, that lender's decisions become your constraints:
+  renewal terms, covenant changes, cross-collateralization, and what happens if their appetite for your
+  sector changes. Spreading exposure is not always possible, but knowing your concentration is always
+  possible — and it changes which moves are prudent.
+</p>
+
+<h3>Sequence beats intensity</h3>
+<p>
+  Most people can identify several obligations worth addressing. Far fewer can say which one to address
+  first and why. Order matters because some changes need time to season before they register, some
+  create room that funds the next move, and some foreclose options if taken too early. A prioritized
+  sequence usually outperforms a more aggressive but unordered effort.
+</p>
+`;
+
+const signals = [
+  { t: 'Several obligations added over a short window', d: 'Each one defensible in isolation. Together, a payment calendar nobody designed.' },
+  { t: 'Daily or weekly collection on any obligation', d: 'These consume liquidity continuously and make the rest of the position harder to manage. They almost always belong near the top of the sequence.' },
+  { t: 'A renewal or maturity inside twelve months', d: 'The window before a renewal is when the profile matters most and when there is least time to change it.' },
+  { t: 'Most of the balance with one lender', d: 'Concentration turns another party’s policy changes into your constraints.' },
+  { t: 'Payments that barely reduce principal', d: 'A structure issue, not a size issue. Worth diagnosing before deciding where extra money should go.' },
+  { t: 'Personal guarantees you have lost track of', d: 'Common, and consequential — the personal profile is carrying obligations the owner is not counting.' },
+];
+
+const steps = [
+  { n: '01', t: 'Inventory every obligation', d: 'Balance, rate, structure, collection frequency, maturity, collateral, guarantor. Most clients discover at least one thing they had forgotten.' },
+  { n: '02', t: 'Calculate true cost per obligation', d: 'Not the stated rate — what each one actually costs to carry, including how the payment is applied.' },
+  { n: '03', t: 'Map the payment calendar', d: 'When each obligation collects, and where the month clusters. Clusters are frequently fixable on their own.' },
+  { n: '04', t: 'Measure concentration and collateral', d: 'How much of the position depends on one relationship, and what is pledged against what.' },
+  { n: '05', t: 'Rank by pressure, not by size', d: 'Which obligations are constraining the position, which are merely large, and which are quietly fine.' },
+  { n: '06', t: 'Build the sequence', d: 'A defined first move, a defined second, and an explicit list of what to leave alone for now.' },
+];
+
+const boundaries = [
+  'KSM is not a debt settlement or debt relief company and does not negotiate with creditors.',
+  'KSM does not enroll clients in debt management plans or hold client funds.',
+  'KSM is not a credit repair organization and does not dispute credit report entries.',
+  'KSM does not broker refinancing or consolidation products, and takes no lender compensation.',
+];
+
+const related = [
+  { label: 'Cash Flow Optimization', href: '/cash-flow-optimization', d: 'The committed-versus-flexible split that debt structure drives.' },
+  { label: 'Financing Readiness', href: '/financing-readiness', d: 'How the restructured position reads when you approach a lender.' },
+  { label: 'Debt Structure vs. Balance', href: '/insights/debt-structure-vs-balance', d: 'Two identical balances, two very different positions.' },
+];
+---
+
+<ServicePage
+  metaTitle="Debt Strategy & Optimization | KSM"
+  metaDescription="KSM analyzes debt structure — true cost, payment shape, collection frequency, maturity timing and concentration — then builds a prioritized sequence. KSM is not a lender, debt settlement or credit repair company."
+  path="/debt-strategy"
+  eyebrow="Debt Strategy"
+  title="Two identical balances. Two completely different positions."
+  lede="What an obligation costs, how the payment is built, when it matures, and how much sits with one lender matter more than the number on the statement. Structure is what we analyze."
+  bodyHtml={bodyHtml}
+  signalsTitle="Six structural signals worth taking seriously."
+  signals={signals}
+  stepsTitle="How a debt engagement runs."
+  stepsLede="Six passes producing an inventory, a true-cost ranking and a sequence. No negotiation, no enrollment, no product on the other end."
+  steps={steps}
+  boundaryTitle="What this engagement is not."
+  boundaries={boundaries}
+  related={related}
+  ctaTitle="Get the sequence before the next payment."
+  ctaBody="Knowing which obligation to address first — and which to leave alone — is usually worth more than an extra payment applied to the wrong one."
+/>

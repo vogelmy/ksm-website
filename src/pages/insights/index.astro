@@ -1,0 +1,101 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CTA from '../../components/CTA.astro';
+import { INSIGHTS } from '../../data/site';
+
+const [featured, ...rest] = INSIGHTS;
+const fmt = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<Base
+  title="Financial Strategy Insights | Kallus Strategic Management"
+  description="Articles on cash flow, debt structure, credit exposure, liquidity and financing readiness — written for people who want to understand the mechanics rather than be sold a product."
+  path="/insights"
+>
+  <PageHero
+    eyebrow="Insights"
+    title="The mechanics, explained without a product attached."
+    lede="Most financial content exists to sell something. These pieces exist to explain how a position actually behaves — which is a prerequisite for deciding anything about it."
+  />
+
+  <!-- Featured -->
+  <section class="wrap mt-16">
+    <a
+      href={`/insights/${featured.slug}`}
+      class="reveal group grid gap-8 rounded-[1.75rem] border border-line bg-cream p-8 transition-colors hover:border-brand-200 md:p-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:items-center"
+    >
+      <div>
+        <p class="label flex flex-wrap items-center gap-x-3 text-ink-400">
+          <span class="text-brand-700">Latest</span>
+          <span aria-hidden="true">·</span>
+          <span>{featured.category}</span>
+          <span aria-hidden="true">·</span>
+          <span>{featured.readTime}</span>
+        </p>
+        <h2 class="mt-5 text-[1.75rem] leading-tight sm:text-[2.25rem] group-hover:text-brand-700">
+          {featured.title}
+        </h2>
+        <p class="mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-ink-600">{featured.excerpt}</p>
+        <span class="mt-8 inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-brand-700 transition-all group-hover:gap-3">
+          Read the article <span aria-hidden="true">→</span>
+        </span>
+      </div>
+
+      <div class="hidden lg:block">
+        <div class="rounded-2xl border border-line bg-white p-7 shadow-[var(--shadow-card)]">
+          <p class="label text-ink-400">In this piece</p>
+          <ul class="mt-4 space-y-3">
+            {
+              ['The pattern', 'Why it persists', 'What to measure', 'What to do about it'].map((t, i) => (
+                <li class="flex items-center gap-3 text-[0.875rem] text-ink-600">
+                  <span class="num text-[0.6875rem] text-brand-500">{String(i + 1).padStart(2, '0')}</span>
+                  {t}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <!-- Grid -->
+  <section class="wrap mt-6">
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        rest.map((a, i) => (
+          <a
+            href={`/insights/${a.slug}`}
+            class="card card-hover reveal group flex flex-col p-7"
+            data-delay={(i % 3) * 70}
+          >
+            <p class="label flex items-center gap-2.5">
+              <span class="text-brand-700">{a.category}</span>
+              <span class="text-ink-300" aria-hidden="true">·</span>
+              <span class="text-ink-400">{a.readTime}</span>
+            </p>
+            <h2 class="mt-4 text-[1.125rem] leading-snug transition-colors group-hover:text-brand-700">
+              {a.title}
+            </h2>
+            <p class="mt-3.5 flex-1 text-[0.9375rem] leading-relaxed text-ink-600">{a.excerpt}</p>
+            <time class="mt-6 text-[0.75rem] font-medium text-ink-400" datetime={a.date}>
+              {fmt(a.date)}
+            </time>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <CTA
+    title="Reading is useful. Your own numbers are better."
+    body="These pieces describe patterns we see repeatedly. A profile tells you which of them are operating in your position right now."
+  />
+</Base>

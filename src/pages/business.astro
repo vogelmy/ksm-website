@@ -1,0 +1,187 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTA from '../components/CTA.astro';
+import { FAQ } from '../data/site';
+
+const SITUATIONS = [
+  {
+    t: 'Revenue is up and the account is not',
+    d: 'Growth consumes cash before it produces it. Inventory, payroll and receivables all move ahead of collections, and a profitable month can still be a tight one. The fix is almost never more revenue.',
+  },
+  {
+    t: 'Debt taken on quickly, in pieces',
+    d: 'A line here, an advance there, an equipment note, a card carrying a balance nobody meant to carry. Individually defensible. Collectively, a payment schedule that determines the calendar.',
+  },
+  {
+    t: 'Personal guarantees stacking up',
+    d: 'Most small business debt is personally guaranteed. That means the business position and the personal position are the same position as far as future financing is concerned — and they need to be evaluated together.',
+  },
+  {
+    t: 'A renewal or maturity approaching',
+    d: 'The months before a renewal are when the profile matters most and when there is the least time to change it. Preparation starting six months out looks very different from preparation starting six weeks out.',
+  },
+  {
+    t: 'Preparing to raise or borrow for growth',
+    d: 'The question is not whether capital is available. It is what the position needs to look like so the capital available is on terms worth taking.',
+  },
+  {
+    t: 'Owner compensation that muddies the picture',
+    d: 'Draws, distributions, salary and reimbursements structured for one purpose often read badly for another. How income is documented can matter as much as how much there is.',
+  },
+];
+
+const METRICS = [
+  { l: 'Operating cash flow', d: 'What the business genuinely produces after obligations, not after adjustments.' },
+  { l: 'Debt service coverage', d: 'How much room sits between production and required payments.' },
+  { l: 'Working capital cycle', d: 'How long cash is tied up between spending it and collecting it.' },
+  { l: 'Utilization', d: 'Business and personal revolving exposure, viewed as one number.' },
+  { l: 'Concentration', d: 'How much of the position depends on a single lender, customer or line.' },
+  { l: 'Guarantee exposure', d: 'What the personal position is actually carrying on behalf of the business.' },
+];
+---
+
+<Base
+  title="Financial Strategy for Business Owners | KSM"
+  description="KSM helps business owners map operating cash flow, business debt structure, personal guarantees, credit exposure and working capital into one financial profile — then build a prioritized strategy before the next financing move."
+  path="/business"
+>
+  <PageHero
+    eyebrow="Business Owners"
+    title="For an owner, business finance and personal finance are the same balance sheet."
+    lede="Personal guarantees, owner draws, blended credit and seasonal revenue mean the two positions move together. A profile that looks at only one side answers the wrong question."
+    anchors={[
+      { label: 'Typical situations', href: '#situations' },
+      { label: 'What gets measured', href: '#measured' },
+      { label: 'The engagement', href: '#process' },
+    ]}
+  />
+
+  <section class="wrap mt-20">
+    <div class="prose-ksm reveal max-w-3xl">
+      <h2>The problem with looking at the business alone</h2>
+      <p>
+        Owners are usually well informed about their business numbers and considerably less clear on how
+        those numbers land on the personal side. That gap matters because the two are joined at several
+        points at once: guarantees put business obligations on the personal profile, draws determine what
+        personal income looks like on paper, and revolving credit frequently gets used on both sides of
+        the line without much distinction.
+      </p>
+      <p>
+        When a lender evaluates an owner-operated business, it evaluates both. Preparing only one is
+        preparing half the position — and the half that gets neglected is usually the one that creates
+        the surprise.
+      </p>
+
+      <h3>What KSM does not do here</h3>
+      <ul>
+        <li>KSM does not broker business loans, lines, advances or equipment financing.</li>
+        <li>KSM does not receive compensation from lenders or funding sources.</li>
+        <li>KSM does not provide accounting, audit, tax or legal services.</li>
+        <li>KSM does not guarantee approval, rates, limits, terms or savings.</li>
+      </ul>
+      <p>
+        The work is analysis and strategy. Execution stays with you, your accountant, and whichever
+        institution you decide to approach.
+      </p>
+    </div>
+  </section>
+
+  <section id="situations" class="wrap mt-20 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Typical situations</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        Six versions of the same underlying problem.
+      </h2>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        SITUATIONS.map((s, i) => (
+          <article class="card card-hover reveal p-7" data-delay={(i % 3) * 70}>
+            <h3 class="text-[1.0625rem] leading-snug">{s.t}</h3>
+            <p class="mt-3.5 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="measured" class="wrap mt-24 scroll-mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">What gets measured</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          The six numbers that decide most outcomes.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          None of these is exotic. What is uncommon is having all six current, in one place, and read
+          against each other rather than in isolation.
+        </p>
+      </div>
+
+      <ul class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+        {
+          METRICS.map((m) => (
+            <li class="bg-white p-6">
+              <h3 class="text-[1rem] leading-snug">{m.l}</h3>
+              <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-500">{m.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Illustrative walkthrough -->
+  <section class="wrap mt-24">
+    <div class="rounded-[2rem] bg-ink-950 p-7 sm:p-10 md:p-14">
+      <p class="eyebrow reveal !text-brand-300 before:!bg-brand-400">Illustrative walkthrough</p>
+      <h2 class="reveal mt-6 max-w-2xl text-[1.75rem] leading-tight text-white sm:text-[2.125rem]" data-delay="60">
+        “We need working capital before the busy season.”
+      </h2>
+      <p class="reveal mt-5 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-300" data-delay="120">
+        A constructed example. Not a real client, not a representation of results.
+      </p>
+
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {
+          [
+            {
+              h: 'What the owner sees',
+              b: 'Strong bookings, a tight account, and a line that is already most of the way drawn.',
+            },
+            {
+              h: 'What the profile shows',
+              b: 'The constraint is the collection cycle, not revenue. Utilization on the personal side is also depressing the profile the lender will read.',
+            },
+            {
+              h: 'What the sequence says',
+              b: 'Address the cycle and the personal utilization before applying — the same request reads very differently ninety days later.',
+            },
+          ].map((c, i) => (
+            <div class="reveal rounded-2xl border border-white/10 bg-white/[0.04] p-6" data-delay={i * 70}>
+              <h3 class="text-[1rem] text-white">{c.h}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-300">{c.b}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <ProcessTimeline />
+
+  <FAQAccordion
+    items={FAQ.slice(0, 9)}
+    title="Questions owners ask first."
+    lede="Including the ones that establish what KSM is not."
+  />
+
+  <CTA
+    title="Prepare the position, then approach the capital."
+    body="Tell us what the business is trying to do and when. We will map both sides of the balance sheet and give you the order of operations."
+  />
+</Base>

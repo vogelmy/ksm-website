@@ -1,0 +1,190 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Canonical path, e.g. "/individuals" */
+  path?: string;
+  /** Hide the sticky mobile CTA (used on /start) */
+  hideMobileCta?: boolean;
+  /** JSON-LD objects to embed */
+  schema?: unknown[];
+}
+
+const { title, description, path = Astro.url.pathname, hideMobileCta = false, schema = [] } = Astro.props;
+
+const canonical = new URL(path, Astro.site ?? 'https://ksm-website.pages.dev').toString();
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: SITE.name,
+  alternateName: 'KSM',
+  description: SITE.description,
+  url: (Astro.site ?? 'https://ksm-website.pages.dev').toString(),
+  email: SITE.email,
+  areaServed: 'US',
+  serviceType: [
+    'Financial profile analysis',
+    'Cash flow optimization',
+    'Debt structure strategy',
+    'Financing readiness',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="theme-color" content="#0F1D33" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
+    {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} is:inline />)}
+  </head>
+
+  <body class="min-h-screen antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-900 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+      >Skip to content</a
+    >
+
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    {
+      !hideMobileCta && (
+        <div class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 p-3 backdrop-blur md:hidden">
+          <a href="/start" class="btn btn-primary w-full" data-ev="mobile_sticky_cta_click">
+            Start My Financial Profile
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      )
+    }
+    {!hideMobileCta && <div class="h-[76px] md:hidden" aria-hidden="true" />}
+
+    <script is:inline>
+      // ---- Centralized analytics utility -------------------------------
+      window.ksm = window.ksm || {};
+      window.ksm.track = function (event, props) {
+        var payload = Object.assign({ event: event, path: location.pathname }, props || {});
+        if (typeof window.gtag === 'function') window.gtag('event', event, payload);
+        if (window.posthog && typeof window.posthog.capture === 'function')
+          window.posthog.capture(event, payload);
+        (window.dataLayer = window.dataLayer || []).push(payload);
+      };
+      window.ksm.track('page_view');
+
+      // Declarative event tracking: any element with data-ev
+      document.addEventListener('click', function (e) {
+        var el = e.target instanceof Element ? e.target.closest('[data-ev]') : null;
+        if (el) window.ksm.track(el.getAttribute('data-ev'), { label: (el.textContent || '').trim().slice(0, 60) });
+      });
+
+      // Scroll depth
+      (function () {
+        var fired = {};
+        function onScroll() {
+          var h = document.documentElement;
+          var max = h.scrollHeight - h.clientHeight;
+          if (max <= 0) return;
+          var pct = (h.scrollTop / max) * 100;
+          [25, 50, 75, 100].forEach(function (m) {
+            if (pct >= m && !fired[m]) {
+              fired[m] = true;
+              window.ksm.track('scroll_' + m);
+            }
+          });
+        }
+        addEventListener('scroll', onScroll, { passive: true });
+      })();
+
+      // ---- Scroll reveal ------------------------------------------------
+      (function () {
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+        if (!els.length) return;
+
+        function show(el, useDelay) {
+          if (el.classList.contains('reveal-in')) return;
+          var delay = useDelay ? parseInt(el.getAttribute('data-delay') || '0', 10) : 0;
+          if (delay > 0) setTimeout(function () { el.classList.add('reveal-in'); }, delay);
+          else el.classList.add('reveal-in');
+        }
+
+        if (reduce || !('IntersectionObserver' in window)) {
+          els.forEach(function (el) { show(el, false); });
+          return;
+        }
+
+        // Sweep on load and on scroll. Deliberately not IntersectionObserver:
+        // IO can skip above-the-fold nodes on first paint, which leaves content invisible.
+        var pending = els.slice();
+        var queued = false;
+
+        function sweep() {
+          queued = false;
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          var still = [];
+          for (var i = 0; i < pending.length; i++) {
+            var el = pending[i];
+            var top = el.getBoundingClientRect().top;
+            if (top < vh * 0.92) show(el, true);
+            else still.push(el);
+          }
+          pending = still;
+          if (!pending.length) {
+            removeEventListener('scroll', request);
+            removeEventListener('resize', request);
+          }
+        }
+
+        function request() {
+          if (queued) return;
+          queued = true;
+          requestAnimationFrame(sweep);
+        }
+
+        sweep();
+        addEventListener('scroll', request, { passive: true });
+        addEventListener('resize', request);
+        // Belt and braces: fonts/images settling can shift layout.
+        setTimeout(sweep, 400);
+      })();
+    </script>
+  </body>
+</html>

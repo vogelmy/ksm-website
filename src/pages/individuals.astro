@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import CTA from '../components/CTA.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import { FAQ } from '../data/site';
+
+const SITUATIONS = [
+  {
+    t: 'A mortgage or refinance on the horizon',
+    d: 'You want to know what the position needs to look like before the application, not after a lender explains what went wrong. That usually means addressing utilization, documentation and reserves in a specific order, with enough lead time for each to register.',
+  },
+  {
+    t: 'Debt that accumulated one reasonable decision at a time',
+    d: 'No single obligation was a mistake. Together they now consume more of the month than anyone planned. The work is figuring out which ones are genuinely expensive, which are merely large, and what order to address them in.',
+  },
+  {
+    t: 'Good income that does not feel like good income',
+    d: 'The money arrives and disappears. Mapping committed versus flexible outflow almost always finds more room than expected — and identifies the two or three commitments actually driving the pressure.',
+  },
+  {
+    t: 'A major purchase or life event coming',
+    d: 'A home, a business, tuition, a relocation, supporting a family member. Large decisions have a way of undoing everything around them when they are made without looking at the whole picture first.',
+  },
+  {
+    t: 'A financial picture spread across too many places',
+    d: 'Several banks, several cards, a retirement account somewhere, an old loan nobody has looked at in years. Assembling it into one view is often the single most valuable hour of the engagement.',
+  },
+  {
+    t: 'A position that needs a second opinion',
+    d: 'You have a plan and you want it stress-tested by someone with no product to sell and no incentive tied to which direction you choose.',
+  },
+];
+
+const NOTFOR = [
+  'You are looking for someone to dispute items on your credit report.',
+  'You want a company to negotiate settlements with your creditors.',
+  'You want a broker to shop your loan application to lenders.',
+  'You are looking for investment management or securities advice.',
+];
+---
+
+<Base
+  title="Financial Strategy for Individuals & Families | KSM"
+  description="KSM helps individuals and families map their complete financial position — cash flow, debt, credit exposure, liquidity and income — and build a prioritized strategy before a mortgage, refinance or major financial decision."
+  path="/individuals"
+>
+  <PageHero
+    eyebrow="Individuals & Families"
+    title="Your finances are not six separate decisions. They only behave like it."
+    lede="A mortgage, a car, a card, tuition, an obligation you inherited — each gets evaluated on its own, and the combined effect never gets looked at. That combined effect is what determines what you can actually do next."
+    anchors={[
+      { label: 'When people call us', href: '#situations' },
+      { label: 'The engagement', href: '#process' },
+      { label: 'When we are not the fit', href: '#not-for' },
+    ]}
+  />
+
+  <section class="wrap mt-20">
+    <div class="prose-ksm reveal max-w-3xl">
+      <h2>What we actually do for individuals</h2>
+      <p>
+        We build a single, structured view of your position and then tell you what to do about it in a
+        specific order. That is the whole engagement. There is no product at the end of it, no
+        application to sign, and no ongoing management fee attached to the recommendation.
+      </p>
+      <p>
+        In practice, the value shows up in three places. The first is simply seeing everything in one
+        place — most people have never had their obligations, income, credit exposure and reserves laid
+        out side by side. The second is <strong>diagnosis</strong>: which parts of the position are
+        stronger than they feel, which are weaker than they look, and where two goals are working
+        against each other. The third is <strong>sequence</strong> — knowing that this comes before
+        that, and why.
+      </p>
+      <p>
+        Sensitive financial detail is gathered later in the engagement through a structured process.
+        Nothing beyond your name, goal and contact information is collected through this website.
+      </p>
+    </div>
+  </section>
+
+  <section id="situations" class="wrap mt-20 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Typical situations</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        When people tend to call.
+      </h2>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        SITUATIONS.map((s, i) => (
+          <article class="card card-hover reveal p-7" data-delay={(i % 3) * 70}>
+            <h3 class="text-[1.0625rem] leading-snug">{s.t}</h3>
+            <p class="mt-3.5 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Illustrative walkthrough -->
+  <section class="wrap mt-24">
+    <div class="rounded-[2rem] border border-line bg-cream p-7 sm:p-10 md:p-14">
+      <p class="eyebrow reveal">Illustrative walkthrough</p>
+      <h2 class="reveal mt-6 max-w-2xl text-[1.75rem] leading-tight sm:text-[2.125rem]" data-delay="60">
+        “We want to buy a house in the next twelve months.”
+      </h2>
+      <p class="reveal mt-5 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+        A constructed example showing how the profile moves from an objective to a sequence. It is not a
+        real client and not a promise of any outcome.
+      </p>
+
+      <ol class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
+        {
+          [
+            {
+              n: 'The goal',
+              b: 'A purchase twelve months out, with a target payment the household is comfortable carrying.',
+            },
+            {
+              n: 'What gets mapped',
+              b: 'Income structure and documentation, every obligation, utilization across all lines, accessible reserves.',
+            },
+            {
+              n: 'What surfaces',
+              b: 'Income supports the goal. Two revolving lines are carrying most of the utilization weight, and reserves are thin against the target payment.',
+            },
+            {
+              n: 'The sequence',
+              b: 'Utilization first because it needs months to season, reserves second, documentation last. Nothing new opened in the interim.',
+            },
+          ].map((step, i) => (
+            <li class="reveal bg-white p-6" data-delay={i * 70}>
+              <span class="font-display text-[0.6875rem] font-extrabold tracking-[0.14em] text-brand-600">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 class="mt-3 text-[1rem] leading-snug">{step.n}</h3>
+              <p class="mt-2.5 text-[0.875rem] leading-relaxed text-ink-600">{step.b}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="mt-8 text-[0.75rem] leading-relaxed text-ink-400">
+        Illustrative only. KSM does not guarantee mortgage approval, rates, terms or any other financing
+        outcome.
+      </p>
+    </div>
+  </section>
+
+  <ProcessTimeline />
+
+  <section id="not-for" class="wrap mt-24 scroll-mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">Honest scoping</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          When KSM is not the right call.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          A short conversation costs nothing and frequently ends with a referral elsewhere. That is a
+          legitimate outcome, and it is better for everyone than an engagement that was never going to
+          fit.
+        </p>
+      </div>
+
+      <ul class="reveal space-y-4" data-delay="100">
+        {
+          NOTFOR.map((n) => (
+            <li class="flex items-start gap-3.5 rounded-xl border border-line bg-white p-5 text-[0.9375rem] leading-relaxed text-ink-600">
+              <span
+                class="mt-0.5 grid h-5 w-5 flex-none place-items-center rounded-full border border-ink-200 text-ink-400"
+                aria-hidden="true"
+              >
+                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M2 2l5 5M7 2L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+              {n}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <FAQAccordion
+    items={FAQ.slice(0, 8)}
+    title="Questions individuals ask first."
+    lede="If the answer you need is not here, it is a good first question for the call."
+  />
+
+  <CTA
+    title="Start with the whole picture."
+    body="Tell us what you are working toward. We will tell you what the position needs to support it — and in what order."
+  />
+</Base>

@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CTA from '../components/CTA.astro';
+
+interface Signal {
+  t: string;
+  d: string;
+}
+interface Step {
+  n: string;
+  t: string;
+  d: string;
+}
+interface Props {
+  metaTitle: string;
+  metaDescription: string;
+  path: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  /** Left-hand editorial body (HTML string) */
+  bodyHtml: string;
+  signalsTitle: string;
+  signals: Signal[];
+  stepsTitle: string;
+  stepsLede: string;
+  steps: Step[];
+  boundaryTitle: string;
+  boundaries: string[];
+  related: { label: string; href: string; d: string }[];
+  ctaTitle: string;
+  ctaBody: string;
+}
+
+const {
+  metaTitle,
+  metaDescription,
+  path,
+  eyebrow,
+  title,
+  lede,
+  bodyHtml,
+  signalsTitle,
+  signals,
+  stepsTitle,
+  stepsLede,
+  steps,
+  boundaryTitle,
+  boundaries,
+  related,
+  ctaTitle,
+  ctaBody,
+} = Astro.props;
+---
+
+<Base title={metaTitle} description={metaDescription} path={path}>
+  <PageHero
+    eyebrow={eyebrow}
+    title={title}
+    lede={lede}
+    anchors={[
+      { label: 'Signals', href: '#signals' },
+      { label: 'How we work it', href: '#approach' },
+      { label: 'Scope', href: '#scope' },
+    ]}
+  />
+
+  <section class="wrap mt-20">
+    <div class="prose-ksm reveal max-w-3xl" set:html={bodyHtml} />
+  </section>
+
+  <section id="signals" class="wrap mt-20 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Signals</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">{signalsTitle}</h2>
+    </div>
+    <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        signals.map((s, i) => (
+          <article class="card card-hover reveal p-7" data-delay={(i % 3) * 70}>
+            <h3 class="text-[1.0625rem] leading-snug">{s.t}</h3>
+            <p class="mt-3.5 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="approach" class="wrap mt-24 scroll-mt-24">
+    <div class="rounded-[2rem] border border-line bg-cream p-7 sm:p-10 md:p-14">
+      <div class="max-w-2xl">
+        <p class="eyebrow reveal">The approach</p>
+        <h2 class="reveal mt-6 text-[1.875rem] leading-tight sm:text-[2.25rem]" data-delay="60">
+          {stepsTitle}
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">{stepsLede}</p>
+      </div>
+
+      <ol class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2">
+        {
+          steps.map((s, i) => (
+            <li class="reveal bg-white p-7" data-delay={(i % 2) * 70}>
+              <span class="num text-[0.75rem] font-medium tracking-[0.1em] text-brand-600">{s.n}</span>
+              <h3 class="mt-3 text-[1.0625rem] leading-snug">{s.t}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section id="scope" class="wrap mt-24 scroll-mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">Scope</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          {boundaryTitle}
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          Being explicit about what falls outside the engagement is part of the engagement.
+        </p>
+      </div>
+      <ul class="reveal space-y-4" data-delay="100">
+        {
+          boundaries.map((b) => (
+            <li class="flex items-start gap-3.5 rounded-xl border border-line bg-white p-5 text-[0.9375rem] leading-relaxed text-ink-600">
+              <span
+                class="mt-0.5 grid h-5 w-5 flex-none place-items-center rounded-full border border-ink-200 text-ink-400"
+                aria-hidden="true"
+              >
+                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M2 2l5 5M7 2L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </span>
+              {b}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap mt-24">
+    <p class="eyebrow reveal">Keep reading</p>
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      {
+        related.map((r, i) => (
+          <a href={r.href} class="card card-hover reveal group p-7" data-delay={i * 70}>
+            <h3 class="text-[1.0625rem] leading-snug transition-colors group-hover:text-brand-700">
+              {r.label}
+            </h3>
+            <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{r.d}</p>
+            <span class="mt-5 inline-flex items-center gap-1.5 text-[0.875rem] font-semibold text-brand-700">
+              Read <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <CTA title={ctaTitle} body={ctaBody} />
+</Base>

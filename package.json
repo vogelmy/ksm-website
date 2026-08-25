@@ -1,0 +1,23 @@
+{
+  "name": "ksm-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "db:init": "wrangler d1 execute ksm-leads --remote --file ./schema.sql",
+    "db:init:local": "wrangler d1 execute ksm-leads --local --file ./schema.sql"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "tailwindcss": "^4.1.18",
+    "wrangler": "^4.125.0"
+  }
+}

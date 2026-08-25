@@ -1,0 +1,91 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+
+const bodyHtml = `
+<h2>Cash flow is a structure problem, not a discipline problem</h2>
+<p>
+  Almost everyone who calls about cash flow opens the same way: the money comes in and it disappears.
+  The instinct is to treat that as a spending problem. In most positions we look at, it is not. It is a
+  <strong>structure</strong> problem — too much of the month is committed before any decision gets made,
+  and the commitments are shaped in a way that leaves no margin.
+</p>
+<p>
+  The distinction matters because the two problems have completely different solutions. A spending
+  problem responds to a budget. A structure problem responds to changing the shape of the obligations,
+  the timing of the inflows, or both. Budgets applied to a structure problem tend to fail in month
+  three, which is why so many people conclude the problem is them.
+</p>
+
+<h3>Cash flow and liquidity are not the same thing</h3>
+<p>
+  Cash flow is a rate: what moves through the position over a period. Liquidity is a level: what is
+  accessible right now if something goes wrong. A position can have healthy cash flow and almost no
+  liquidity, and that combination fails badly under a single unexpected expense — because every shock
+  becomes a financing decision made under time pressure.
+</p>
+<p>
+  We measure both, separately, and set a reserve target sized to your actual obligations rather than a
+  generic rule of thumb.
+</p>
+
+<h3>The number that matters most</h3>
+<p>
+  The single most useful figure we produce is the split between <strong>committed</strong> and
+  <strong>flexible</strong> outflow. Committed means contractual: debt service, housing, insurance,
+  payroll. Flexible means everything else. Two positions with identical income and identical total
+  outflow can have a completely different committed share — and the one with the higher committed share
+  has fewer options no matter how disciplined the household or business is.
+</p>
+`;
+
+const signals = [
+  { t: 'Profitable months that feel tight', d: 'The income statement and the bank account tell different stories. Usually a timing gap between when money is earned and when it arrives.' },
+  { t: 'No reserve, or a reserve that never grows', d: 'Every attempt to build one gets consumed by the next surprise, which is itself a symptom of the committed share being too high.' },
+  { t: 'Payments landing in the same week', d: 'The obligations were taken on separately, so nobody sequenced the due dates. The month has a cliff in it.' },
+  { t: 'Using credit for ordinary expenses', d: 'Revolving balances that grow slowly and never fully clear are usually cash flow signaling, not overspending.' },
+  { t: 'Seasonal swings that never get planned for', d: 'The strong months fund the weak ones informally rather than deliberately, so the weak months arrive as a surprise every year.' },
+  { t: 'Income grew and pressure did not fall', d: 'Commitments expanded with income. The ratio never changed, so the position did not actually improve.' },
+];
+
+const steps = [
+  { n: '01', t: 'Separate committed from flexible', d: 'Every outflow gets classified. This produces the ratio that most other decisions depend on.' },
+  { n: '02', t: 'Map timing against obligations', d: 'When money arrives versus when it is required. Gaps and clusters both show up here, and both are fixable without changing a single number.' },
+  { n: '03', t: 'Stress the position', d: 'What happens to the month if income drops, a payment resets, or an unplanned expense lands. This is where thin liquidity becomes visible.' },
+  { n: '04', t: 'Set a reserve target with a reason', d: 'Not a generic number of months. A figure derived from your committed outflow and the volatility of your income.' },
+  { n: '05', t: 'Identify the two or three real levers', d: 'There are usually only a few commitments actually driving the pressure. Naming them prevents a long list of trivial changes.' },
+  { n: '06', t: 'Sequence and schedule', d: 'What changes first, what changes next, and what should be left alone until the earlier moves have landed.' },
+];
+
+const boundaries = [
+  'KSM does not manage, hold or move client funds.',
+  'KSM does not provide bookkeeping, accounting or tax preparation.',
+  'KSM does not negotiate with creditors on a client’s behalf.',
+  'KSM does not provide investment advice or manage securities.',
+];
+
+const related = [
+  { label: 'Debt Strategy', href: '/debt-strategy', d: 'Structure, cost and sequence — the other half of most cash flow problems.' },
+  { label: 'The KSM Financial Profile', href: '/financial-profile', d: 'How cash flow is read against the other five components.' },
+  { label: 'Cash Flow vs. Liquidity', href: '/insights/cash-flow-vs-liquidity', d: 'Why confusing the two is expensive, with a worked example.' },
+];
+---
+
+<ServicePage
+  metaTitle="Cash Flow Optimization Strategy | KSM"
+  metaDescription="KSM separates committed from flexible outflow, maps timing against obligations, stress-tests the position and sets a reserve target — then sequences the two or three changes that actually move the month."
+  path="/cash-flow-optimization"
+  eyebrow="Cash Flow Optimization"
+  title="The month is decided before you make a single decision about it."
+  lede="How much of your income is already committed — and how the timing of what comes in lines up against what goes out — determines your flexibility far more than any individual spending choice does."
+  bodyHtml={bodyHtml}
+  signalsTitle="Six signs the constraint is structure, not discipline."
+  signals={signals}
+  stepsTitle="How a cash flow engagement runs."
+  stepsLede="Six passes over the same position, each producing something concrete. The output is a short list of changes in a defined order, not a budget."
+  steps={steps}
+  boundaryTitle="What sits outside this work."
+  boundaries={boundaries}
+  related={related}
+  ctaTitle="Find the two levers that change the month."
+  ctaBody="Most positions have a small number of commitments doing most of the damage. The first job is finding them."
+/>

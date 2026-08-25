@@ -1,0 +1,110 @@
+---
+import { NAV } from '../data/site';
+const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => here === href || here.startsWith(href + '/');
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent bg-white/90 backdrop-blur-md transition-[border-color,box-shadow] duration-200"
+>
+  <div class="wrap flex h-[72px] items-center justify-between gap-6">
+    <a href="/" class="flex items-center gap-3" aria-label="Kallus Strategic Management — home">
+      <span
+        class="grid h-10 w-10 flex-none place-items-center rounded-xl bg-ink-900"
+        aria-hidden="true"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2.5" y="11" width="3.2" height="6.5" rx="1.2" fill="#6180FB" />
+          <rect x="8.4" y="7" width="3.2" height="10.5" rx="1.2" fill="#94ACFF" />
+          <rect x="14.3" y="2.5" width="3.2" height="15" rx="1.2" fill="#FFFFFF" />
+        </svg>
+      </span>
+      <span class="leading-none">
+        <span class="block font-display text-[1.375rem] font-extrabold leading-none tracking-[-0.02em] text-ink-900"
+          >KSM</span
+        >
+        <span
+          class="label mt-1.5 block whitespace-nowrap text-[0.5rem] text-ink-400"
+          >Kallus Strategic Management</span
+        >
+      </span>
+    </a>
+
+    <nav class="hidden items-center gap-6 xl:gap-8 lg:flex" aria-label="Primary">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'whitespace-nowrap text-[0.9375rem] font-medium transition-colors',
+              isActive(item.href) ? 'text-brand-700' : 'text-ink-600 hover:text-ink-900',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hidden flex-none items-center md:flex">
+      <a href="/start" class="btn btn-primary btn-sm" data-ev="hero_cta_click">
+        Start my profile <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <button
+      id="menu-btn"
+      type="button"
+      class="grid h-10 w-10 place-items-center rounded-lg border border-line text-ink-900 lg:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden border-t border-line bg-white lg:hidden">
+    <nav class="wrap flex flex-col py-3" aria-label="Mobile">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class="border-b border-line/70 py-3.5 text-base font-medium text-ink-700 last:border-0"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/about" class="border-b border-line/70 py-3.5 text-base font-medium text-ink-700">About KSM</a>
+      <a href="/start" class="btn btn-primary mt-4 mb-2 w-full" data-ev="mobile_menu_cta_click">
+        Start my profile <span aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.getElementById('site-header');
+    function onScroll() {
+      var on = window.scrollY > 8;
+      header.classList.toggle('border-line', on);
+      header.classList.toggle('shadow-[0_8px_24px_-20px_rgba(15,29,51,.5)]', on);
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var btn = document.getElementById('menu-btn');
+    var menu = document.getElementById('mobile-menu');
+    btn.addEventListener('click', function () {
+      var open = menu.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+  })();
+</script>

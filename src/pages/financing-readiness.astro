@@ -1,0 +1,91 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+
+const bodyHtml = `
+<h2>Preparation is the part of financing you actually control</h2>
+<p>
+  You do not control whether a lender approves a request, what rate they offer, or how their appetite
+  for your profile shifts between now and the application. You do control what the position looks like
+  when it arrives on their desk — and that is where nearly all the available leverage sits.
+</p>
+<p>
+  Financing readiness is the discipline of closing the gap between the position you have and the
+  position the request requires, <strong>before</strong> the request is made. Almost every element of
+  that gap takes time. Utilization needs months to season. Documentation needs to be consistent across
+  periods. Reserves need to exist long enough to look like reserves rather than a recent deposit.
+</p>
+
+<h3>What a lender is actually reading</h3>
+<p>
+  The version of you a lender evaluates is assembled from documents, ratios and history. It does not
+  include context, intent, or an explanation of the year that made the numbers look that way. That is
+  not unfair — it is simply how the process works at scale. Understanding that view is what lets you
+  prepare for it instead of arguing with it afterwards.
+</p>
+
+<h3>The most common failure is timing, not strength</h3>
+<p>
+  Positions that would read well in six months get presented today because the need became urgent. The
+  request gets declined or comes back on unfavorable terms, and each attempt leaves a mark. Sequencing
+  the request is frequently worth more than improving any single input.
+</p>
+
+<h3>An honest caution</h3>
+<p>
+  No preparation guarantees an approval, a rate, a limit or a term. Anyone who tells you otherwise is
+  selling something. What preparation reliably does is remove avoidable reasons for a decline and put
+  you in a position to evaluate an offer rather than accept whatever is available.
+</p>
+`;
+
+const signals = [
+  { t: 'A financing need inside twelve months', d: 'The best time to start is while there is still room to change the inputs that need seasoning.' },
+  { t: 'A recent decline you did not fully understand', d: 'Declines are rarely about one thing. Reconstructing what was read is the first step to fixing it.' },
+  { t: 'Utilization sitting high across revolving lines', d: 'One of the most influential inputs, and one of the slowest to correct. It belongs early in any sequence.' },
+  { t: 'Income that is real but hard to document', d: 'Self-employment, multiple sources, or compensation structured for tax efficiency can read poorly for lending purposes.' },
+  { t: 'Several applications in a short period', d: 'Application patterns are visible and interpreted. Spacing and sequencing matter.' },
+  { t: 'Reserves that appeared recently', d: 'A balance that arrived last week reads differently than one that has been there for two quarters.' },
+];
+
+const steps = [
+  { n: '01', t: 'Define the request precisely', d: 'Amount, purpose, timing and the institution type. Readiness is relative to a specific request, not to a general standard.' },
+  { n: '02', t: 'Assemble the lender-side view', d: 'What the position looks like when read from documents and ratios rather than from context.' },
+  { n: '03', t: 'Identify the gap', d: 'The specific distance between the current profile and what the request typically requires.' },
+  { n: '04', t: 'Order the fixes by lead time', d: 'Anything that needs to season goes first. Anything instant goes last. This is the whole game.' },
+  { n: '05', t: 'Prepare documentation', d: 'Consistency across periods, and a clear explanation for anything a reviewer will pause on.' },
+  { n: '06', t: 'Time the approach', d: 'When to submit, in what order, and what not to do in the interim.' },
+];
+
+const boundaries = [
+  'KSM does not submit applications or act as a broker or originator.',
+  'KSM does not guarantee approval, rates, credit limits, terms or savings.',
+  'KSM receives no compensation from lenders, funders or referral partners.',
+  'KSM is not a credit repair organization and does not dispute credit report entries.',
+];
+
+const related = [
+  { label: 'The KSM Financial Profile', href: '/financial-profile', d: 'The full framework the readiness work sits inside.' },
+  { label: 'Debt Strategy', href: '/debt-strategy', d: 'Structure changes that usually precede a financing request.' },
+  { label: 'What Lenders Actually See', href: '/insights/what-lenders-actually-see', d: 'How the position gets reconstructed on the other side of the desk.' },
+];
+---
+
+<ServicePage
+  metaTitle="Financing Readiness Strategy | KSM"
+  metaDescription="KSM helps individuals and business owners close the gap between their current financial position and what a specific financing request requires — sequenced by lead time, before the application. No guaranteed approvals."
+  path="/financing-readiness"
+  eyebrow="Financing Readiness"
+  title="You control the position, not the decision. Prepare the part you control."
+  lede="Approvals, rates and limits are decided by lenders against their own criteria. What you can influence is the profile that arrives on the desk — and nearly every element of it needs lead time."
+  bodyHtml={bodyHtml}
+  signalsTitle="Six reasons to start preparing now."
+  signals={signals}
+  stepsTitle="How a readiness engagement runs."
+  stepsLede="Six passes, ordered by how long each change takes to register. The output is a dated sequence ending at the point the request should be made."
+  steps={steps}
+  boundaryTitle="What this engagement is not."
+  boundaries={boundaries}
+  related={related}
+  ctaTitle="Start before the need becomes urgent."
+  ctaBody="The inputs that matter most are the ones that take the longest to change. Twelve months out is early. Six weeks out is late."
+/>

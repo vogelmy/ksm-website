@@ -1,0 +1,215 @@
+---
+import Base from '../layouts/Base.astro';
+import Dashboard from '../components/Dashboard.astro';
+import SystemDiagram from '../components/SystemDiagram.astro';
+import PillarCards from '../components/PillarCards.astro';
+import ProfileReport from '../components/ProfileReport.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import AudienceSwitcher from '../components/AudienceSwitcher.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTA from '../components/CTA.astro';
+import { FAQ } from '../data/site';
+
+const POSITIONING = [
+  {
+    t: 'No product quota',
+    d: 'KSM does not sell financing and takes no compensation from lenders. There is no product on the other side of the recommendation.',
+  },
+  {
+    t: 'No guaranteed outcomes',
+    d: 'KSM cannot guarantee approvals, rates, limits or savings — and treats anyone who does as a warning sign, not a competitor.',
+  },
+  {
+    t: 'Strategy first',
+    d: 'The work is the relationship between cash flow, obligations, profile and timing. Capital is a consequence of that, not a substitute for it.',
+  },
+];
+
+const TRUST = [
+  {
+    t: 'Private',
+    d: 'Financial information is handled with discretion, used solely to build and discuss your profile, and never sold or shared with lenders for marketing.',
+  },
+  {
+    t: 'Independent',
+    d: 'KSM is not the lender making the underwriting decision, and has no financial interest in which direction you go.',
+  },
+  {
+    t: 'Strategic',
+    d: 'The objective is not simply obtaining more capital. Sometimes the strongest recommendation is to wait, restructure, or do less.',
+  },
+];
+
+const FRAMEWORK = [
+  { n: '6', l: 'Profile components', d: 'Cash flow, debt, credit, liquidity, income and capital needs.' },
+  { n: '5', l: 'Engagement steps', d: 'Connect, map, diagnose, strategize, execute.' },
+  { n: '90', l: 'Day roadmap', d: 'A written sequence with a defined first move.' },
+  { n: '1', l: 'Consolidated view', d: 'The whole position, assembled in one place.' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  title="Financial Profile Strategy | Kallus Strategic Management"
+  description="KSM helps individuals and business owners understand their complete financial position — cash flow, debt structure, credit exposure, liquidity, income and timing — and build a prioritized strategy before the next financial move."
+  path="/"
+  schema={[faqSchema]}
+>
+  <!-- ================= HERO ================= -->
+  <section class="relative overflow-hidden border-b border-line bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-70" aria-hidden="true"></div>
+    <div
+      class="pointer-events-none absolute right-[-8rem] top-6 h-[640px] w-[640px] rounded-full border border-line"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="wrap relative grid items-center gap-14 py-16 md:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,29rem)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">Business credit · Funding readiness · Financial strategy</p>
+
+        <h1 class="reveal mt-7 text-[2.5rem] leading-[1.04] sm:text-[3.25rem] lg:text-[3.75rem]" data-delay="60">
+          Know exactly where your <span class="text-brand-600">financial position</span> stands.
+        </h1>
+
+        <p class="reveal mt-7 max-w-xl text-[1.125rem] leading-relaxed text-ink-600" data-delay="120">
+          Before you pursue your next loan, line of credit, mortgage, refinance or major financial move,
+          understand the picture behind it. KSM maps the whole position, finds the pressure points, and
+          gives you a prioritized sequence.
+        </p>
+
+        <div class="reveal mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" data-delay="180">
+          <a href="/start" class="btn btn-primary" data-ev="hero_cta_click">
+            Get my financial profile <span aria-hidden="true">→</span>
+          </a>
+          <a href="/how-it-works" class="btn btn-ghost" data-ev="hero_secondary_click">
+            See how it works <span aria-hidden="true">↘</span>
+          </a>
+        </div>
+
+        <p class="reveal mt-9 max-w-lg text-[0.8125rem] leading-relaxed text-ink-400" data-delay="240">
+          No guaranteed approvals. No guaranteed score increases. Private, independent and strategic —
+          built around your complete financial picture.
+        </p>
+      </div>
+
+      <div class="reveal lg:pl-4" data-delay="140">
+        <Dashboard />
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE BIG IDEA ================= -->
+  <SystemDiagram />
+
+  <!-- ================= SIX PILLARS ================= -->
+  <PillarCards />
+
+  <!-- ================= THE DELIVERABLE ================= -->
+  <ProfileReport />
+
+  <!-- ================= BEFORE / AFTER ================= -->
+  <BeforeAfter />
+
+  <!-- ================= AUDIENCE ================= -->
+  <AudienceSwitcher />
+
+  <!-- ================= PROCESS ================= -->
+  <ProcessTimeline />
+
+  <!-- ================= POSITIONING ================= -->
+  <section class="wrap mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Positioning</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        We are not here to sell you another financial product.
+      </h2>
+      <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+        KSM exists to help clients understand their position before someone tries to sell them the next
+        solution for it.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        POSITIONING.map((c, i) => (
+          <div class="card reveal p-7" data-delay={i * 70}>
+            <h3 class="text-[1.125rem] leading-snug">{c.t}</h3>
+            <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{c.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ================= TRUST ================= -->
+  <section class="wrap mt-24">
+    <div class="rounded-[2rem] border border-line bg-cream px-6 py-14 sm:px-12 md:py-16">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="eyebrow reveal justify-center">Trust</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          Financial decisions deserve more than generic advice.
+        </h2>
+      </div>
+
+      <div class="mx-auto mt-12 grid max-w-4xl gap-10 md:grid-cols-3">
+        {
+          TRUST.map((t, i) => (
+            <div class="reveal text-center md:text-left" data-delay={i * 70}>
+              <h3 class="label text-brand-700">{t.t}</h3>
+              <p class="mt-4 text-[0.9375rem] leading-relaxed text-ink-600">{t.d}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FRAMEWORK (in place of testimonials) ================= -->
+  <section class="wrap mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">Methodology</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          Built around a repeatable framework.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          Every engagement runs the same structure, in the same order, regardless of how complicated the
+          starting point is. That is what makes the output comparable over time — and what keeps the
+          recommendation from depending on who happens to be in the room.
+        </p>
+        <a href="/how-it-works" class="btn btn-ghost mt-8" data-ev="framework_click">
+          See the full methodology <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+        {
+          FRAMEWORK.map((f) => (
+            <div class="bg-white p-7">
+              <p class="font-display text-[2.5rem] leading-none font-extrabold tabular-nums text-ink-900">{f.n}</p>
+              <p class="label mt-3 text-brand-700">{f.l}</p>
+              <p class="mt-2.5 text-[0.875rem] leading-relaxed text-ink-500">{f.d}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <FAQAccordion items={FAQ} />
+
+  <!-- ================= CTA ================= -->
+  <CTA />
+</Base>

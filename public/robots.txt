@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ksm-website.pages.dev/sitemap-index.xml

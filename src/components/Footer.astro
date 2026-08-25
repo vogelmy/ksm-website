@@ -1,0 +1,81 @@
+---
+import { FOOTER_NAV, SITE } from '../data/site';
+const year = 2026;
+---
+
+<footer class="mt-24 border-t border-line bg-ink-950 text-ink-300">
+  <div class="wrap py-16 md:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="grid h-10 w-10 flex-none place-items-center rounded-xl bg-white/10" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2.5" y="11" width="3.2" height="6.5" rx="1.2" fill="#6180FB" />
+              <rect x="8.4" y="7" width="3.2" height="10.5" rx="1.2" fill="#94ACFF" />
+              <rect x="14.3" y="2.5" width="3.2" height="15" rx="1.2" fill="#FFFFFF" />
+            </svg>
+          </span>
+          <span class="font-display text-lg font-extrabold tracking-tight text-white">
+            Kallus Strategic Management
+          </span>
+        </div>
+        <p class="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-ink-400">
+          Clarity before capital. Strategy before financing. Understand the complete financial picture
+          before the next move.
+        </p>
+        <a
+          href={`mailto:${SITE.email}`}
+          class="mt-6 inline-block text-[0.9375rem] font-medium text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+          data-ev="email_click">{SITE.email}</a
+        >
+      </div>
+
+      {
+        FOOTER_NAV.map((col) => (
+          <div>
+            <h3 class="label text-ink-500">{col.title}</h3>
+            <ul class="mt-5 space-y-3">
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} class="text-[0.9375rem] text-ink-300 transition-colors hover:text-white">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-14 space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-[0.8125rem] leading-relaxed text-ink-400">
+      <p>
+        <strong class="font-semibold text-ink-300">Important disclosures.</strong>
+        Kallus Strategic Management is a financial strategy consulting practice. KSM is not a lender, a
+        bank, a credit repair organization, a debt settlement or debt relief company, a credit reporting
+        agency, a mortgage broker, or a registered investment adviser. KSM does not originate loans,
+        submit financing applications on a client's behalf, or receive compensation from lenders.
+      </p>
+      <p>
+        KSM does not guarantee financing approval, interest rates, credit limits, credit score changes,
+        savings, or any other financial outcome. Approval decisions are made solely by lenders according
+        to their own underwriting criteria. Any profile score, metric, roadmap or report shown on this
+        website is an illustrative example created for demonstration and does not represent an actual
+        client, an actual result, or a universal credit score.
+      </p>
+      <p>
+        Nothing on this website constitutes legal, tax, accounting or investment advice. Consult a
+        qualified professional regarding your specific circumstances.
+      </p>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-4 border-t border-white/10 pt-8 text-[0.8125rem] text-ink-500 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} Kallus Strategic Management. All rights reserved.</p>
+      <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Legal">
+        <a href="/privacy" class="transition-colors hover:text-white">Privacy Policy</a>
+        <a href="/terms" class="transition-colors hover:text-white">Terms of Use</a>
+        <a href="/disclosures" class="transition-colors hover:text-white">Disclosures</a>
+      </nav>
+    </div>
+  </div>
+</footer>

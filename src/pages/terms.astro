@@ -1,0 +1,95 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+
+const bodyHtml = `
+<h2>Acceptance</h2>
+<p>
+  By accessing this website you agree to these terms. If you do not agree, do not use the site.
+</p>
+
+<h2>Informational purpose only</h2>
+<p>
+  All content on this website is provided for general informational purposes. It is not legal, tax,
+  accounting, investment or lending advice, it is not tailored to your circumstances, and it does not
+  create a consulting or client relationship between you and Kallus Strategic Management ("KSM"). A
+  client relationship arises only under a signed engagement agreement.
+</p>
+
+<h2>Illustrative figures</h2>
+<p>
+  Scores, metrics, dashboards, sample reports, roadmaps and scenarios shown on this site are
+  illustrative examples created for demonstration. They do not represent actual clients, actual
+  engagements or expected results. See our <a href="/disclosures">Disclosures</a> for the full
+  statement.
+</p>
+
+<h2>No guarantees</h2>
+<p>
+  KSM does not guarantee financing approval, interest rates, credit limits, terms, credit score
+  changes, savings or any other financial outcome. Lending decisions are made by lenders under their
+  own criteria.
+</p>
+
+<h2>Submissions</h2>
+<p>
+  When you submit the profile request form you confirm that the information you provide is accurate to
+  the best of your knowledge and that you are authorized to provide it. You agree not to submit
+  sensitive information — account numbers, government identification numbers, credentials or similar —
+  through this website. You agree that KSM may contact you regarding your request.
+</p>
+
+<h2>Acceptable use</h2>
+<p>You agree not to:</p>
+<ul>
+  <li>Use the site for any unlawful purpose or in violation of any applicable regulation</li>
+  <li>Attempt to gain unauthorized access to the site, its systems or its data</li>
+  <li>Submit automated, fraudulent, abusive or deliberately false enquiries</li>
+  <li>Scrape, republish or resell the site's content without written permission</li>
+</ul>
+
+<h2>Intellectual property</h2>
+<p>
+  The content, structure, copy, design and frameworks presented on this site are the property of KSM.
+  You may read and share links to the material; you may not reproduce it commercially without written
+  permission.
+</p>
+
+<h2>Third-party links</h2>
+<p>
+  Links to third-party sites are provided for convenience. KSM does not control and is not responsible
+  for their content, policies or practices.
+</p>
+
+<h2>Availability</h2>
+<p>
+  The site is provided on an "as is" and "as available" basis. KSM does not warrant uninterrupted or
+  error-free operation and may modify or discontinue any part of the site at any time.
+</p>
+
+<h2>Limitation of liability</h2>
+<p>
+  To the fullest extent permitted by law, KSM will not be liable for any indirect, incidental,
+  consequential or punitive damages arising from your use of this website or reliance on its content.
+</p>
+
+<h2>Changes</h2>
+<p>
+  These terms may be updated. The updated date at the top of this page reflects the current version,
+  and continued use of the site constitutes acceptance.
+</p>
+
+<h2>Contact</h2>
+<p>Questions about these terms: <a href="mailto:info@ksmstrategy.com">info@ksmstrategy.com</a>.</p>
+`;
+---
+
+<LegalPage
+  metaTitle="Terms of Use | Kallus Strategic Management"
+  metaDescription="Terms governing use of the Kallus Strategic Management website, including the informational nature of its content and the absence of any guaranteed financial outcome."
+  path="/terms"
+  eyebrow="Terms"
+  title="Terms of use."
+  lede="The short version: everything here is informational, the figures are illustrative, and reading the site does not make you a client."
+  updated="August 2026"
+  bodyHtml={bodyHtml}
+/>

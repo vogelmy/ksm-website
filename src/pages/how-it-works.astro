@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ProfileReport from '../components/ProfileReport.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTA from '../components/CTA.astro';
+import { PROCESS, FAQ } from '../data/site';
+
+const WHATYOUGET = [
+  { t: 'A written financial profile', d: 'The complete position assembled in one document, with each of the six components assessed and explained.' },
+  { t: 'A stated top priority', d: 'One thing, named explicitly, with the reasoning behind why it comes before everything else.' },
+  { t: 'A ninety-day roadmap', d: 'Four phases with dated windows, so the sequence is a calendar rather than a wish list.' },
+  { t: 'A list of what to leave alone', d: 'Frequently the most useful page. Knowing what not to touch prevents undoing the moves that matter.' },
+];
+
+const PRINCIPLES = [
+  { t: 'Objective first, paperwork second', d: 'Nothing gets assembled until we know what you are trying to accomplish and by when. The same position is strong or weak depending entirely on the objective it is measured against.' },
+  { t: 'One view, not twelve', d: 'The consolidation step is unglamorous and it is where most of the surprises surface. Almost no one arrives with their position already in one place.' },
+  { t: 'Ranked by pressure, not by size', d: 'The biggest number is rarely the most urgent one. We rank by what is actually constraining the position.' },
+  { t: 'A sequence, with reasons', d: 'Every recommendation carries an order and a rationale. If you cannot explain why something is first, it is not a strategy.' },
+  { t: 'No product at the end', d: 'KSM does not sell financing and takes no lender compensation, so “do nothing yet” remains an available recommendation.' },
+  { t: 'Honest about limits', d: 'We say plainly what cannot be promised — approvals, rates, limits, score changes — because the alternative is a sales pitch.' },
+];
+---
+
+<Base
+  title="How KSM Works | Kallus Strategic Management"
+  description="The KSM engagement in five steps: connect, map, diagnose, strategize, execute. What we assemble, how we rank priorities, what you receive, and what we do not do."
+  path="/how-it-works"
+>
+  <PageHero
+    eyebrow="How it works"
+    title="From financial complexity to a clear next move."
+    lede="Five steps, run in the same order every time. Each one produces something you can see, so you always know where the engagement stands and what it has established so far."
+    anchors={[
+      { label: 'The five steps', href: '#steps' },
+      { label: 'What you receive', href: '#deliverable' },
+      { label: 'Principles', href: '#principles' },
+      { label: 'FAQ', href: '#faq' },
+    ]}
+  />
+
+  <!-- Detailed steps -->
+  <section id="steps" class="wrap mt-20 scroll-mt-24">
+    <ol class="space-y-5">
+      {
+        PROCESS.map((step, i) => (
+          <li
+            class="reveal grid gap-6 rounded-[1.5rem] border border-line bg-white p-7 md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] md:gap-12 md:p-10"
+            data-delay={i * 60}
+          >
+            <div>
+              <span class="num text-[0.75rem] font-medium tracking-[0.12em] text-brand-600">Step {step.num}</span>
+              <h2 class="mt-3 text-[1.5rem] leading-snug">{step.title}</h2>
+            </div>
+            <div>
+              <p class="font-display text-[1.125rem] font-bold leading-snug text-ink-900">{step.summary}</p>
+              <p class="mt-4 text-[1rem] leading-relaxed text-ink-600">{step.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- What you receive -->
+  <section class="wrap mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">The output</p>
+        <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">
+          Four things, every time.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          The format does not change with the complexity of the position. Only the content does.
+        </p>
+      </div>
+
+      <ul class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+        {
+          WHATYOUGET.map((w) => (
+            <li class="bg-white p-7">
+              <h3 class="text-[1.0625rem] leading-snug">{w.t}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{w.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <ProfileReport />
+
+  <!-- Principles -->
+  <section id="principles" class="wrap mt-24 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Principles</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        Six rules the engagement runs on.
+      </h2>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        PRINCIPLES.map((p, i) => (
+          <div class="card reveal p-7" data-delay={(i % 3) * 70}>
+            <h3 class="text-[1.0625rem] leading-snug">{p.t}</h3>
+            <p class="mt-3.5 text-[0.9375rem] leading-relaxed text-ink-600">{p.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Pricing posture -->
+  <section class="wrap mt-24">
+    <div class="rounded-[2rem] border border-line bg-cream px-6 py-14 sm:px-12">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="eyebrow reveal justify-center">Engagements</p>
+        <h2 class="reveal mt-6 text-[1.875rem] leading-tight sm:text-[2.25rem]" data-delay="60">
+          Scoped to the complexity of the profile.
+        </h2>
+        <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+          A single-entity personal position and an owner-operated business with several lenders are not
+          the same amount of work, so they are not scoped the same way. Scope and cost are discussed
+          directly before anything starts — and there is no cost to establish whether KSM is the right
+          fit at all.
+        </p>
+        <a href="/start" class="btn btn-primary mt-9" data-ev="pricing_cta_click">
+          See if KSM is a fit <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <FAQAccordion items={FAQ} />
+
+  <CTA />
+</Base>

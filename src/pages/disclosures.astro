@@ -1,0 +1,83 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+
+const bodyHtml = `
+<h2>What KSM is</h2>
+<p>
+  Kallus Strategic Management ("KSM") is a financial strategy consulting practice. KSM analyzes a
+  client's financial position and produces written analysis, a stated priority and a prioritized
+  roadmap. That analysis is advisory in nature and educational in purpose.
+</p>
+
+<h2>What KSM is not</h2>
+<ul>
+  <li><strong>Not a lender or bank.</strong> KSM does not originate, fund, purchase or service loans, lines of credit, advances or any other extension of credit.</li>
+  <li><strong>Not a loan broker or originator.</strong> KSM does not submit financing applications on a client's behalf, does not place clients with lenders, and does not receive compensation, commissions or referral fees from lenders or funding sources.</li>
+  <li><strong>Not a credit repair organization.</strong> KSM does not dispute entries on consumer credit reports, does not contact credit bureaus on a client's behalf, and does not offer to improve or repair credit records, history or ratings.</li>
+  <li><strong>Not a debt settlement, debt relief or debt management company.</strong> KSM does not negotiate with creditors, does not enroll clients in settlement or management programs, and does not hold, receive or disburse client funds.</li>
+  <li><strong>Not a consumer reporting agency.</strong> KSM does not assemble, evaluate, furnish or sell consumer credit information or consumer reports as those terms are used under the Fair Credit Reporting Act.</li>
+  <li><strong>Not an investment adviser, broker-dealer, accountant or law firm.</strong> KSM does not manage assets, recommend securities, prepare tax filings, perform audits or provide legal advice.</li>
+</ul>
+
+<h2>No guarantees</h2>
+<p>
+  KSM does not guarantee, promise or predict any financial outcome. This includes but is not limited to:
+  approval or denial of any application for credit; interest rates, credit limits, terms or fees offered
+  by any lender; changes to any credit score or credit report; savings, cost reductions or debt
+  elimination; business revenue, profitability or valuation; or the availability of financing of any
+  kind.
+</p>
+<p>
+  Lending decisions are made solely by lenders according to their own underwriting criteria, which KSM
+  does not control and cannot influence.
+</p>
+
+<h2>Illustrative content on this website</h2>
+<p>
+  Every score, percentage, metric, progress bar, profile dashboard, sample report, roadmap, walkthrough
+  and scenario shown on this website is an <strong>illustrative example created for demonstration
+  purposes</strong>. These figures do not represent an actual client, an actual engagement, an actual
+  result, or any expected result. The numerical "profile position" shown in these examples is a
+  presentational device and is not a credit score, a universal rating, or a prediction of any lending
+  decision.
+</p>
+
+<h2>No testimonials or client claims</h2>
+<p>
+  This website does not display client testimonials, client logos, client counts, awards, certifications
+  or performance statistics. Where a section of the site is designed to hold such material, it remains
+  intentionally empty until KSM has authentic, substantiated content to place in it.
+</p>
+
+<h2>Not professional advice</h2>
+<p>
+  Nothing on this website — including the Insights articles — constitutes legal, tax, accounting,
+  investment or lending advice, and nothing on it creates a client relationship. The content is general
+  in nature and does not account for any individual's specific circumstances. Consult a qualified
+  professional before acting on anything you read here.
+</p>
+
+<h2>Third-party references</h2>
+<p>
+  Any reference to a third-party company, product or website is for context only and does not imply
+  endorsement, affiliation or sponsorship in either direction.
+</p>
+
+<h2>Questions</h2>
+<p>
+  Questions about these disclosures can be directed to
+  <a href="mailto:info@ksmstrategy.com">info@ksmstrategy.com</a>.
+</p>
+`;
+---
+
+<LegalPage
+  metaTitle="Disclosures | Kallus Strategic Management"
+  metaDescription="Regulatory and business disclosures for Kallus Strategic Management: what KSM is, what KSM is not, and the absence of guarantees regarding financing, rates, credit scores or savings."
+  path="/disclosures"
+  eyebrow="Disclosures"
+  title="What KSM is, what KSM is not, and what it cannot promise."
+  lede="This page is deliberately blunt. A financial practice that is vague about its own limits is telling you something."
+  updated="August 2026"
+  bodyHtml={bodyHtml}
+/>

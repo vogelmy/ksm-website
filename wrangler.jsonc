@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ksm-website",
+  "account_id": "f7e0ab82b63c3683d7c3f49619f4d1bb",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-08-20",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "LEAD_TO": "moishyv@gmail.com",
+    "LEAD_FROM_NAME": "KSM Website",
+    "SITE_NAME": "Kallus Strategic Management"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ksm-leads",
+      "database_id": "c81ddc57-a265-4c58-aa9e-8ae0b88c7eb2",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}

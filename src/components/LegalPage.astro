@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+
+interface Props {
+  metaTitle: string;
+  metaDescription: string;
+  path: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  updated: string;
+  bodyHtml: string;
+}
+const { metaTitle, metaDescription, path, eyebrow, title, lede, updated, bodyHtml } = Astro.props;
+---
+
+<Base title={metaTitle} description={metaDescription} path={path}>
+  <PageHero eyebrow={eyebrow} title={title} lede={lede} />
+  <section class="wrap mt-16 mb-24">
+    <p class="label text-ink-400">Last updated {updated}</p>
+    <div class="prose-ksm mt-8 max-w-3xl" set:html={bodyHtml} />
+  </section>
+</Base>

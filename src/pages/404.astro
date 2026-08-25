@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { NAV } from '../data/site';
+---
+
+<Base
+  title="Page Not Found | Kallus Strategic Management"
+  description="The page you were looking for does not exist. Here is where to go instead."
+  path="/404"
+>
+  <section class="relative overflow-hidden bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div class="wrap relative py-24 md:py-32">
+      <div class="max-w-2xl">
+        <p class="label text-brand-600">Error 404</p>
+        <h1 class="mt-6 text-[2.25rem] leading-[1.06] sm:text-[3rem]">
+          That page is not part of the picture.
+        </h1>
+        <p class="mt-6 text-[1.125rem] leading-relaxed text-ink-600">
+          The link may be out of date, or the address may have a typo in it. Everything on the site is
+          one click away below.
+        </p>
+
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="/" class="btn btn-primary">Back to the homepage <span aria-hidden="true">→</span></a>
+          <a href="/start" class="btn btn-ghost">Start my profile</a>
+        </div>
+
+        <nav class="mt-14 border-t border-line pt-8" aria-label="Site sections">
+          <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink-400">
+            Main sections
+          </p>
+          <ul class="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+            {
+              [...NAV, { label: 'About KSM', href: '/about' }].map((n) => (
+                <li>
+                  <a
+                    href={n.href}
+                    class="text-[0.9375rem] font-medium text-ink-700 underline decoration-line underline-offset-4 transition-colors hover:text-brand-700 hover:decoration-brand-300"
+                  >
+                    {n.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+</Base>

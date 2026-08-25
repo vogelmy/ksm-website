@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PillarCards from '../components/PillarCards.astro';
+import Dashboard from '../components/Dashboard.astro';
+import ProfileReport from '../components/ProfileReport.astro';
+import CTA from '../components/CTA.astro';
+import { PILLARS } from '../data/site';
+
+const MISREADS = [
+  {
+    t: 'A credit score is the whole picture',
+    d: 'A score compresses a complicated history into three digits for one specific purpose. It says nothing about how much of your month is already committed, how much runway you have, or whether the timing of your next move makes sense.',
+  },
+  {
+    t: 'More capital solves a cash flow problem',
+    d: 'New capital changes the shape of the problem and adds an obligation to it. If the underlying monthly margin is the constraint, more borrowing usually tightens it.',
+  },
+  {
+    t: 'Paying off the biggest balance first',
+    d: 'The largest balance is often not the most expensive, the most restrictive, or the most urgent. Sequence matters more than size.',
+  },
+  {
+    t: 'Business and personal are separate',
+    d: 'Personal guarantees, owner draws and blended credit lines connect them. Lenders look at both. Most owners only look at one.',
+  },
+];
+---
+
+<Base
+  title="What Is a Financial Profile? | Kallus Strategic Management"
+  description="The KSM Financial Profile examines the relationship between cash flow, debt structure, credit exposure, liquidity, income, capital needs and timing — not a single score."
+  path="/financial-profile"
+>
+  <PageHero
+    eyebrow="The KSM Financial Profile"
+    title="A financial profile is not a score. It is a relationship between seven things."
+    lede="Most financial advice treats one number as the answer — a credit score, a balance, an income figure. A profile is different: it is the structure underneath those numbers, and it is what determines what you can realistically do next."
+    anchors={[
+      { label: 'The six components', href: '#pillars' },
+      { label: 'What it produces', href: '#deliverable' },
+      { label: 'Common misreads', href: '#misreads' },
+    ]}
+  />
+
+  <!-- Definition + illustrative dashboard -->
+  <section class="wrap mt-20">
+    <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:gap-16">
+      <div class="prose-ksm reveal max-w-2xl">
+        <h2>What the profile actually measures</h2>
+        <p>
+          The KSM Financial Profile is a structured view of a financial position. It assembles what
+          normally lives in a dozen separate places — statements, obligations, credit lines, income
+          documentation, reserves — into one picture, then examines how those pieces interact.
+        </p>
+        <p>
+          That interaction is the point. A position with strong income and thin liquidity behaves very
+          differently from one with modest income and deep reserves, even when a score would rank them
+          similarly. A business with excellent revenue and badly structured debt can be less financeable
+          than a smaller business with clean, well-sequenced obligations.
+        </p>
+
+        <h3>What a profile is not</h3>
+        <ul>
+          <li>
+            <strong>It is not a FICO score or any other credit score.</strong> KSM does not produce, replicate
+            or predict credit scores.
+          </li>
+          <li>
+            <strong>It is not an approval prediction.</strong> Lenders decide approvals against their own
+            criteria. A profile helps you understand the position you bring to that decision.
+          </li>
+          <li>
+            <strong>It is not a product recommendation.</strong> KSM does not sell financing and receives
+            no compensation from lenders.
+          </li>
+        </ul>
+
+        <h3>Why the relationship matters more than any single number</h3>
+        <p>
+          Consider two positions with the same monthly income and the same total debt. In the first, the
+          obligations are long-dated, fixed, and spread across three lenders. In the second, two thirds
+          of the balance sits with a single lender on a short renewal, and the payments are structured
+          so that most of each payment is cost rather than principal.
+        </p>
+        <p>
+          On a spreadsheet those look identical. In practice, one position has options and the other has
+          a deadline. That difference is invisible until someone maps it — which is what the profile does.
+        </p>
+      </div>
+
+      <div class="reveal lg:pt-4" data-delay="120">
+        <Dashboard
+          score={64}
+          insight="Debt structure is stronger than the balance suggests. The constraint is liquidity — and it is the constraint that should be addressed first."
+        />
+      </div>
+    </div>
+  </section>
+
+  <PillarCards
+    eyebrow="Components"
+    heading="The six components, in detail."
+    lede="Each component is assessed on its own and then in relation to the other five. A strength in one place frequently depends on a weakness somewhere else."
+  />
+
+  <!-- Deep dive on each pillar -->
+  <section class="wrap mt-20">
+    <div class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-2">
+      {
+        PILLARS.map((p) => (
+          <article class="reveal bg-white p-8">
+            <div class="flex items-baseline gap-3">
+              <span class="font-display text-[0.75rem] font-extrabold tracking-[0.14em] text-brand-600">
+                {p.num}
+              </span>
+              <h3 class="text-[1.25rem]">{p.title}</h3>
+            </div>
+            <p class="mt-4 text-[0.9375rem] leading-relaxed text-ink-600">{p.detail}</p>
+            <a
+              href={p.href}
+              class="mt-5 inline-flex items-center gap-1.5 text-[0.875rem] font-semibold text-brand-700 hover:gap-2.5"
+            >
+              Related strategy <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Misreads -->
+  <section id="misreads" class="wrap mt-24 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Common misreads</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        Four assumptions that quietly cost people money.
+      </h2>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
+      {
+        MISREADS.map((m, i) => (
+          <div class="card reveal p-7" data-delay={(i % 2) * 70}>
+            <p class="flex items-start gap-3">
+              <span
+                class="mt-0.5 grid h-5 w-5 flex-none place-items-center rounded-full bg-warn-soft text-warn"
+                aria-hidden="true"
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M5 2.2v3.2M5 7.6v.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </span>
+              <span class="font-display text-[1.0625rem] font-bold leading-snug text-ink-900">{m.t}</span>
+            </p>
+            <p class="mt-4 text-[0.9375rem] leading-relaxed text-ink-600">{m.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <ProfileReport />
+
+  <CTA
+    title="See your own profile, not an example."
+    body="The dashboards on this page are illustrations. The next step is building the real one — starting with what you are trying to accomplish."
+  />
+</Base>

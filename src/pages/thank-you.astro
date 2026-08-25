@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+
+const NEXT = [
+  {
+    n: '01',
+    t: 'We read what you sent',
+    d: 'Your objective, timeline and pressure points determine which framework we run and what we will need from you.',
+  },
+  {
+    n: '02',
+    t: 'We reach out to schedule',
+    d: 'A short first conversation establishes scope, confirms whether KSM is the right fit, and covers cost before anything begins.',
+  },
+  {
+    n: '03',
+    t: 'The profile gets built',
+    d: 'If we proceed, we assemble the complete position and produce your written profile, top priority and ninety-day roadmap.',
+  },
+];
+---
+
+<Base
+  title="Your Profile Request Has Been Started | KSM"
+  description="Your KSM Financial Profile request has been received. Here is what happens next."
+  path="/thank-you"
+  hideMobileCta={true}
+>
+  <section class="relative overflow-hidden border-b border-line bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div
+      class="pointer-events-none absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full border border-line"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="wrap relative py-20 md:py-28">
+      <div class="max-w-2xl">
+        <span
+          class="grid h-14 w-14 place-items-center rounded-2xl bg-good-soft"
+          aria-hidden="true"
+        >
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <path
+              d="M6 13.4l4.6 4.6L20 8.6"
+              stroke="#2F9E68"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+
+        <h1 class="mt-8 text-[2.25rem] leading-[1.06] sm:text-[3rem]">
+          Your KSM Financial Profile has been started.
+        </h1>
+        <p class="mt-6 text-[1.125rem] leading-relaxed text-ink-600">
+          We have your request. Someone from KSM will be in touch shortly to schedule the first
+          conversation — there is nothing else you need to do right now.
+        </p>
+
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="/financial-profile" class="btn btn-primary" data-ev="thankyou_learn_click">
+            Read what a profile covers <span aria-hidden="true">→</span>
+          </a>
+          <a href="/insights" class="btn btn-ghost" data-ev="thankyou_insights_click">Browse insights</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap py-16 md:py-20">
+    <p class="eyebrow">What happens next</p>
+    <ol class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-3">
+      {
+        NEXT.map((s) => (
+          <li class="bg-white p-7">
+            <span class="num text-[0.75rem] font-medium tracking-[0.1em] text-brand-600">{s.n}</span>
+            <h2 class="mt-3 text-[1.125rem] leading-snug">{s.t}</h2>
+            <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-12 rounded-2xl border border-line bg-cream p-7">
+      <h2 class="text-[1.0625rem]">Need to reach us sooner?</h2>
+      <p class="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-600">
+        Email <a href={`mailto:${SITE.email}`} class="font-semibold text-brand-700 underline underline-offset-4" data-ev="email_click">{SITE.email}</a>
+        and reference the request you just submitted.
+      </p>
+      <p class="mt-5 text-[0.75rem] leading-relaxed text-ink-400">
+        A reminder: KSM is not a lender and does not guarantee financing, rates, credit limits, score
+        changes or any other outcome.
+      </p>
+    </div>
+  </section>
+</Base>

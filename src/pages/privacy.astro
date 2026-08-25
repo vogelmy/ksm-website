@@ -1,0 +1,102 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+
+const bodyHtml = `
+<h2>Scope</h2>
+<p>
+  This policy describes how Kallus Strategic Management ("KSM", "we") handles information collected
+  through this website. It does not describe the separate, more detailed handling that applies to
+  information collected during a paid engagement, which is governed by the engagement agreement.
+</p>
+
+<h2>What this website collects</h2>
+<p>The profile request form on this site collects only:</p>
+<ul>
+  <li>Whether you are enquiring as an individual or a business owner</li>
+  <li>What you are trying to accomplish, and your timeline</li>
+  <li>What you have identified as your main pressure points</li>
+  <li>Optional free-text context you choose to provide</li>
+  <li>Your first name, last name, email address and, optionally, a phone number</li>
+</ul>
+<p>
+  The form <strong>does not</strong> ask for and should not be used to send account numbers, balances,
+  Social Security numbers, tax identification numbers, dates of birth, credentials, or any other
+  sensitive financial or identifying information.
+</p>
+
+<h2>Technical information</h2>
+<p>
+  Our hosting provider processes standard request data (such as IP address, user agent and timestamp)
+  in order to serve the site and protect it from abuse. We record the page a submission came from and
+  the referring URL so we understand which pages generate enquiries.
+</p>
+
+<h2>How the information is used</h2>
+<ul>
+  <li>To respond to your enquiry and schedule a first conversation</li>
+  <li>To determine whether KSM is an appropriate fit for your situation</li>
+  <li>To understand, in aggregate, how the website is performing</li>
+</ul>
+
+<h2>How it is not used</h2>
+<p>
+  We do not sell your information. We do not share it with lenders, funders, brokers or any other
+  third party for their marketing purposes. We do not use it to build advertising profiles, and we do
+  not sell or trade contact lists.
+</p>
+
+<h2>Service providers</h2>
+<p>
+  Submissions are stored with our infrastructure provider and delivered to us by an email provider.
+  These providers process the information solely to deliver those services to KSM. If we add analytics
+  or scheduling tools, they will be limited to the same purposes described above.
+</p>
+
+<h2>Retention</h2>
+<p>
+  Enquiry records are retained for as long as they are useful for responding, for record-keeping, and
+  for understanding demand — and are deleted on request. To have your enquiry deleted, email us from
+  the address you submitted.
+</p>
+
+<h2>Your choices</h2>
+<p>
+  You may ask us what we hold about you, ask us to correct it, or ask us to delete it. Contact
+  <a href="mailto:info@ksmstrategy.com">info@ksmstrategy.com</a>. Depending on where you live, you may
+  have additional statutory rights; we will honour valid requests under applicable law.
+</p>
+
+<h2>Cookies</h2>
+<p>
+  This website does not set advertising or tracking cookies. The profile form stores your in-progress
+  answers in your own browser's session storage so you do not lose them if you navigate backwards; that
+  data never leaves your device until you submit, and it is cleared when you do.
+</p>
+
+<h2>Children</h2>
+<p>This website is intended for adults and is not directed at children.</p>
+
+<h2>Changes</h2>
+<p>
+  If this policy changes materially, the updated date at the top of this page will change. Continued
+  use of the site after an update constitutes acceptance of the revised policy.
+</p>
+
+<h2>Contact</h2>
+<p>
+  Privacy questions can be sent to
+  <a href="mailto:info@ksmstrategy.com">info@ksmstrategy.com</a>.
+</p>
+`;
+---
+
+<LegalPage
+  metaTitle="Privacy Policy | Kallus Strategic Management"
+  metaDescription="How Kallus Strategic Management handles information submitted through this website: what is collected, how it is used, what it is never used for, and how to have it deleted."
+  path="/privacy"
+  eyebrow="Privacy"
+  title="What we collect, and the much longer list of what we do not."
+  lede="The profile request asks for your goal and your contact details. Nothing financial, nothing sensitive, and nothing that gets sold."
+  updated="August 2026"
+  bodyHtml={bodyHtml}
+/>

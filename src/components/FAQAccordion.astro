@@ -1,0 +1,67 @@
+---
+interface Props {
+  items: { q: string; a: string }[];
+  title?: string;
+  lede?: string;
+}
+const {
+  items,
+  title = 'Questions people ask before they start.',
+  lede = 'Straight answers, including the ones that rule KSM out.',
+} = Astro.props;
+---
+
+<section id="faq" class="wrap mt-24 scroll-mt-24">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <p class="eyebrow reveal">Frequently asked</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.375rem]" data-delay="60">{title}</h2>
+      <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">{lede}</p>
+      <a href="/start" class="btn btn-primary mt-8" data-ev="faq_cta_click">
+        Start my profile <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="reveal divide-y divide-line border-y border-line" data-delay="100">
+      {
+        items.map((item) => (
+          <details class="group" data-faq>
+            <summary
+              class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-left"
+              data-ev="faq_open"
+            >
+              <span class="font-display text-[1.0625rem] font-bold leading-snug text-ink-900 transition-colors group-hover:text-brand-700">
+                {item.q}
+              </span>
+              <span
+                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full border border-line text-ink-500 transition-all duration-300 group-open:rotate-45 group-open:border-brand-600 group-open:bg-brand-600 group-open:text-white"
+                aria-hidden="true"
+              >
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M5.5 1.5v8M1.5 5.5h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                </svg>
+              </span>
+            </summary>
+            <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]">
+              <div class="overflow-hidden">
+                <p class="pb-6 pr-10 text-[0.9375rem] leading-relaxed text-ink-600">{item.a}</p>
+              </div>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  // Accordion behaviour: one open at a time
+  document.querySelectorAll('[data-faq]').forEach(function (el) {
+    el.addEventListener('toggle', function () {
+      if (!el.open) return;
+      document.querySelectorAll('[data-faq]').forEach(function (other) {
+        if (other !== el) other.open = false;
+      });
+    });
+  });
+</script>
