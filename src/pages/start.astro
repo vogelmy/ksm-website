@@ -535,10 +535,6 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       persist();
       var n = e.target && e.target.name;
       if (n) showError(n, false);
-      // auto-advance on identity choice for a lighter feel
-      if (n === 'identity' && current === 1) {
-        setTimeout(function () { nextBtn.click(); }, 220);
-      }
     });
 
     form.addEventListener('submit', function (e) {
