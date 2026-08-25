@@ -40,7 +40,25 @@ profile wizard, and a centralized analytics dispatcher).
 /thank-you                   Post-submission confirmation
 /privacy /terms /disclosures Legal
 /404                         Not found
+/admin                       Lead dashboard (Basic Auth, not in the sitemap)
+/admin/export.csv            CSV of all leads
 ```
+
+---
+
+## The Position Index
+
+`src/data/profile.ts` is the single source of truth for the scoring model.
+
+The overall result is a **lettered band (A–E)** with a descriptor, deliberately
+not a 0–100 headline figure — a number in that shape reads as a credit score,
+which is the exact comparison the disclosures work to prevent. Component values
+stay numeric because on the homepage they are inputs the visitor drags.
+
+The hero dashboard is interactive: moving any component recomputes the band and
+swaps the KSM Insight to the line belonging to whichever component is weakest.
+Pass `interactive={true}` to enable it, `values={[...]}` to set a starting
+position, and neither to render a read-only version.
 
 ---
 
@@ -95,6 +113,18 @@ wrangler secret put LEAD_FROM      # must be a verified Brevo sender
 ```
 
 ### Reading leads
+
+The dashboard at `/admin` lists every request with stats, filtering and CSV
+export. It is rendered by the Worker behind HTTP Basic Auth, sent `no-store`
+and `noindex`, and disallowed in `robots.txt`.
+
+```bash
+wrangler secret put ADMIN_PASSWORD    # rotate the password
+```
+
+`ADMIN_USER` is a plain var in `wrangler.jsonc` (default `ksm`).
+
+Straight from the database:
 
 ```bash
 wrangler d1 execute ksm-leads --remote \
