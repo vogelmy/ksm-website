@@ -76,6 +76,14 @@
     outline-offset: 3px;
     border-radius: 4px;
   }
+  /* Grid items default to min-width:auto, so a single unbreakable word can
+     push the page wider than the viewport. This lives in @layer base so any
+     explicit min-w-* utility still wins. */
+  .grid > * { min-width: 0; }
+
+  /* Long tokens (emails, URLs) wrap instead of overflowing. */
+  p, li, td, dd, h1, h2, h3, h4 { overflow-wrap: break-word; }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after {
