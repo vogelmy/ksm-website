@@ -1,9 +1,10 @@
 ---
-import { COMPONENTS, bandFor, indexOf } from '../data/profile';
+import { COMPONENTS, bandFor, indexOf, scoreOf } from '../data/profile';
 
 const BARS = COMPONENTS.map((c) => ({ label: c.label, pct: c.value }));
 const INDEX = indexOf(BARS.map((b) => b.pct));
 const BAND = bandFor(INDEX);
+const SCORE = scoreOf(BARS.map((b) => b.pct));
 
 const ROADMAP = [
   { num: '01', title: 'Stabilize', window: 'Days 1–30', body: 'Rebuild a reserve floor and remove the two obligations creating the most monthly pressure.' },
@@ -42,18 +43,17 @@ const ROADMAP = [
         <div class="px-7 py-7">
           <div class="flex items-end justify-between gap-6 border-b border-line pb-6">
             <div>
-              <p class="label text-ink-400">Position Index</p>
-              <div class="mt-2 flex items-end gap-3">
-                <span class="font-display text-[3rem] leading-none font-extrabold text-ink-900">
-                  {BAND.letter}
+              <p class="label text-ink-400">KSM Profile Score</p>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="font-display text-[3rem] leading-none font-extrabold tabular-nums text-ink-900">
+                  {SCORE}
                 </span>
-                <span class="pb-1 font-display text-[1.125rem] font-extrabold leading-none text-ink-700">
-                  {BAND.label}
-                </span>
+                <span class="font-display text-[1.125rem] font-bold leading-none text-ink-400">/10</span>
               </div>
+              <p class="mt-2 text-[0.8125rem] font-semibold text-ink-700">{BAND.label}</p>
             </div>
             <p class="pb-1 text-right text-[0.8125rem] font-medium text-ink-500">
-              Band A–E<br /><span class="text-ink-400">Prepared 14 Aug 2026</span>
+              0–10 · 10 is strongest<br /><span class="text-ink-400">Prepared 14 Aug 2026</span>
             </p>
           </div>
 

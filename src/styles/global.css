@@ -166,7 +166,7 @@
 }
 
 @layer components {
-  /* Position Index sliders. One markup path: `.is-static` renders the same
+  /* Profile Score sliders. One markup path: `.is-static` renders the same
      row as a read-only bar by hiding the thumb and ignoring pointer events. */
   .ksm-range {
     -webkit-appearance: none;

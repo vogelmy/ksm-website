@@ -1,11 +1,10 @@
 /**
- * The KSM Position Index.
+ * The KSM Profile Score.
  *
- * Deliberately NOT a 0–100 score presented as a headline number — that reads as
- * a credit score and invites exactly the comparison the practice spends the
- * rest of the site rejecting. The overall result is a lettered band with a
- * plain-language descriptor. Component values stay numeric because they are
- * inputs the visitor can move, not a rating of them.
+ * A 0–10 scale where 10 is the strongest funding-ready position. Deliberately
+ * 0–10 rather than 0–100 or a three-digit figure: consumer credit scores are
+ * three digits, so a single-digit scale cannot be mistaken for one. The band
+ * descriptor is kept alongside it so the number always arrives with a word.
  */
 
 export interface Band {
@@ -127,6 +126,17 @@ export const COMPONENTS: Component[] = [
 /** Simple mean — explainable beats clever when a client asks how it was derived. */
 export function indexOf(values: number[]): number {
   return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
+}
+
+/** The headline figure: 0–10 to one decimal, where 10 is strongest. */
+export function scoreOf(values: number[]): string {
+  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  return (Math.round(mean) / 10).toFixed(1);
+}
+
+/** Segments lit on the ten-segment dial. */
+export function segmentsOf(values: number[]): number {
+  return Math.round(indexOf(values) / 10);
 }
 
 export const STRONG_INSIGHT =

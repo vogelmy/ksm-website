@@ -46,19 +46,40 @@ profile wizard, and a centralized analytics dispatcher).
 
 ---
 
-## The Position Index
+## The KSM Profile Score
 
 `src/data/profile.ts` is the single source of truth for the scoring model.
 
-The overall result is a **lettered band (A–E)** with a descriptor, deliberately
-not a 0–100 headline figure — a number in that shape reads as a credit score,
-which is the exact comparison the disclosures work to prevent. Component values
-stay numeric because on the homepage they are inputs the visitor drags.
+The headline figure is **0–10, where 10 is the strongest funding-ready
+position**, shown to one decimal beside a ten-segment dial. Single digits are
+deliberate: consumer credit scores are three digits, so this scale cannot be
+mistaken for one. A band descriptor ("Solid", "Developing") always travels with
+the number so it never arrives as a bare figure.
 
-The hero dashboard is interactive: moving any component recomputes the band and
+The hero dashboard is interactive: moving any component recomputes the score and
 swaps the KSM Insight to the line belonging to whichever component is weakest.
 Pass `interactive={true}` to enable it, `values={[...]}` to set a starting
 position, and neither to render a read-only version.
+
+---
+
+## Content compliance
+
+`npm run check:content` scans the built HTML and **fails the build** if any
+credit-repair, credit-improvement or guaranteed-outcome claim appears. It runs
+automatically inside both `npm run build` and `npm run deploy`.
+
+Negation is judged per sentence, so a disclaimer elsewhere on the page cannot
+excuse a claim made here:
+
+```
+Allowed   KSM is not a credit repair organization.
+Allowed   Is KSM a debt settlement company? No. KSM does not ...
+Blocked   We raise your score. KSM is not a lender.
+```
+
+Rules live in `scripts/check-content.mjs`. Add terms there rather than relying
+on anyone remembering the constraint.
 
 ---
 

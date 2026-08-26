@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run check:content",
     "preview": "wrangler dev",
-    "deploy": "astro build && wrangler deploy",
+    "check:content": "node scripts/check-content.mjs dist",
+    "deploy": "astro build && npm run check:content && wrangler deploy",
     "db:init": "wrangler d1 execute ksm-leads --remote --file ./schema.sql",
     "db:init:local": "wrangler d1 execute ksm-leads --local --file ./schema.sql"
   },

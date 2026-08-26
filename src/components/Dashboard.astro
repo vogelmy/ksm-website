@@ -1,8 +1,18 @@
 ---
-import { COMPONENTS, BANDS, COMPONENT_STATUS, bandFor, statusFor, indexOf, STRONG_INSIGHT } from '../data/profile';
+import {
+  COMPONENTS,
+  BANDS,
+  COMPONENT_STATUS,
+  bandFor,
+  statusFor,
+  indexOf,
+  scoreOf,
+  segmentsOf,
+  STRONG_INSIGHT,
+} from '../data/profile';
 
 interface Props {
-  /** Let the visitor drag each component and watch the band and insight change. */
+  /** Let the visitor drag each component and watch the score and insight change. */
   interactive?: boolean;
   /** Override the starting component values (same order as COMPONENTS). */
   values?: number[];
@@ -13,15 +23,21 @@ interface Props {
 const { interactive = false, values, insight } = Astro.props;
 
 const components = COMPONENTS.map((c, i) => ({ ...c, value: values?.[i] ?? c.value }));
-const index = indexOf(components.map((c) => c.value));
-const band = bandFor(index);
+const raw = components.map((c) => c.value);
+const band = bandFor(indexOf(raw));
+const score = scoreOf(raw);
+const lit = segmentsOf(raw);
 
 const weakest = components.reduce((a, b) => (b.value < a.value ? b : a));
-const derivedInsight = weakest.value >= 80 ? STRONG_INSIGHT : weakest.insight;
-const startingInsight = insight ?? derivedInsight;
+const startingInsight = insight ?? (weakest.value >= 80 ? STRONG_INSIGHT : weakest.insight);
 
+// Ten-segment dial: the shape itself says "out of ten".
 const R = 34;
 const C = 2 * Math.PI * R;
+const SEG = C / 10;
+const GAP = 5;
+const DASH = SEG - GAP;
+const SEGMENTS = Array.from({ length: 10 }, (_, i) => i);
 
 const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_INSIGHT, components };
 ---
@@ -35,43 +51,44 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
     >
       <div class="flex items-start justify-between gap-4 sm:gap-6">
         <div class="min-w-0">
-          <p class="label text-ink-400">KSM Position Index</p>
-          <p
-            id="band-label"
-            class="mt-3 font-display text-[1.625rem] leading-[1.1] font-extrabold text-ink-900 min-[400px]:text-[2rem] sm:text-[2.5rem] sm:leading-none"
-          >
-            {band.label}
+          <p class="label text-ink-400">KSM Profile Score</p>
+
+          <p class="mt-3 flex items-baseline gap-1">
+            <span
+              id="score-value"
+              class="font-display text-[2.5rem] leading-none font-extrabold tabular-nums text-ink-900 sm:text-[3rem]"
+              >{score}</span
+            >
+            <span class="font-display text-[1.125rem] font-bold leading-none text-ink-400">/10</span>
           </p>
+
           <p class="mt-2.5 text-[0.8125rem] font-medium text-ink-500">
-            Band <span id="band-letter-inline" class="num font-semibold text-ink-700">{band.letter}</span>
+            <span id="band-label" class="font-semibold text-ink-700">{band.label}</span>
             <span class="text-ink-300" aria-hidden="true"> · </span>
-            <span class="text-ink-400">A–E scale</span>
+            <span class="text-ink-400">10 is strongest</span>
           </p>
         </div>
 
         <div class="relative h-[64px] w-[64px] flex-none sm:h-[86px] sm:w-[86px]">
           <svg viewBox="0 0 86 86" class="h-full w-full -rotate-90" aria-hidden="true">
-            <circle cx="43" cy="43" r={R} fill="none" stroke="#E4E8EF" stroke-width="7"></circle>
-            <circle
-              id="score-ring"
-              cx="43"
-              cy="43"
-              r={R}
-              fill="none"
-              stroke="#2B57F0"
-              stroke-width="7"
-              stroke-linecap="round"
-              stroke-dasharray={C}
-              stroke-dashoffset={C}
-              data-circumference={C}
-              data-target={C - (C * index) / 100}
-              style="transition: stroke-dashoffset .5s cubic-bezier(.2,.7,.3,1)"></circle>
+            {
+              SEGMENTS.map((i) => (
+                <circle
+                  cx="43"
+                  cy="43"
+                  r={R}
+                  fill="none"
+                  stroke={i < lit ? '#2B57F0' : '#E4E8EF'}
+                  stroke-width="7"
+                  stroke-linecap="butt"
+                  stroke-dasharray={`${DASH} ${C - DASH}`}
+                  stroke-dashoffset={-i * SEG}
+                  data-seg={i}
+                  style="transition: stroke .25s ease"
+                />
+              ))
+            }
           </svg>
-          <span
-            id="band-letter"
-            class="absolute inset-0 grid place-items-center font-display text-[1.375rem] font-extrabold text-ink-900 sm:text-[1.75rem]"
-            aria-hidden="true">{band.letter}</span
-          >
         </div>
       </div>
 
@@ -155,9 +172,7 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
       {
         interactive && (
           <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <p class="text-[0.75rem] text-ink-500">
-              Drag any row to model a different position.
-            </p>
+            <p class="text-[0.75rem] text-ink-500">Drag any row to model a different position.</p>
             <button
               type="button"
               id="ksm-reset"
@@ -190,8 +205,9 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
   </div>
 
   <p class="mt-8 text-[0.75rem] leading-relaxed text-ink-500 sm:mt-12">
-    Illustrative model. The Position Index is a KSM presentation device, not a credit score, a rating,
-    or a prediction of any lending decision. KSM does not guarantee financing outcomes.
+    Illustrative model. The KSM Profile Score is a 0–10 KSM measure of how well a position is set up for
+    a financing conversation. It is not a credit score, a rating, or a prediction of any lending
+    decision, and KSM does not guarantee financing outcomes.
   </p>
 </div>
 
@@ -210,11 +226,9 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
     var TONE = { good: '#2F9E68', warn: '#C98A22', bad: '#B4483C' };
     var TONE_CLASS = { good: 'text-good', warn: 'text-warn', bad: 'text-bad' };
 
-    var ring = root.querySelector('#score-ring');
-    var circumference = ring ? parseFloat(ring.getAttribute('data-circumference')) : 0;
+    var segs = root.querySelectorAll('[data-seg]');
+    var scoreEl = root.querySelector('#score-value');
     var bandLabel = root.querySelector('#band-label');
-    var bandLetter = root.querySelector('#band-letter');
-    var bandLetterInline = root.querySelector('#band-letter-inline');
     var bandNote = root.querySelector('#band-note');
     var insightEl = root.querySelector('#ksm-insight');
 
@@ -246,9 +260,8 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
         'linear-gradient(to right, ' + colour + ' ' + v + '%, #E9EDF3 ' + v + '%)'
       );
       row.input.style.setProperty('--thumb', colour);
-      var valueEl = row.li.querySelector('[data-value]');
+      row.li.querySelector('[data-value]').textContent = String(v);
       var statusEl = row.li.querySelector('[data-status]');
-      valueEl.textContent = String(v);
       statusEl.textContent = s.label;
       statusEl.className = TONE_CLASS[s.tone];
     }
@@ -257,17 +270,20 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
       var values = rows.map(function (r) {
         return Number(r.input.value);
       });
-      var index = Math.round(
+      var mean =
         values.reduce(function (a, b) {
           return a + b;
-        }, 0) / values.length
-      );
+        }, 0) / values.length;
+      var index = Math.round(mean);
       var band = bandFor(index);
 
-      if (ring) ring.style.strokeDashoffset = String(circumference - (circumference * index) / 100);
+      if (scoreEl) scoreEl.textContent = (index / 10).toFixed(1);
+      var lit = Math.round(index / 10);
+      segs.forEach(function (s, i) {
+        s.setAttribute('stroke', i < lit ? '#2B57F0' : '#E4E8EF');
+      });
+
       if (bandLabel) bandLabel.textContent = band.label;
-      if (bandLetter) bandLetter.textContent = band.letter;
-      if (bandLetterInline) bandLetterInline.textContent = band.letter;
       if (bandNote) bandNote.textContent = band.note;
 
       var weakest = rows[0];
