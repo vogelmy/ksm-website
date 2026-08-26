@@ -10,11 +10,13 @@
  */
 
 import { handleAdmin } from './admin';
+import { handleAssessment } from './assessment';
 
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   LEAD_TO: string;
+  LEAD_BCC?: string;
   LEAD_FROM_NAME: string;
   SITE_NAME: string;
   ADMIN_USER?: string;
@@ -192,12 +194,16 @@ async function notify(env: Env, lead: NotifyPayload): Promise<void> {
     return;
   }
 
-  const recipients = (env.LEAD_TO || '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((email) => ({ email }));
-  if (!recipients.length) return;
+  const addresses = (list?: string) =>
+    (list || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((email) => ({ email }));
+
+  const recipients = addresses(env.LEAD_TO);
+  const bcc = addresses(env.LEAD_BCC);
+  if (!recipients.length && !bcc.length) return;
 
   const rows: [string, string][] = [
     ['Name', `${lead.firstName} ${lead.lastName}`],
@@ -249,7 +255,8 @@ ${rows
       },
       body: JSON.stringify({
         sender: { email: from, name: env.LEAD_FROM_NAME || 'KSM Website' },
-        to: recipients,
+        to: recipients.length ? recipients : bcc,
+        ...(recipients.length && bcc.length ? { bcc } : {}),
         replyTo: { email: lead.email, name: `${lead.firstName} ${lead.lastName}` },
         subject: `New profile request — ${lead.firstName} ${lead.lastName} (${
           lead.identity === 'business' ? 'Business' : 'Individual'
@@ -307,6 +314,10 @@ export default {
 
     if (url.pathname === '/api/lead') {
       return handleLead(request, env, ctx);
+    }
+
+    if (url.pathname === '/api/assessment') {
+      return handleAssessment(request, env, ctx);
     }
 
     if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {

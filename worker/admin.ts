@@ -29,6 +29,34 @@ interface LeadRow {
   country: string | null;
 }
 
+interface AssessmentRow {
+  id: string;
+  created_at: string;
+  identity: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string | null;
+  score: number;
+  band: string;
+  weakest: string | null;
+  cash_flow: number;
+  debt: number;
+  credit: number;
+  liquidity: number;
+  income: number;
+  capital: number;
+}
+
+const COMPONENT_LABELS: Record<string, string> = {
+  'cash-flow': 'Cash flow',
+  debt: 'Debt',
+  credit: 'Credit',
+  liquidity: 'Liquidity',
+  income: 'Income',
+  capital: 'Capital',
+};
+
 const esc = (v: unknown): string =>
   String(v ?? '').replace(/[&<>"']/g, (c) =>
     c === '&' ? '&amp;' : c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : '&#39;'
@@ -119,6 +147,15 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
 
   const rows = results ?? [];
 
+  const assessRes = await env.DB.prepare(
+    `SELECT id, created_at, identity, first_name, last_name, email, phone,
+            score, band, weakest, cash_flow, debt, credit, liquidity, income, capital
+       FROM assessments
+      ORDER BY created_at DESC
+      LIMIT 500`
+  ).all<AssessmentRow>();
+  const assessments = assessRes.results ?? [];
+
   if (url.pathname === '/admin/export.csv') {
     const headers = [
       'received',
@@ -179,6 +216,7 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
     ['Last 30 days', since(30)],
     ['Business owners', business],
     ['Individuals', rows.length - business],
+    ['Assessments', assessments.length],
   ];
 
   const body = `<!doctype html>
@@ -228,6 +266,10 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   .tag.ind{background:#E7F5ED;color:#1F7A4E}
   .notes{max-width:280px;color:var(--ink6)}
   .empty{padding:60px 24px;text-align:center;color:var(--ink4)}
+  h2.sec{margin:30px 0 12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);
+         font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500}
+  .score{font-size:20px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  .score i{font-size:11px;font-style:normal;color:var(--ink4);font-weight:600}
   @media (max-width:700px){main{padding:16px}td,th{padding:10px}}
 </style>
 </head><body>
@@ -239,6 +281,42 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   <div class="stats">
     ${stats.map(([l, v]) => `<div class="stat"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('')}
   </div>
+
+  ${
+    assessments.length
+      ? `<h2 class="sec">Assessment results</h2>
+  <div class="wrap">
+    <table><thead><tr>
+      <th>Received</th><th>Score</th><th>Name</th><th>Contact</th><th>Type</th>
+      <th>Weakest</th><th>Cash flow</th><th>Debt</th><th>Credit</th><th>Liquidity</th><th>Income</th><th>Capital</th>
+    </tr></thead><tbody>
+    ${assessments
+      .map(
+        (a) => `<tr>
+      <td class="mono">${esc(fmtDate(a.created_at))}</td>
+      <td><span class="score">${esc(a.score)}<i>/10</i></span><br><span class="mono">${esc(a.band)}</span></td>
+      <td class="who">${esc(a.first_name)} ${esc(a.last_name)}</td>
+      <td><a href="mailto:${esc(a.email)}">${esc(a.email)}</a>${
+          a.phone ? `<br><span class="mono">${esc(a.phone)}</span>` : ''
+        }</td>
+      <td><span class="tag ${a.identity === 'business' ? 'biz' : 'ind'}">${
+          a.identity === 'business' ? 'Business' : 'Individual'
+        }</span></td>
+      <td class="mono">${esc(COMPONENT_LABELS[a.weakest || ''] || a.weakest || '—')}</td>
+      <td class="mono">${esc(a.cash_flow)}</td>
+      <td class="mono">${esc(a.debt)}</td>
+      <td class="mono">${esc(a.credit)}</td>
+      <td class="mono">${esc(a.liquidity)}</td>
+      <td class="mono">${esc(a.income)}</td>
+      <td class="mono">${esc(a.capital)}</td>
+    </tr>`
+      )
+      .join('')}
+    </tbody></table>
+  </div>
+  <h2 class="sec">Profile requests</h2>`
+      : ''
+  }
 
   <div class="bar">
     <input id="q" type="search" placeholder="Filter by name, email, goal, pressure point…" autocomplete="off">

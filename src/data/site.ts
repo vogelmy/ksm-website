@@ -4,7 +4,9 @@ export const SITE = {
   tagline: 'Business finance, clarified.',
   description:
     'KSM helps individuals and business owners understand their complete financial position — cash flow, debt structure, credit exposure, liquidity, income and timing — and build a prioritized strategy before the next financial move.',
-  email: 'info@ksmstrategy.com',
+  email: 'motti@kallusstrategicmanagement.com',
+  phone: '+19549108336',
+  phoneDisplay: '(954) 910-8336',
   locale: 'en_US',
 };
 
@@ -39,6 +41,7 @@ export const FOOTER_NAV = [
     title: 'Resources',
     links: [
       { label: 'Insights', href: '/insights' },
+      { label: 'Free Profile Score assessment', href: '/assessment' },
       { label: 'Frequently Asked Questions', href: '/how-it-works#faq' },
       { label: 'Start Your Profile', href: '/start' },
       { label: 'Disclosures', href: '/disclosures' },

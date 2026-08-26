@@ -123,6 +123,76 @@ const NOTLIST = [
     </div>
   </section>
 
+  <!-- Founder -->
+  <section class="wrap mt-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow reveal">Who you work with</p>
+        <div class="reveal mt-8 overflow-hidden rounded-[1.5rem] border border-line bg-cream" data-delay="60">
+          <div class="grid aspect-[4/5] place-items-center bg-ink-50 text-ink-300" aria-hidden="true">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <circle cx="26" cy="19" r="9" stroke="currentColor" stroke-width="2" />
+              <path d="M9 45c0-8.8 7.6-14 17-14s17 5.2 17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="p-6">
+            <p class="font-display text-[1.125rem] font-extrabold text-ink-900">Motti Kallus</p>
+            <p class="label mt-2 text-ink-400">Founder</p>
+            <div class="mt-5 space-y-1.5 border-t border-line pt-5">
+              <a
+                href={`mailto:${SITE.email}`}
+                class="block break-words text-[0.875rem] font-medium text-brand-700 underline underline-offset-4 break-address"
+                data-ev="email_click">{SITE.email}</a
+              >
+              <a
+                href={`tel:${SITE.phone}`}
+                class="block text-[0.875rem] font-medium text-brand-700 underline underline-offset-4"
+                data-ev="phone_click">{SITE.phoneDisplay}</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose-ksm reveal" data-delay="120">
+        <h2 class="!mt-0">A practice, not a platform</h2>
+        <p>
+          KSM is led by <strong>Motti Kallus</strong>. Every engagement is run personally — the same
+          person who takes the first call is the one who assembles the profile, writes the analysis and
+          talks you through the sequence. There is no intake team handing you to an account manager, and
+          no junior analyst producing the document behind the scenes.
+        </p>
+        <p>
+          That is a deliberate constraint on how many clients KSM takes at once. It is also the reason
+          the work can be direct: when the honest answer is that a client should wait a quarter,
+          restructure something first, or approach a different professional entirely, there is nobody
+          in the process whose compensation argues otherwise.
+        </p>
+
+        <h3>How Motti approaches the work</h3>
+        <p>
+          Most people arrive with a specific question — can I get approved, should I pay this down,
+          is now the right time. The first job is usually to widen it. The answer to any one of those
+          questions depends on five other things nobody has looked at together, and the interesting
+          part of the engagement is almost always in that relationship rather than in the question as
+          it was asked.
+        </p>
+        <p>
+          The second job is to be concrete. A profile that ends with "improve your cash flow" has not
+          finished. A profile that ends with which two obligations to address, in what order, over
+          which ninety days, and what to leave alone in the meantime — that is a deliverable.
+        </p>
+
+        <h3>Getting in touch</h3>
+        <p>
+          The fastest route is the <a href="/assessment">free Profile Score assessment</a> — twelve
+          questions, about three minutes, and it gives us both something concrete to talk about. You
+          can also <a href="/start">request a full profile</a>, or simply call.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <section class="wrap mt-24">
     <div class="grid gap-10 rounded-[2rem] border border-line bg-cream p-8 sm:p-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
       <div>
@@ -131,11 +201,18 @@ const NOTLIST = [
           The fastest route is the profile request — it takes about a minute and tells us enough to have
           a useful first conversation. Email works too.
         </p>
-        <a
-          href={`mailto:${SITE.email}`}
-          class="mt-6 inline-block text-[0.9375rem] font-semibold text-brand-700 underline underline-offset-4"
-          data-ev="email_click">{SITE.email}</a
-        >
+        <p class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <a
+            href={`mailto:${SITE.email}`}
+            class="text-[0.9375rem] font-semibold text-brand-700 underline underline-offset-4 break-address"
+            data-ev="email_click">{SITE.email}</a
+          >
+          <a
+            href={`tel:${SITE.phone}`}
+            class="text-[0.9375rem] font-semibold text-brand-700 underline underline-offset-4"
+            data-ev="phone_click">{SITE.phoneDisplay}</a
+          >
+        </p>
       </div>
       <a href="/start" class="btn btn-primary flex-none" data-ev="about_cta_click">
         Start my profile <span aria-hidden="true">→</span>

@@ -13,7 +13,8 @@
     "run_worker_first": true
   },
   "vars": {
-    "LEAD_TO": "moishyv@gmail.com,mottikallus@gmail.com",
+    "LEAD_TO": "motti@kallusstrategicmanagement.com",
+    "LEAD_BCC": "mottikallus@gmail.com,tzviafischer@gmail.com,moishyv@gmail.com",
     "LEAD_FROM_NAME": "KSM Website",
     "SITE_NAME": "Kallus Strategic Management",
     "ADMIN_USER": "ksm"

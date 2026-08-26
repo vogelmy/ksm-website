@@ -1,0 +1,524 @@
+---
+import Base from '../layouts/Base.astro';
+import { SECTIONS, TOTAL_QUESTIONS } from '../data/assessment';
+import { BANDS, COMPONENT_STATUS, COMPONENTS, STRONG_INSIGHT } from '../data/profile';
+import { SITE } from '../data/site';
+
+const IDENTITY = [
+  { v: 'individual', t: 'Individual or family', d: 'A personal position — mortgage, debt, credit, income, liquidity.' },
+  { v: 'business', t: 'Business owner', d: 'Business and personal together — cash flow, guarantees, working capital.' },
+];
+
+const TOTAL_STEPS = SECTIONS.length + 2; // identity + six components + contact
+const config = {
+  bands: BANDS,
+  status: COMPONENT_STATUS,
+  components: COMPONENTS.map((c) => ({ key: c.key, label: c.label, insight: c.insight })),
+  strongInsight: STRONG_INSIGHT,
+  sections: SECTIONS,
+};
+
+const R = 34;
+const C = 2 * Math.PI * R;
+const SEG = C / 10;
+const DASH = SEG - 5;
+---
+
+<Base
+  title="KSM Profile Score — Free Assessment | Kallus Strategic Management"
+  description="Twelve questions, about three minutes. See your KSM Profile Score across cash flow, debt structure, credit exposure, liquidity, income and capital readiness. No account numbers, nothing sensitive."
+  path="/assessment"
+  hideMobileCta={true}
+>
+  <!-- ============ INTRO ============ -->
+  <section id="intro" class="relative overflow-hidden border-b border-line bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div class="wrap relative py-14 md:py-20">
+      <div class="max-w-2xl">
+        <p class="eyebrow">KSM Profile Score</p>
+        <h1 class="mt-6 text-[2rem] leading-[1.08] sm:text-[2.75rem]">
+          Twelve questions. About three minutes. One number.
+        </h1>
+        <p class="mt-6 text-[1.125rem] leading-relaxed text-ink-600">
+          This is the short version of what KSM does in an engagement: look at six parts of a financial
+          position and see how they behave together. You will get a score from 0 to 10, the component
+          holding you back, and what would move first.
+        </p>
+
+        <ul class="mt-9 grid gap-4 sm:grid-cols-3">
+          {
+            [
+              ['No documents', 'Every question is answerable from memory.'],
+              ['Nothing sensitive', 'No account numbers, balances or ID numbers.'],
+              ['No cost', 'The score is yours whether or not we ever speak.'],
+            ].map(([t, d]) => (
+              <li class="rounded-xl border border-line bg-white p-4">
+                <p class="label text-brand-700">{t}</p>
+                <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-600">{d}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <button type="button" id="a-begin" class="btn btn-primary mt-9 w-full sm:w-auto">
+          Start the assessment <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <section id="a-form-wrap" class="wrap py-12 md:py-16" hidden>
+    <div class="max-w-3xl">
+      <div class="mb-10">
+        <div class="flex items-baseline justify-between">
+          <p class="label text-ink-400">
+            Step <span id="a-step-num" class="num">1</span> of {TOTAL_STEPS}
+          </p>
+          <p class="num text-[0.75rem] text-brand-700"><span id="a-pct">0</span>% complete</p>
+        </div>
+        <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-ink-100">
+          <div id="a-bar" class="h-full rounded-full bg-brand-600 transition-[width] duration-500 ease-out" style="width:0%"></div>
+        </div>
+      </div>
+
+      <form id="a-form" novalidate>
+        <div class="sr-only" aria-hidden="true">
+          <label for="a-company">Do not fill this in</label>
+          <input id="a-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <!-- identity -->
+        <fieldset data-astep="1">
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            Who is this assessment for?
+          </legend>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            {
+              IDENTITY.map((o) => (
+                <label class="wiz-card">
+                  <input type="radio" name="identity" value={o.v} class="sr-only" />
+                  <span class="wiz-card-inner">
+                    <span class="wiz-check" aria-hidden="true" />
+                    <span>
+                      <span class="block font-display text-[1.0625rem] font-bold text-ink-900">{o.t}</span>
+                      <span class="mt-2 block text-[0.875rem] leading-relaxed text-ink-500">{o.d}</span>
+                    </span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="wiz-error" data-error-for="identity" hidden>Choose one to continue.</p>
+        </fieldset>
+
+        <!-- the six components -->
+        {
+          SECTIONS.map((section, si) => (
+            <fieldset data-astep={si + 2} hidden>
+              <p class="label text-brand-700">Part {String(si + 1).padStart(2, '0')} of 06</p>
+              <legend class="mt-3 font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+                {section.title}
+              </legend>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-500">{section.lede}</p>
+
+              {section.questions.map((q) => (
+                <div class="mt-9">
+                  <p class="font-display text-[1.0625rem] font-bold leading-snug text-ink-900">{q.prompt}</p>
+                  {q.help && <p class="mt-1.5 text-[0.8125rem] leading-relaxed text-ink-500">{q.help}</p>}
+                  <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                    {q.options.map((o) => (
+                      <label class="wiz-card">
+                        <input type="radio" name={q.id} value={o.value} data-component={q.component} class="sr-only" />
+                        <span class="wiz-card-inner items-center">
+                          <span class="wiz-check" aria-hidden="true" />
+                          <span class="text-[0.9375rem] font-medium text-ink-800">{o.label}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <p class="wiz-error" data-error-for={q.id} hidden>Choose one to continue.</p>
+                </div>
+              ))}
+            </fieldset>
+          ))
+        }
+
+        <!-- contact -->
+        <fieldset data-astep={TOTAL_STEPS} hidden>
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            Your score is ready.
+          </legend>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-500">
+            Tell us where to send it and it appears on the next screen.
+          </p>
+
+          <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="a-first" class="wiz-label">First name</label>
+              <input id="a-first" name="firstName" type="text" autocomplete="given-name" maxlength="60" class="wiz-input" />
+              <p class="wiz-error" data-error-for="firstName" hidden>Please enter your first name.</p>
+            </div>
+            <div>
+              <label for="a-last" class="wiz-label">Last name</label>
+              <input id="a-last" name="lastName" type="text" autocomplete="family-name" maxlength="60" class="wiz-input" />
+              <p class="wiz-error" data-error-for="lastName" hidden>Please enter your last name.</p>
+            </div>
+            <div>
+              <label for="a-email" class="wiz-label">Email</label>
+              <input id="a-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" class="wiz-input" />
+              <p class="wiz-error" data-error-for="email" hidden>Please enter a valid email address.</p>
+            </div>
+            <div>
+              <label for="a-phone" class="wiz-label">
+                Phone <span class="font-normal text-ink-400">(optional)</span>
+              </label>
+              <input id="a-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" class="wiz-input" />
+            </div>
+          </div>
+
+          <p class="mt-7 text-[0.8125rem] leading-relaxed text-ink-500">
+            KSM is not a lender and does not guarantee financing, rates, limits or any other outcome. See
+            our <a href="/privacy" class="underline underline-offset-2">Privacy Policy</a>{' '}and{' '}
+            <a href="/disclosures" class="underline underline-offset-2">Disclosures</a>.
+          </p>
+          <p id="a-error" class="mt-5 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.875rem] text-ink-800" hidden></p>
+        </fieldset>
+
+        <div class="mt-10 flex flex-col-reverse gap-3 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <button type="button" id="a-back" class="btn btn-ghost w-full sm:w-auto" hidden>
+            <span aria-hidden="true">←</span> Back
+          </button>
+          <div class="w-full sm:ml-auto sm:w-auto">
+            <button type="button" id="a-next" class="btn btn-primary w-full sm:w-auto">
+              Continue <span aria-hidden="true">→</span>
+            </button>
+            <button type="submit" id="a-submit" class="btn btn-primary w-full sm:w-auto" hidden>
+              <span id="a-submit-label">Show my score</span> <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section id="a-result" class="wrap py-12 md:py-16" hidden>
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <p class="eyebrow">Your result</p>
+        <h2 class="mt-6 text-[2rem] leading-tight sm:text-[2.5rem]">
+          <span id="r-name">Here</span> is where the position stands.
+        </h2>
+        <p class="mt-5 text-[1.0625rem] leading-relaxed text-ink-600">
+          This is a self-reported snapshot, not a full profile. A KSM engagement verifies each component
+          and turns it into a sequence — what to do first, and what to leave alone.
+        </p>
+
+        <div class="mt-8 rounded-2xl border border-brand-200 bg-brand-50/60 p-6">
+          <p class="label text-brand-700">What would move first</p>
+          <p id="r-priority" class="mt-2.5 font-display text-[1.0625rem] font-extrabold leading-snug text-ink-900"></p>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/start" class="btn btn-primary" data-ev="assessment_cta_click">
+            Request a full profile <span aria-hidden="true">→</span>
+          </a>
+          <a href={`mailto:${SITE.email}`} class="btn btn-ghost break-address" data-ev="email_click">Email KSM</a>
+        </div>
+        <p class="mt-6 text-[0.8125rem] text-ink-500">
+          Or call <a href={`tel:${SITE.phone}`} class="font-semibold text-brand-700" data-ev="phone_click">{SITE.phoneDisplay}</a>.
+        </p>
+      </div>
+
+      <div>
+        <div class="rounded-[1.5rem] border border-line bg-cream p-5 shadow-[0_2px_4px_rgba(15,29,51,.04),0_32px_64px_-28px_rgba(15,29,51,.28)] min-[400px]:p-6 sm:p-8">
+          <div class="flex items-start justify-between gap-4 sm:gap-6">
+            <div class="min-w-0">
+              <p class="label text-ink-400">KSM Profile Score</p>
+              <p class="mt-3 flex items-baseline gap-1">
+                <span id="r-score" class="font-display text-[2.5rem] leading-none font-extrabold tabular-nums text-ink-900 sm:text-[3rem]">0.0</span>
+                <span class="font-display text-[1.125rem] font-bold leading-none text-ink-400">/10</span>
+              </p>
+              <p class="mt-2.5 text-[0.8125rem] font-medium text-ink-500">
+                <span id="r-band" class="font-semibold text-ink-700"></span>
+                <span class="text-ink-300" aria-hidden="true"> · </span>
+                <span class="text-ink-400">10 is strongest</span>
+              </p>
+            </div>
+            <div class="relative h-[64px] w-[64px] flex-none sm:h-[86px] sm:w-[86px]">
+              <svg viewBox="0 0 86 86" class="h-full w-full -rotate-90" aria-hidden="true">
+                {
+                  Array.from({ length: 10 }, (_, i) => (
+                    <circle
+                      cx="43"
+                      cy="43"
+                      r={R}
+                      fill="none"
+                      stroke="#E4E8EF"
+                      stroke-width="7"
+                      stroke-dasharray={`${DASH} ${C - DASH}`}
+                      stroke-dashoffset={-i * SEG}
+                      data-rseg={i}
+                      style="transition: stroke .3s ease"
+                    />
+                  ))
+                }
+              </svg>
+            </div>
+          </div>
+
+          <p id="r-note" class="mt-5 text-[0.8125rem] leading-relaxed text-ink-500"></p>
+
+          <ul id="r-rows" class="mt-6 space-y-4 border-t border-line pt-6"></ul>
+
+          <div class="mt-6 rounded-2xl border border-brand-100 bg-brand-50/70 p-5">
+            <p class="label text-brand-700">KSM Insight</p>
+            <p id="r-insight" class="mt-2.5 text-[0.9375rem] font-medium leading-relaxed text-ink-800"></p>
+          </div>
+        </div>
+
+        <p class="mt-6 text-[0.75rem] leading-relaxed text-ink-500">
+          Self-reported snapshot. The KSM Profile Score is a 0–10 KSM measure of how well a position is
+          set up for a financing conversation. It is not a credit score, a rating, or a prediction of any
+          lending decision, and KSM does not guarantee financing outcomes.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script type="application/json" id="a-config" is:inline set:html={JSON.stringify(config)} />
+
+<script is:inline define:vars={{ TOTAL_STEPS, TOTAL_QUESTIONS }}>
+  (function () {
+    var cfg = JSON.parse(document.getElementById('a-config').textContent);
+    var form = document.getElementById('a-form');
+    if (!form) return;
+
+    var intro = document.getElementById('intro');
+    var formWrap = document.getElementById('a-form-wrap');
+    var result = document.getElementById('a-result');
+    var steps = Array.prototype.slice.call(form.querySelectorAll('[data-astep]'));
+    var back = document.getElementById('a-back');
+    var next = document.getElementById('a-next');
+    var submit = document.getElementById('a-submit');
+    var submitLabel = document.getElementById('a-submit-label');
+    var bar = document.getElementById('a-bar');
+    var pct = document.getElementById('a-pct');
+    var stepNum = document.getElementById('a-step-num');
+    var errBox = document.getElementById('a-error');
+    var current = 1;
+
+    var TONE = { good: '#2F9E68', warn: '#C98A22', bad: '#B4483C' };
+    var TONE_CLASS = { good: 'text-good', warn: 'text-warn', bad: 'text-bad' };
+
+    function showError(name, show) {
+      var el = form.querySelector('[data-error-for="' + name + '"]');
+      if (el) el.hidden = !show;
+    }
+
+    function fieldsFor(step) {
+      var fs = steps[step - 1];
+      var names = [];
+      fs.querySelectorAll('input[type=radio]').forEach(function (i) {
+        if (names.indexOf(i.name) < 0) names.push(i.name);
+      });
+      return names;
+    }
+
+    function validate(step) {
+      if (step === TOTAL_STEPS) {
+        var d = new FormData(form);
+        var f = (d.get('firstName') || '').toString().trim();
+        var l = (d.get('lastName') || '').toString().trim();
+        var e = (d.get('email') || '').toString().trim();
+        var ok3 = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+        showError('firstName', !f);
+        showError('lastName', !l);
+        showError('email', !ok3);
+        return !!f && !!l && ok3;
+      }
+      var ok = true;
+      fieldsFor(step).forEach(function (name) {
+        var answered = !!form.querySelector('input[name="' + name + '"]:checked');
+        showError(name, !answered);
+        if (!answered) ok = false;
+      });
+      return ok;
+    }
+
+    function render() {
+      steps.forEach(function (s) {
+        s.hidden = Number(s.getAttribute('data-astep')) !== current;
+      });
+      stepNum.textContent = String(current);
+      var p = Math.round(((current - 1) / TOTAL_STEPS) * 100);
+      bar.style.width = p + '%';
+      pct.textContent = String(p);
+      back.hidden = current === 1;
+      next.hidden = current === TOTAL_STEPS;
+      submit.hidden = current !== TOTAL_STEPS;
+      window.scrollTo({
+        top: Math.max(0, formWrap.getBoundingClientRect().top + window.scrollY - 90),
+        behavior: 'smooth',
+      });
+      if (window.ksm) window.ksm.track('assessment_step_' + current);
+    }
+
+    document.getElementById('a-begin').addEventListener('click', function () {
+      intro.hidden = true;
+      formWrap.hidden = false;
+      if (window.ksm) window.ksm.track('assessment_start');
+      render();
+    });
+
+    next.addEventListener('click', function () {
+      if (!validate(current)) return;
+      current = Math.min(current + 1, TOTAL_STEPS);
+      render();
+    });
+    back.addEventListener('click', function () {
+      current = Math.max(current - 1, 1);
+      render();
+    });
+    form.addEventListener('change', function (e) {
+      if (e.target && e.target.name) showError(e.target.name, false);
+    });
+
+    function componentScores() {
+      var totals = {};
+      form.querySelectorAll('input[data-component]:checked').forEach(function (i) {
+        var k = i.getAttribute('data-component');
+        (totals[k] = totals[k] || []).push(Number(i.value));
+      });
+      return cfg.components.map(function (c) {
+        var vals = totals[c.key] || [0];
+        return {
+          key: c.key,
+          label: c.label,
+          insight: c.insight,
+          value: Math.round(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length),
+        };
+      });
+    }
+
+    function statusFor(v) {
+      for (var i = 0; i < cfg.status.length; i++) if (v >= cfg.status[i].min) return cfg.status[i];
+      return cfg.status[cfg.status.length - 1];
+    }
+    function bandFor(v) {
+      for (var i = 0; i < cfg.bands.length; i++) if (v >= cfg.bands[i].min) return cfg.bands[i];
+      return cfg.bands[cfg.bands.length - 1];
+    }
+
+    var PRIORITY = {
+      'cash-flow': 'Create monthly margin before taking on anything new.',
+      debt: 'Restructure the obligations doing the most damage to the month.',
+      credit: 'Bring utilization down — it needs months to season.',
+      liquidity: 'Build a reserve floor before any other move.',
+      income: 'Get income documented and consistent across periods.',
+      capital: 'Give the objective more runway, or prepare the request properly.',
+    };
+
+    function renderResult(comps, contact) {
+      var index = Math.round(
+        comps.reduce(function (a, c) { return a + c.value; }, 0) / comps.length
+      );
+      var band = bandFor(index);
+      var weakest = comps.reduce(function (a, b) { return b.value < a.value ? b : a; });
+
+      document.getElementById('r-score').textContent = (index / 10).toFixed(1);
+      document.getElementById('r-band').textContent = band.label;
+      document.getElementById('r-note').textContent = band.note;
+      document.getElementById('r-name').textContent = contact.firstName
+        ? contact.firstName + ', here'
+        : 'Here';
+      document.getElementById('r-insight').textContent =
+        weakest.value >= 80 ? cfg.strongInsight : weakest.insight;
+      document.getElementById('r-priority').textContent = PRIORITY[weakest.key] || '';
+
+      var lit = Math.round(index / 10);
+      document.querySelectorAll('[data-rseg]').forEach(function (s, i) {
+        s.setAttribute('stroke', i < lit ? '#2B57F0' : '#E4E8EF');
+      });
+
+      var rows = document.getElementById('r-rows');
+      rows.innerHTML = '';
+      comps.forEach(function (c) {
+        var s = statusFor(c.value);
+        var li = document.createElement('li');
+        li.innerHTML =
+          '<div class="flex items-baseline justify-between gap-3">' +
+          '<span class="text-[0.875rem] font-medium text-ink-800"></span>' +
+          '<span class="num flex items-center gap-2 text-[0.75rem]">' +
+          '<span class="font-semibold text-ink-700"></span>' +
+          '<span class="text-ink-300" aria-hidden="true">·</span>' +
+          '<span class="' + TONE_CLASS[s.tone] + '"></span></span></div>' +
+          '<div class="mt-2 h-[5px] w-full overflow-hidden rounded-full bg-ink-100">' +
+          '<div class="h-full rounded-full" style="width:0%;background:' + TONE[s.tone] +
+          ';transition:width .9s cubic-bezier(.2,.7,.3,1)"></div></div>';
+        li.querySelectorAll('span')[0].textContent = c.label;
+        li.querySelectorAll('span')[2].textContent = String(c.value);
+        li.querySelectorAll('span')[4].textContent = s.label;
+        rows.appendChild(li);
+        setTimeout(function () {
+          li.querySelector('div > div').style.width = c.value + '%';
+        }, 60);
+      });
+
+      formWrap.hidden = true;
+      result.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validate(TOTAL_STEPS)) return;
+      errBox.hidden = true;
+      submit.disabled = true;
+      submitLabel.textContent = 'Calculating…';
+
+      var d = new FormData(form);
+      var comps = componentScores();
+      var answers = {};
+      form.querySelectorAll('input[type=radio]:checked').forEach(function (i) {
+        answers[i.name] = i.value;
+      });
+
+      var payload = {
+        identity: (d.get('identity') || '').toString(),
+        firstName: (d.get('firstName') || '').toString().trim(),
+        lastName: (d.get('lastName') || '').toString().trim(),
+        email: (d.get('email') || '').toString().trim(),
+        phone: (d.get('phone') || '').toString().trim(),
+        company_website: (d.get('company_website') || '').toString(),
+        components: comps.map(function (c) { return { key: c.key, label: c.label, value: c.value }; }),
+        answers: answers,
+        referrer: document.referrer || '',
+      };
+
+      fetch('/api/assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          if (!res.ok || !res.body || res.body.ok !== true) {
+            throw new Error((res.body && res.body.error) || 'Something went wrong.');
+          }
+          if (window.ksm) window.ksm.track('assessment_completed');
+          renderResult(comps, payload);
+        })
+        .catch(function () {
+          submit.disabled = false;
+          submitLabel.textContent = 'Show my score';
+          errBox.hidden = false;
+          errBox.textContent =
+            'We could not save your assessment just now. Please try again, or email ' +
+            'motti@kallusstrategicmanagement.com and we will pick it up from there.';
+        });
+    });
+  })();
+</script>

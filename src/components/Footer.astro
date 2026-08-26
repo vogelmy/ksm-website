@@ -23,11 +23,18 @@ const year = 2026;
           Clarity before capital. Strategy before financing. Understand the complete financial picture
           before the next move.
         </p>
-        <a
-          href={`mailto:${SITE.email}`}
-          class="mt-6 inline-block text-[0.9375rem] font-medium text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
-          data-ev="email_click">{SITE.email}</a
-        >
+        <div class="mt-6 space-y-2">
+          <a
+            href={`mailto:${SITE.email}`}
+            class="block text-[0.9375rem] font-medium text-white underline decoration-white/30 underline-offset-4 hover:decoration-white break-address"
+            data-ev="email_click">{SITE.email}</a
+          >
+          <a
+            href={`tel:${SITE.phone}`}
+            class="block text-[0.9375rem] font-medium text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+            data-ev="phone_click">{SITE.phoneDisplay}</a
+          >
+        </div>
       </div>
 
       {
