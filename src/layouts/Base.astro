@@ -13,27 +13,69 @@ interface Props {
   hideMobileCta?: boolean;
   /** JSON-LD objects to embed */
   schema?: unknown[];
+  /** Social share image, absolute or root-relative. */
+  image?: string;
+  /** og:type — "article" for Insights posts. */
+  ogType?: string;
+  /** Keep thin or post-conversion pages out of search results. */
+  noindex?: boolean;
+  /** Extra <meta> for articles. */
+  publishedTime?: string;
 }
 
-const { title, description, path = Astro.url.pathname, hideMobileCta = false, schema = [] } = Astro.props;
+const {
+  title,
+  description,
+  path = Astro.url.pathname,
+  hideMobileCta = false,
+  schema = [],
+  image = '/og.png',
+  ogType = 'website',
+  noindex = false,
+  publishedTime,
+} = Astro.props;
 
-const canonical = new URL(path, Astro.site ?? 'https://ksm-website.pages.dev').toString();
+const origin = (Astro.site ?? new URL('https://ksm-strategy.com')).toString().replace(/\/$/, '');
+const canonical = new URL(path, origin + '/').toString();
+const ogImage = new URL(image, origin + '/').toString();
 
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': origin + '/#organization',
   name: SITE.name,
   alternateName: 'KSM',
   description: SITE.description,
-  url: (Astro.site ?? 'https://ksm-website.pages.dev').toString(),
+  url: origin + '/',
   email: SITE.email,
-  areaServed: 'US',
+  telephone: SITE.phone,
+  image: origin + '/og.png',
+  logo: origin + '/favicon.svg',
+  founder: { '@type': 'Person', name: 'Motti Kallus', jobTitle: 'Founder' },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Boca Raton',
+    addressRegion: 'FL',
+    addressCountry: 'US',
+  },
+  areaServed: { '@type': 'Country', name: 'United States' },
   serviceType: [
     'Financial profile analysis',
     'Cash flow optimization',
     'Debt structure strategy',
     'Financing readiness',
   ],
+  knowsAbout: [
+    'Cash flow analysis',
+    'Debt structure',
+    'Credit exposure',
+    'Liquidity planning',
+    'Financing readiness',
+    'Business financial strategy',
+  ],
+  // Stated so search and AI answers do not mis-file KSM as a lender or credit repair firm.
+  disambiguatingDescription:
+    'KSM is an independent financial strategy consulting practice. It is not a lender, loan broker, credit repair organization, debt settlement company, credit reporting agency or investment adviser, and it does not guarantee financing outcomes.',
 };
 ---
 
@@ -47,15 +89,33 @@ const orgSchema = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="KSM — Kallus Strategic Management. Know exactly where your financial position stands."
+    />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta
+      name="twitter:image:alt"
+      content="KSM — Kallus Strategic Management. Know exactly where your financial position stands."
+    />
+
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="author" content="Kallus Strategic Management" />
 
     <meta name="theme-color" content="#0F1D33" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

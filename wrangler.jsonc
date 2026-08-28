@@ -5,6 +5,12 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-08-20",
   "observability": { "enabled": true },
+  // The site lives on its own domain; the workers.dev preview URL is off.
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "ksm-strategy.com", "custom_domain": true },
+    { "pattern": "www.ksm-strategy.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

@@ -314,6 +314,13 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    // One canonical host. www redirects to the apex, preserving path and query.
+    if (url.hostname.startsWith('www.')) {
+      const target = new URL(url.toString());
+      target.hostname = url.hostname.slice(4);
+      return Response.redirect(target.toString(), 301);
+    }
+
     if (url.pathname === '/api/lead') {
       return handleLead(request, env, ctx);
     }

@@ -6,6 +6,30 @@ import FAQAccordion from '../components/FAQAccordion.astro';
 import CTA from '../components/CTA.astro';
 import { PROCESS, FAQ } from '../data/site';
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How a KSM engagement works',
+  description:
+    'The five steps KSM runs in every engagement, from establishing the objective to leaving the client with a ninety-day sequence.',
+  step: PROCESS.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.title,
+    text: s.detail,
+  })),
+};
+
 const WHATYOUGET = [
   { t: 'A written financial profile', d: 'The complete position assembled in one document, with each of the six components assessed and explained.' },
   { t: 'A stated top priority', d: 'One thing, named explicitly, with the reasoning behind why it comes before everything else.' },
@@ -27,6 +51,7 @@ const PRINCIPLES = [
   title="How KSM Works | Kallus Strategic Management"
   description="The KSM engagement in five steps: connect, map, diagnose, strategize, execute. What we assemble, how we rank priorities, what you receive, and what we do not do."
   path="/how-it-works"
+  schema={[faqSchema, howToSchema]}
 >
   <PageHero
     eyebrow="How it works"

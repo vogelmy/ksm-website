@@ -23,6 +23,24 @@ const BELIEFS = [
   },
 ];
 
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Motti Kallus',
+  jobTitle: 'Founder',
+  worksFor: { '@type': 'Organization', name: SITE.name },
+  email: SITE.email,
+  telephone: SITE.phone,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Boca Raton',
+    addressRegion: 'FL',
+    addressCountry: 'US',
+  },
+  description:
+    'Founder of Kallus Strategic Management, with more than a decade across business operations, strategy, sales and organizational growth. Works with business owners on cash flow, debt structure and how their financial position reads to a lender.',
+};
+
 const NOTLIST = [
   ['Not a lender or bank', 'KSM does not originate, fund or service loans of any kind.'],
   ['Not a loan broker or originator', 'KSM does not submit applications and takes no lender compensation.'],
@@ -35,8 +53,9 @@ const NOTLIST = [
 
 <Base
   title="About KSM | Kallus Strategic Management"
-  description="Kallus Strategic Management is an independent financial strategy practice. KSM is not a lender, broker, credit repair organization, debt settlement company or investment adviser."
+  description="Kallus Strategic Management is an independent financial strategy practice in Boca Raton, founded by Motti Kallus. Not a lender, broker or credit repair firm."
   path="/about"
+  schema={[personSchema]}
 >
   <PageHero
     eyebrow="About KSM"

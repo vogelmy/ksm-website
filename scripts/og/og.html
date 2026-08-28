@@ -1,0 +1,139 @@
+<!doctype html>
+<!--
+  Source for public/og.png — the card shown when the site is shared on WhatsApp,
+  LinkedIn, Slack, iMessage, X, Facebook.
+
+  Regenerate with:
+    node scripts/og/render.mjs
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        width: 1200px; height: 630px; overflow: hidden;
+        background: #0a1425;
+        font-family: Inter, sans-serif;
+        color: #fff;
+        position: relative;
+        display: flex;
+      }
+      .grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(255,255,255,.055) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255,255,255,.055) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+      .arc {
+        position: absolute; right: -220px; top: -160px;
+        width: 780px; height: 780px; border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.09);
+      }
+      .left { position: relative; padding: 62px 0 62px 68px; width: 700px; display: flex; flex-direction: column; }
+      .brand { display: flex; align-items: center; gap: 16px; }
+      .mark { width: 52px; height: 52px; border-radius: 14px; background: rgba(255,255,255,.08);
+              display: grid; place-items: center; }
+      .name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -.02em; }
+      .sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .16em;
+             text-transform: uppercase; color: #8592a6; margin-top: 5px; }
+      h1 {
+        font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+        font-size: 55px; line-height: 1.08; letter-spacing: -.03em;
+        margin-top: auto;
+      }
+      h1 em { font-style: normal; color: #6180fb; }
+      .lede { margin-top: 22px; font-size: 20px; line-height: 1.5; color: #b3bdcc; max-width: 585px; }
+      .foot { margin-top: auto; padding-top: 34px; display: flex; align-items: center; gap: 18px;
+              font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .1em;
+              text-transform: uppercase; color: #8592a6; }
+      .dot { width: 4px; height: 4px; border-radius: 50%; background: #3a5068; }
+
+      .right { position: relative; flex: 1; display: grid; place-items: center; }
+      .card {
+        width: 340px; background: #fbfaf5; border-radius: 22px; padding: 26px;
+        color: #0f1d33; box-shadow: 0 40px 80px -30px rgba(0,0,0,.7);
+      }
+      .card .label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .16em;
+                     text-transform: uppercase; color: #8592a6; }
+      .score { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 48px;
+               line-height: 1; margin-top: 10px; display: flex; align-items: baseline; gap: 4px; }
+      .score span { font-size: 19px; color: #8592a6; }
+      .band { margin-top: 9px; font-size: 13px; color: #5c6b82; }
+      .band b { color: #22374f; }
+      .rows { margin-top: 20px; border-top: 1px solid #e4e8ef; padding-top: 16px; }
+      .row { margin-bottom: 13px; }
+      .row:last-child { margin-bottom: 0; }
+      .row .t { display: flex; justify-content: space-between; font-size: 13px; }
+      .row .t b { font-weight: 500; color: #16283f; }
+      .row .t i { font-style: normal; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+      .bar { height: 5px; border-radius: 99px; background: #e9edf3; margin-top: 6px; overflow: hidden; }
+      .bar div { height: 100%; border-radius: 99px; }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <div class="arc"></div>
+
+    <div class="left">
+      <div class="brand">
+        <div class="mark">
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+            <rect x="2.5" y="11" width="3.2" height="6.5" rx="1.2" fill="#6180FB" />
+            <rect x="8.4" y="7" width="3.2" height="10.5" rx="1.2" fill="#94ACFF" />
+            <rect x="14.3" y="2.5" width="3.2" height="15" rx="1.2" fill="#FFFFFF" />
+          </svg>
+        </div>
+        <div>
+          <div class="name">KSM</div>
+          <div class="sub">Kallus Strategic Management</div>
+        </div>
+      </div>
+
+      <h1>Know exactly where your <em>financial position</em> stands.</h1>
+      <p class="lede">
+        Cash flow, debt, credit, liquidity, income and timing — mapped together, then a prioritized
+        sequence for what to do first.
+      </p>
+
+      <div class="foot">
+        <span>ksm-strategy.com</span>
+        <span class="dot"></span>
+        <span>Boca Raton, FL</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <div class="label">KSM Profile Score</div>
+        <div class="score">7.0 <span>/10</span></div>
+        <div class="band"><b>Solid</b> · 10 is strongest</div>
+        <div class="rows">
+          <div class="row">
+            <div class="t"><b>Cash Flow</b><i style="color:#C98A22">62</i></div>
+            <div class="bar"><div style="width:62%;background:#C98A22"></div></div>
+          </div>
+          <div class="row">
+            <div class="t"><b>Debt Structure</b><i style="color:#2F9E68">84</i></div>
+            <div class="bar"><div style="width:84%;background:#2F9E68"></div></div>
+          </div>
+          <div class="row">
+            <div class="t"><b>Liquidity</b><i style="color:#C98A22">48</i></div>
+            <div class="bar"><div style="width:48%;background:#C98A22"></div></div>
+          </div>
+          <div class="row">
+            <div class="t"><b>Income</b><i style="color:#2F9E68">89</i></div>
+            <div class="bar"><div style="width:89%;background:#2F9E68"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

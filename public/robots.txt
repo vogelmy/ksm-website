@@ -2,5 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /thank-you
 
-Sitemap: https://ksm-website.moishyv.workers.dev/sitemap-index.xml
+# Plain-language summary for AI answer engines
+# https://ksm-strategy.com/llms.txt
+
+Sitemap: https://ksm-strategy.com/sitemap-index.xml
