@@ -12,7 +12,7 @@ export const SITE = {
    * Set this and /book embeds the calendar automatically; leave it empty and
    * /book shows call-and-email instructions instead.
    */
-  bookingUrl: '',
+  bookingUrl: 'https://calendly.com/mottiksm/30min?hide_gdpr_banner=1&primary_color=2b57f0',
   locale: 'en_US',
 };
 
