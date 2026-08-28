@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE } from '../data/site';
+
+/**
+ * Booking page. The moment KSM supplies a scheduling link, set SITE.bookingUrl
+ * in src/data/site.ts and the calendar embeds itself here — nothing else to
+ * change. Until then the page routes people to the assessment, phone and email
+ * rather than showing an empty frame.
+ */
+const booking = SITE.bookingUrl;
+
+const PREP = [
+  ['What to have in mind', 'The objective you are working toward and roughly when you need it.'],
+  ['What we will cover', 'Where your position looks strong, where it is constrained, and what would move first.'],
+  ['What it costs', 'Nothing. The call establishes whether KSM is the right fit before anything is scoped.'],
+];
+---
+
+<Base
+  title="Book a Call | Kallus Strategic Management"
+  description="Book a short introductory call with Motti Kallus to talk through your financial position, what is constraining it, and whether KSM is the right fit."
+  path="/book"
+>
+  <PageHero
+    eyebrow="Book a call"
+    title="A short conversation, before anything is scoped."
+    lede="Fifteen to twenty minutes to talk through what you are working toward and where the position stands. No preparation needed, and nothing is committed on the call."
+  />
+
+  <section class="wrap mt-14 mb-8">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <ul class="space-y-6">
+          {
+            PREP.map(([t, d]) => (
+              <li>
+                <p class="label text-brand-700">{t}</p>
+                <p class="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-600">{d}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-10 rounded-2xl border border-line bg-cream p-6">
+          <p class="label text-ink-400">Prefer to start with numbers?</p>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">
+            The free Profile Score assessment takes about three minutes and gives us both something
+            concrete to work from on the call.
+          </p>
+          <a href="/assessment" class="btn btn-ghost btn-sm mt-5" data-ev="book_assessment_click">
+            Take the assessment <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        {
+          booking ? (
+            <div class="overflow-hidden rounded-[1.5rem] border border-line bg-white shadow-[var(--shadow-card)]">
+              <iframe
+                src={booking}
+                title="Book a call with KSM"
+                loading="lazy"
+                class="h-[720px] w-full border-0"
+              />
+            </div>
+          ) : (
+            <div class="rounded-[1.5rem] border border-line bg-white p-8 shadow-[var(--shadow-card)]">
+              <p class="label text-brand-700">Two ways to reach us today</p>
+              <h2 class="mt-4 text-[1.5rem] leading-snug">Call or email, and we will find a time.</h2>
+              <p class="mt-4 text-[1rem] leading-relaxed text-ink-600">
+                Online booking is being set up. In the meantime the fastest route is the phone — you
+                will reach Motti directly.
+              </p>
+
+              <div class="mt-8 space-y-3">
+                <a href={`tel:${SITE.phone}`} class="btn btn-primary w-full" data-ev="phone_click">
+                  Call {SITE.phoneDisplay}
+                </a>
+                <a
+                  href={`mailto:${SITE.email}?subject=Booking%20a%20call%20with%20KSM`}
+                  class="btn btn-ghost w-full"
+                  data-ev="email_click"
+                >
+                  Email Motti
+                </a>
+                <p class="break-address text-center text-[0.8125rem] text-ink-500">{SITE.email}</p>
+              </div>
+
+              <p class="mt-8 border-t border-line pt-6 text-[0.8125rem] leading-relaxed text-ink-500">
+                Include a couple of times that suit you and we will confirm one back.
+              </p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Base>

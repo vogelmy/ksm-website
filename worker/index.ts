@@ -289,6 +289,8 @@ const CSP = [
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data:",
   "connect-src 'self'",
+  // Scheduling embeds on /book. Iframe only — no third-party script is loaded.
+  "frame-src https://calendly.com https://*.calendly.com https://cal.com https://*.cal.com https://calendar.google.com",
 ].join('; ');
 
 function withSecurityHeaders(res: Response, url: URL): Response {

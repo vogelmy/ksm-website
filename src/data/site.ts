@@ -7,6 +7,12 @@ export const SITE = {
   email: 'motti@kallusstrategicmanagement.com',
   phone: '+19549108336',
   phoneDisplay: '(954) 910-8336',
+  /**
+   * Scheduling link (Calendly, Cal.com, Google appointment schedule...).
+   * Set this and /book embeds the calendar automatically; leave it empty and
+   * /book shows call-and-email instructions instead.
+   */
+  bookingUrl: '',
   locale: 'en_US',
 };
 
@@ -42,6 +48,7 @@ export const FOOTER_NAV = [
     links: [
       { label: 'Insights', href: '/insights' },
       { label: 'Free Profile Score assessment', href: '/assessment' },
+      { label: 'Book a call', href: '/book' },
       { label: 'Frequently Asked Questions', href: '/how-it-works#faq' },
       { label: 'Start Your Profile', href: '/start' },
       { label: 'Disclosures', href: '/disclosures' },
