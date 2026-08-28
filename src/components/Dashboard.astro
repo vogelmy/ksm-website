@@ -47,29 +47,29 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
     <div
       id="ksm-dashboard"
       data-interactive={interactive ? 'true' : 'false'}
-      class="relative rounded-[1.5rem] border border-line bg-cream p-5 shadow-[0_2px_4px_rgba(15,29,51,.04),0_32px_64px_-28px_rgba(15,29,51,.28)] min-[400px]:p-6 sm:p-8"
+      class="relative rounded-[1.5rem] border border-line bg-cream p-5 shadow-[0_2px_4px_rgba(15,29,51,.04),0_32px_64px_-28px_rgba(15,29,51,.28)] min-[400px]:p-6 sm:p-7"
     >
       <div class="flex items-start justify-between gap-4 sm:gap-6">
         <div class="min-w-0">
           <p class="label text-ink-400">KSM Profile Score</p>
 
-          <p class="mt-3 flex items-baseline gap-1">
+          <p class="mt-2.5 flex items-baseline gap-1">
             <span
               id="score-value"
-              class="font-display text-[2.5rem] leading-none font-extrabold tabular-nums text-ink-900 sm:text-[3rem]"
+              class="font-display text-[2.25rem] leading-none font-extrabold tabular-nums text-ink-900 sm:text-[2.75rem]"
               >{score}</span
             >
             <span class="font-display text-[1.125rem] font-bold leading-none text-ink-400">/10</span>
           </p>
 
-          <p class="mt-2.5 text-[0.8125rem] font-medium text-ink-500">
+          <p class="mt-2 text-[0.8125rem] font-medium text-ink-500">
             <span id="band-label" class="font-semibold text-ink-700">{band.label}</span>
             <span class="text-ink-300" aria-hidden="true"> · </span>
             <span class="text-ink-400">10 is strongest</span>
           </p>
         </div>
 
-        <div class="relative h-[64px] w-[64px] flex-none sm:h-[86px] sm:w-[86px]">
+        <div class="relative h-[60px] w-[60px] flex-none sm:h-[76px] sm:w-[76px]">
           <svg viewBox="0 0 86 86" class="h-full w-full -rotate-90" aria-hidden="true">
             {
               SEGMENTS.map((i) => (
@@ -92,10 +92,10 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
         </div>
       </div>
 
-      <p id="band-note" class="mt-5 text-[0.8125rem] leading-relaxed text-ink-500">{band.note}</p>
+      <p id="band-note" class="mt-4 text-[0.78125rem] leading-snug text-ink-500">{band.note}</p>
 
-      <div class="mt-6 border-t border-line pt-6">
-        <ul class="space-y-4">
+      <div class="mt-5 border-t border-line pt-5">
+        <ul class="space-y-3">
           {
             components.map((c) => {
               const s = statusFor(c.value);
@@ -132,7 +132,7 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
                     value={c.value}
                     data-range={c.key}
                     aria-label={`${c.label} — illustrative strength, 0 to 100`}
-                    class:list={['ksm-range mt-1.5', !interactive && 'is-static']}
+                    class:list={['ksm-range mt-1', !interactive && 'is-static']}
                     tabindex={interactive ? undefined : -1}
                   />
                 </li>
@@ -142,7 +142,7 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
         </ul>
       </div>
 
-      <div class="mt-6 rounded-2xl border border-brand-100 bg-brand-50/70 p-5">
+      <div class="mt-5 rounded-2xl border border-brand-100 bg-brand-50/70 p-4">
         <p class="label flex items-center gap-2 text-brand-700">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path
@@ -162,7 +162,7 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
         </p>
         <p
           id="ksm-insight"
-          class="mt-2.5 text-[0.9375rem] font-medium leading-relaxed text-ink-800"
+          class="mt-2 text-[0.875rem] font-medium leading-snug text-ink-800"
           aria-live="polite"
         >
           {startingInsight}
@@ -171,7 +171,7 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
 
       {
         interactive && (
-          <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+          <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
             <p class="text-[0.75rem] text-ink-500">Drag any row to model a different position.</p>
             <button
               type="button"
@@ -204,10 +204,9 @@ const config = { bands: BANDS, status: COMPONENT_STATUS, strongInsight: STRONG_I
     </div>
   </div>
 
-  <p class="mt-8 text-[0.75rem] leading-relaxed text-ink-500 sm:mt-12">
-    Illustrative model. The KSM Profile Score is a 0–10 KSM measure of how well a position is set up for
-    a financing conversation. It is not a credit score, a rating, or a prediction of any lending
-    decision, and KSM does not guarantee financing outcomes.
+  <p class="mt-6 text-[0.6875rem] leading-snug text-ink-500 sm:mt-8">
+    Illustrative model. The KSM Profile Score is a 0–10 KSM measure, not a credit score and not a
+    prediction of any lending decision.
   </p>
 </div>
 
