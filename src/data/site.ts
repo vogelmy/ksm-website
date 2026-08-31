@@ -21,7 +21,7 @@ export const SITE = {
    * tag is emitted. window.ksm.track() already forwards to gtag, so every event
    * the site fires starts reporting the moment this is filled in.
    */
-  ga4Id: '',
+  ga4Id: 'G-917DLLJ06E',
 
   /**
    * The token from Search Console's "HTML tag" verification method — just the
