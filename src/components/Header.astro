@@ -48,7 +48,8 @@ const isActive = (href: string) => here === href || here.startsWith(href + '/');
       }
     </nav>
 
-    <div class="hidden flex-none items-center md:flex">
+    <div class="hidden flex-none items-center gap-2.5 md:flex">
+      <a href="/book" class="btn btn-ghost btn-sm" data-ev="header_book_click">Book a call</a>
       <a href="/start" class="btn btn-primary btn-sm" data-ev="hero_cta_click">
         Start my profile <span aria-hidden="true">→</span>
       </a>
@@ -81,7 +82,8 @@ const isActive = (href: string) => here === href || here.startsWith(href + '/');
         ))
       }
       <a href="/about" class="border-b border-line/70 py-3.5 text-base font-medium text-ink-700">About KSM</a>
-      <a href="/start" class="btn btn-primary mt-4 mb-2 w-full" data-ev="mobile_menu_cta_click">
+      <a href="/book" class="btn btn-ghost mt-4 w-full" data-ev="mobile_menu_book_click">Book a call</a>
+      <a href="/start" class="btn btn-primary mt-2.5 mb-2 w-full" data-ev="mobile_menu_cta_click">
         Start my profile <span aria-hidden="true">→</span>
       </a>
     </nav>

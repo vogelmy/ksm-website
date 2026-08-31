@@ -7,7 +7,7 @@ import { SITE } from '../data/site';
 interface Props {
   title: string;
   description: string;
-  /** Canonical path, e.g. "/individuals" */
+  /** Canonical path, e.g. "/business" */
   path?: string;
   /** Hide the sticky mobile CTA (used on /start) */
   hideMobileCta?: boolean;
@@ -114,6 +114,10 @@ const orgSchema = {
       content="KSM — Kallus Strategic Management. Know exactly where your financial position stands."
     />
 
+    {SITE.googleSiteVerification && (
+      <meta name="google-site-verification" content={SITE.googleSiteVerification} />
+    )}
+
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="author" content="Kallus Strategic Management" />
 
@@ -127,6 +131,20 @@ const orgSchema = {
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
     />
+
+    {
+      SITE.ga4Id && (
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.ga4Id}`} />
+      )
+    }
+    {
+      SITE.ga4Id && (
+        <script
+          is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${SITE.ga4Id}');`}
+        />
+      )
+    }
 
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} is:inline />)}
@@ -154,10 +172,22 @@ const orgSchema = {
           id="sticky-cta"
           class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-white/95 p-3 backdrop-blur transition-transform duration-300 md:hidden"
         >
-          <a href="/start" class="btn btn-primary w-full" data-ev="mobile_sticky_cta_click">
-            Start My Financial Profile
-            <span aria-hidden="true">→</span>
-          </a>
+          <div class="flex gap-2">
+            <a
+              href="/book"
+              class="btn btn-ghost flex-1 px-3 text-[0.875rem]"
+              data-ev="mobile_sticky_book_click"
+            >
+              Book a call
+            </a>
+            <a
+              href="/start"
+              class="btn btn-primary flex-1 px-3 text-[0.875rem]"
+              data-ev="mobile_sticky_cta_click"
+            >
+              Get my profile
+            </a>
+          </div>
         </div>
       )
     }

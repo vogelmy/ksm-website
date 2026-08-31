@@ -1,10 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const IDENTITY = [
-  { v: 'individual', t: 'Individual or family', d: 'Personal position — mortgage, debt, credit, income, liquidity, a major purchase ahead.' },
-  { v: 'business', t: 'Business owner', d: 'Business and personal together — operating cash flow, guarantees, working capital, growth capital.' },
-];
 
 const GOALS = [
   'Improve monthly cash flow',
@@ -31,7 +27,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
 
 <Base
   title="Start Your Financial Profile | Kallus Strategic Management"
-  description="Four short questions, about a minute. No account numbers and nothing sensitive — just what you are working toward and how to reach you."
+  description="Three short questions, about a minute. No account numbers and nothing sensitive — just what you are working toward and how to reach you."
   path="/start"
   hideMobileCta={true}
 >
@@ -40,7 +36,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
     <div class="wrap relative py-12 md:py-16">
       <p class="eyebrow">Start your profile</p>
       <h1 class="mt-6 max-w-3xl text-[2rem] leading-[1.08] sm:text-[2.75rem]">
-        Four questions. About a minute.
+        Three questions. About a minute.
       </h1>
       <p class="mt-5 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-600">
         We ask what you are trying to accomplish and how to reach you — nothing else. No account numbers,
@@ -54,7 +50,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       <!-- Progress -->
       <div id="wiz-progress" class="mb-10">
         <div class="flex items-baseline justify-between">
-          <p class="label text-ink-400">Step <span id="wiz-step-num" class="num">1</span> of 4</p>
+          <p class="label text-ink-400">Step <span id="wiz-step-num" class="num">1</span> of 3</p>
           <p class="num text-[0.75rem] text-brand-700"><span id="wiz-pct">0</span>% complete</p>
         </div>
         <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-ink-100">
@@ -76,32 +72,6 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
 
         <!-- ============ STEP 1 ============ -->
         <fieldset data-step="1">
-          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
-            Who are you planning for?
-          </legend>
-          <p class="mt-3 text-[0.9375rem] text-ink-500">This determines which framework we run.</p>
-
-          <div class="mt-8 grid gap-4 sm:grid-cols-2">
-            {
-              IDENTITY.map((o) => (
-                <label class="wiz-card">
-                  <input type="radio" name="identity" value={o.v} class="sr-only" required />
-                  <span class="wiz-card-inner">
-                    <span class="wiz-check" aria-hidden="true" />
-                    <span>
-                      <span class="block font-display text-[1.0625rem] font-bold text-ink-900">{o.t}</span>
-                      <span class="mt-2 block text-[0.875rem] leading-relaxed text-ink-500">{o.d}</span>
-                    </span>
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-          <p class="wiz-error" data-error-for="identity" hidden>Choose one to continue.</p>
-        </fieldset>
-
-        <!-- ============ STEP 2 ============ -->
-        <fieldset data-step="2" hidden>
           <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
             What are you trying to accomplish?
           </legend>
@@ -139,8 +109,8 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
           </div>
         </fieldset>
 
-        <!-- ============ STEP 3 ============ -->
-        <fieldset data-step="3" hidden>
+        <!-- ============ STEP 2 ============ -->
+        <fieldset data-step="2" hidden>
           <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
             What is creating the most pressure right now?
           </legend>
@@ -178,8 +148,8 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
           </div>
         </fieldset>
 
-        <!-- ============ STEP 4 ============ -->
-        <fieldset data-step="4" hidden>
+        <!-- ============ STEP 3 ============ -->
+        <fieldset data-step="3" hidden>
           <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
             Where should we send your profile?
           </legend>
@@ -346,7 +316,6 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
     function collect() {
       var fd = new FormData(form);
       var out = {};
-      out.identity = fd.get('identity') || '';
       out.goal = fd.get('goal') || '';
       out.timeline = fd.get('timeline') || '';
       out.concerns = fd.getAll('concerns');
@@ -370,15 +339,12 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       var d = collect();
       var ok = true;
       if (step === 1) {
-        ok = !!d.identity;
-        showError('identity', !ok);
-      } else if (step === 2) {
         ok = !!d.goal;
         showError('goal', !ok);
-      } else if (step === 3) {
+      } else if (step === 2) {
         ok = d.concerns.length > 0;
         showError('concerns', !ok);
-      } else if (step === 4) {
+      } else if (step === 3) {
         var e1 = !!d.firstName, e2 = !!d.lastName;
         var e3 = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);
         showError('firstName', !e1);
@@ -443,6 +409,7 @@ const TIMELINES = ['Within 3 months', '3–6 months', '6–12 months', 'More tha
       submitLabel.textContent = 'Starting your profile…';
 
       var payload = collect();
+      payload.identity = 'business'; // KSM works with business owners only
       payload.page = location.pathname;
       payload.referrer = document.referrer || '';
 

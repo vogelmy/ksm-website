@@ -3,7 +3,7 @@ export const SITE = {
   short: 'KSM',
   tagline: 'Business finance, clarified.',
   description:
-    'KSM helps individuals and business owners understand their complete financial position — cash flow, debt structure, credit exposure, liquidity, income and timing — and build a prioritized strategy before the next financial move.',
+    'KSM helps business owners understand their complete financial position — operating cash flow, debt structure, credit exposure, liquidity, income and timing — and build a prioritized strategy before the next financing move.',
   email: 'motti@kallusstrategicmanagement.com',
   phone: '+19549108336',
   phoneDisplay: '(954) 910-8336',
@@ -15,12 +15,24 @@ export const SITE = {
   bookingUrl:
     'https://calendly.com/mottiksm/15minutes?hide_gdpr_banner=1&hide_event_type_details=1&primary_color=2b57f0',
   locale: 'en_US',
+
+  /**
+   * Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX'. Leave empty and no
+   * tag is emitted. window.ksm.track() already forwards to gtag, so every event
+   * the site fires starts reporting the moment this is filled in.
+   */
+  ga4Id: '',
+
+  /**
+   * The token from Search Console's "HTML tag" verification method — just the
+   * content value, not the whole tag.
+   */
+  googleSiteVerification: '',
 };
 
 export const NAV = [
   { label: 'Financial Profile', href: '/financial-profile' },
-  { label: 'Individuals', href: '/individuals' },
-  { label: 'Business', href: '/business' },
+  { label: 'Who We Help', href: '/business' },
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Insights', href: '/insights' },
 ];
@@ -38,8 +50,8 @@ export const FOOTER_NAV = [
   {
     title: 'Who We Help',
     links: [
-      { label: 'Individuals & Families', href: '/individuals' },
-      { label: 'Business Owners', href: '/business' },
+      { label: 'Who we help', href: '/business' },
+      { label: 'Book a call', href: '/book' },
       { label: 'How It Works', href: '/how-it-works' },
       { label: 'About KSM', href: '/about' },
     ],
@@ -49,7 +61,6 @@ export const FOOTER_NAV = [
     links: [
       { label: 'Insights', href: '/insights' },
       { label: 'Free Profile Score assessment', href: '/assessment' },
-      { label: 'Book a call', href: '/book' },
       { label: 'Frequently Asked Questions', href: '/how-it-works#faq' },
       { label: 'Start Your Profile', href: '/start' },
       { label: 'Disclosures', href: '/disclosures' },
@@ -65,7 +76,7 @@ export const PILLARS = [
     title: 'Cash Flow',
     short: 'What is coming in, what is going out, what is fixed and what is flexible.',
     detail:
-      'Two people with identical incomes can be in completely different positions. What matters is how much of each month is already committed before a single discretionary decision gets made.',
+      'Two businesses with identical revenue can be in completely different positions. What matters is how much of each month is already committed before a single discretionary decision gets made.',
     points: [
       'Committed versus flexible outflow',
       'Timing of inflows against obligations',
@@ -125,7 +136,7 @@ export const PILLARS = [
     title: 'Income',
     short: 'Income level, stability and structure.',
     detail:
-      'How income is earned and documented can matter as much as the amount. Two identical incomes are read very differently depending on structure and consistency.',
+      'How owner income is earned and documented can matter as much as the amount. Two identical incomes are read very differently depending on structure and consistency.',
     points: [
       'Stability and documentation',
       'Concentration of sources',
@@ -208,7 +219,7 @@ export const FAQ = [
   },
   {
     q: 'What information do I need to provide?',
-    a: 'The initial profile request asks only who you are, what you are trying to accomplish, and how to reach you. Financial detail is gathered later in the engagement through a structured process — never through the website form.',
+    a: 'The initial profile request asks only what the business is trying to accomplish and how to reach you. Financial detail is gathered later in the engagement through a structured process — never through the website form.',
   },
   {
     q: 'How long does a Financial Profile Review take?',
@@ -220,11 +231,11 @@ export const FAQ = [
   },
   {
     q: 'Who is KSM best suited for?',
-    a: 'Individuals and business owners with more than one moving part — multiple obligations, a business and personal position that interact, or a significant financial objective on the horizon. If your finances fit comfortably on one page, you probably do not need us.',
+    a: 'Business owners with more than one moving part — multiple obligations, personal guarantees sitting behind business debt, or a financing objective on the horizon. If the business finances fit comfortably on one page, you probably do not need us.',
   },
   {
-    q: 'Do you work with businesses?',
-    a: 'Yes. Business owners are a core part of the practice, particularly where personal guarantees, owner compensation and business obligations are entangled with the personal position.',
+    q: 'Does KSM work with individuals who do not own a business?',
+    a: 'No. KSM works with business owners and the entities they run. An owner\u2019s personal position is examined where it interacts with the business \u2014 guarantees, owner compensation, blended credit \u2014 because lenders look at both, but the engagement is built around the business.',
   },
   {
     q: 'Is my information confidential?',

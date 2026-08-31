@@ -4,12 +4,8 @@ import { SECTIONS, TOTAL_QUESTIONS } from '../data/assessment';
 import { BANDS, COMPONENT_STATUS, COMPONENTS, STRONG_INSIGHT } from '../data/profile';
 import { SITE } from '../data/site';
 
-const IDENTITY = [
-  { v: 'individual', t: 'Individual or family', d: 'A personal position — mortgage, debt, credit, income, liquidity.' },
-  { v: 'business', t: 'Business owner', d: 'Business and personal together — cash flow, guarantees, working capital.' },
-];
 
-const TOTAL_STEPS = SECTIONS.length + 2; // identity + six components + contact
+const TOTAL_STEPS = SECTIONS.length + 1; // six components + contact
 const config = {
   bands: BANDS,
   status: COMPONENT_STATUS,
@@ -88,34 +84,10 @@ const DASH = SEG - 5;
           <input id="a-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
         </div>
 
-        <!-- identity -->
-        <fieldset data-astep="1">
-          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
-            Who is this assessment for?
-          </legend>
-          <div class="mt-8 grid gap-4 sm:grid-cols-2">
-            {
-              IDENTITY.map((o) => (
-                <label class="wiz-card">
-                  <input type="radio" name="identity" value={o.v} class="sr-only" />
-                  <span class="wiz-card-inner">
-                    <span class="wiz-check" aria-hidden="true" />
-                    <span>
-                      <span class="block font-display text-[1.0625rem] font-bold text-ink-900">{o.t}</span>
-                      <span class="mt-2 block text-[0.875rem] leading-relaxed text-ink-500">{o.d}</span>
-                    </span>
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-          <p class="wiz-error" data-error-for="identity" hidden>Choose one to continue.</p>
-        </fieldset>
-
         <!-- the six components -->
         {
           SECTIONS.map((section, si) => (
-            <fieldset data-astep={si + 2} hidden>
+            <fieldset data-astep={si + 1} hidden={si !== 0}>
               <p class="label text-brand-700">Part {String(si + 1).padStart(2, '0')} of 06</p>
               <legend class="mt-3 font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
                 {section.title}
@@ -487,7 +459,7 @@ const DASH = SEG - 5;
       });
 
       var payload = {
-        identity: (d.get('identity') || '').toString(),
+        identity: 'business', // KSM works with business owners only
         firstName: (d.get('firstName') || '').toString().trim(),
         lastName: (d.get('lastName') || '').toString().trim(),
         email: (d.get('email') || '').toString().trim(),

@@ -6,6 +6,33 @@
  * no part of it can ever be served without passing the auth check.
  */
 
+import { SECTIONS } from '../src/data/assessment';
+
+/** qid -> { prompt, options } so stored weights can be shown as real answers. */
+const QUESTIONS = new Map(
+  SECTIONS.flatMap((section) =>
+    section.questions.map((q) => [q.id, { section: section.title, prompt: q.prompt, options: q.options }])
+  )
+);
+
+function answerLines(raw: string | null): [string, string, string][] {
+  if (!raw) return [];
+  let parsed: Record<string, string>;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return [];
+  }
+  const out: [string, string, string][] = [];
+  for (const [id, value] of Object.entries(parsed)) {
+    const q = QUESTIONS.get(id);
+    if (!q) continue;
+    const opt = q.options.find((o) => String(o.value) === String(value));
+    out.push([q.section, q.prompt, opt ? opt.label : String(value)]);
+  }
+  return out;
+}
+
 export interface AdminEnv {
   DB: D1Database;
   ADMIN_USER?: string;
@@ -46,6 +73,7 @@ interface AssessmentRow {
   liquidity: number;
   income: number;
   capital: number;
+  answers: string | null;
 }
 
 const COMPONENT_LABELS: Record<string, string> = {
@@ -149,7 +177,7 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
 
   const assessRes = await env.DB.prepare(
     `SELECT id, created_at, identity, first_name, last_name, email, phone,
-            score, band, weakest, cash_flow, debt, credit, liquidity, income, capital
+            score, band, weakest, cash_flow, debt, credit, liquidity, income, capital, answers
        FROM assessments
       ORDER BY created_at DESC
       LIMIT 500`
@@ -269,6 +297,17 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   h2.sec{margin:30px 0 12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);
          font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500}
   .score{font-size:20px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  tr.answers td{background:var(--cream);padding:0 14px}
+  tr.answers summary{cursor:pointer;padding:11px 0;font-size:13px;font-weight:600;color:var(--brand)}
+  ol.qa{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:9px}
+  ol.qa li{display:grid;grid-template-columns:110px 1fr 230px;gap:14px;align-items:baseline;
+           font-size:13px;padding-bottom:9px;border-bottom:1px solid #e8ebf1}
+  ol.qa li:last-child{border-bottom:0}
+  ol.qa .sec{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;
+             letter-spacing:.12em;text-transform:uppercase;color:var(--ink4)}
+  ol.qa .q{color:var(--ink6)}
+  ol.qa .a{color:var(--ink);font-weight:600}
+  @media (max-width:900px){ol.qa li{grid-template-columns:1fr}}
   .score i{font-size:11px;font-style:normal;color:var(--ink4);font-weight:600}
   @media (max-width:700px){main{padding:16px}td,th{padding:10px}}
 </style>
@@ -309,7 +348,24 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
       <td class="mono">${esc(a.liquidity)}</td>
       <td class="mono">${esc(a.income)}</td>
       <td class="mono">${esc(a.capital)}</td>
-    </tr>`
+    </tr>
+    ${
+      answerLines(a.answers).length
+        ? `<tr class="answers"><td colspan="12">
+            <details>
+              <summary>See all 12 answers from ${esc(a.first_name)} ${esc(a.last_name)}</summary>
+              <ol class="qa">
+                ${answerLines(a.answers)
+                  .map(
+                    ([sec, prompt, ans]) =>
+                      `<li><span class="sec">${esc(sec)}</span><span class="q">${esc(prompt)}</span><span class="a">${esc(ans)}</span></li>`
+                  )
+                  .join('')}
+              </ol>
+            </details>
+          </td></tr>`
+        : ''
+    }`
       )
       .join('')}
     </tbody></table>

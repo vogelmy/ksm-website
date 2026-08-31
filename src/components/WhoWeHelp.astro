@@ -1,0 +1,63 @@
+---
+/**
+ * KSM works with business owners only. This replaced an individual/business
+ * toggle — there is no personal track, so there is nothing to switch between.
+ */
+const SITUATIONS = [
+  {
+    t: 'Owner-operated, and the two sides are tangled',
+    d: 'Personal guarantees, owner draws and blended credit mean the business and personal positions move together. Lenders read both; most owners only track one.',
+  },
+  {
+    t: 'Revenue is up and the account is not',
+    d: 'Growth consumes cash before it produces it. A profitable month can still be a tight one, and more revenue is rarely the fix.',
+  },
+  {
+    t: 'Debt taken on quickly, in pieces',
+    d: 'A line here, an advance there, an equipment note. Each defensible alone; together, a payment calendar nobody designed.',
+  },
+  {
+    t: 'A renewal or maturity approaching',
+    d: 'The months before a renewal are when the profile matters most and when there is least time left to change it.',
+  },
+  {
+    t: 'Preparing to borrow or raise for growth',
+    d: 'The question is not whether capital exists. It is what the position needs to look like so the terms are worth taking.',
+  },
+  {
+    t: 'Seasonal or lumpy collections',
+    d: 'Strong months fund weak ones informally rather than deliberately, so the weak months arrive as a surprise every year.',
+  },
+];
+---
+
+<section id="audience" class="wrap mt-24 scroll-mt-24">
+  <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Who KSM works with</p>
+      <h2 class="reveal mt-6 text-[2rem] leading-tight sm:text-[2.5rem]" data-delay="60">
+        Business owners with more than one moving part.
+      </h2>
+      <p class="reveal mt-5 text-[1.0625rem] leading-relaxed text-ink-600" data-delay="120">
+        Owners who are making money but feel that debt, cash flow or financing structure is holding the
+        business back — and who want someone to look at the whole position rather than one account at a
+        time.
+      </p>
+    </div>
+
+    <a href="/business" class="btn btn-ghost reveal flex-none" data-ev="business_click" data-delay="160">
+      See the full picture <span aria-hidden="true">→</span>
+    </a>
+  </div>
+
+  <ul class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+    {
+      SITUATIONS.map((s) => (
+        <li class="bg-white p-7">
+          <h3 class="text-[1.0625rem] leading-snug">{s.t}</h3>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-600">{s.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -284,11 +284,12 @@ const CSP = [
   "frame-ancestors 'none'",
   "object-src 'none'",
   // Inline scripts are used for the wizard, nav and reveal logic.
-  "script-src 'self' 'unsafe-inline'",
+  // Cloudflare Web Analytics is injected at the edge — cookieless, no personal data.
+  "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data:",
-  "connect-src 'self'",
+  "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com",
+  "connect-src 'self' https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // Scheduling embeds on /book. Iframe only — no third-party script is loaded.
   "frame-src https://calendly.com https://*.calendly.com https://cal.com https://*.cal.com https://calendar.google.com",
 ].join('; ');
@@ -319,6 +320,11 @@ export default {
       const target = new URL(url.toString());
       target.hostname = url.hostname.slice(4);
       return Response.redirect(target.toString(), 301);
+    }
+
+    // The personal track was retired; keep any shared link working.
+    if (url.pathname === '/individuals' || url.pathname === '/individuals/') {
+      return Response.redirect(new URL('/business', url).toString(), 301);
     }
 
     if (url.pathname === '/api/lead') {
