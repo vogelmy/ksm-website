@@ -7,8 +7,9 @@
  */
 
 import { BANDS, COMPONENT_STATUS } from '../src/data/profile';
+import { upsertSheetLead, type SheetsEnv } from './sheets';
 
-export interface AssessmentEnv {
+export interface AssessmentEnv extends SheetsEnv {
   DB: D1Database;
   LEAD_TO: string;
   LEAD_BCC?: string;
@@ -175,6 +176,20 @@ export async function handleAssessment(
       weakest: weakestKey,
       values,
       country,
+    })
+  );
+
+  ctx.waitUntil(
+    upsertSheetLead(env, {
+      name: `${contact.firstName} ${contact.lastName}`,
+      source: 'Website assessment',
+      stage: '1. New lead',
+      phone: contact.phone,
+      email: contact.email,
+      score,
+      note: `Assessment ${score}/10 (${band.label}), weakest ${LABELS[weakestKey] || weakestKey}. Answers in /admin.`,
+      nextAction: 'First contact',
+      dueDays: 1,
     })
   );
 

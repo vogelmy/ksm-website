@@ -11,6 +11,8 @@
 
 import { handleAdmin } from './admin';
 import { handleAssessment } from './assessment';
+import { handleIntake } from './intake';
+import { upsertSheetLead } from './sheets';
 
 interface Env {
   ASSETS: Fetcher;
@@ -24,6 +26,9 @@ interface Env {
   BREVO_API_KEY?: string;
   LEAD_FROM?: string;
   ADMIN_PASSWORD?: string;
+  /** Google service-account JSON key (secret) + pipeline sheet id (var) */
+  GOOGLE_SA_KEY?: string;
+  SHEET_ID?: string;
 }
 
 interface LeadPayload {
@@ -165,6 +170,18 @@ async function handleLead(request: Request, env: Env, ctx: ExecutionContext): Pr
 
   // Notification is best-effort and must not delay or fail the response.
   ctx.waitUntil(notify(env, { ...lead, id, createdAt, country }));
+  ctx.waitUntil(
+    upsertSheetLead(env, {
+      name: `${lead.firstName} ${lead.lastName}`,
+      source: 'Website form',
+      stage: '1. New lead',
+      phone: lead.phone,
+      email: lead.email,
+      note: `Profile request via /start. Goal: ${lead.goal || '—'}. Timeline: ${lead.timeline || '—'}.${lead.concerns.length ? ' Concerns: ' + lead.concerns.join(', ') + '.' : ''}${lead.notes ? ' Notes: ' + lead.notes.slice(0, 300) : ''}`,
+      nextAction: 'First contact',
+      dueDays: 1,
+    })
+  );
 
   return json({ ok: true, id });
 }
@@ -333,6 +350,10 @@ export default {
 
     if (url.pathname === '/api/assessment') {
       return handleAssessment(request, env, ctx);
+    }
+
+    if (url.pathname === '/api/intake') {
+      return handleIntake(request, env, ctx);
     }
 
     if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {

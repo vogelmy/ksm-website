@@ -7,6 +7,7 @@
  */
 
 import { SECTIONS } from '../src/data/assessment';
+import { SECTIONS as INTAKE_SECTIONS, DEBT_COLUMNS } from '../src/data/intake';
 
 /** qid -> { prompt, options } so stored weights can be shown as real answers. */
 const QUESTIONS = new Map(
@@ -74,6 +75,27 @@ interface AssessmentRow {
   income: number;
   capital: number;
   answers: string | null;
+}
+
+interface IntakeRow {
+  id: string;
+  created_at: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string | null;
+  business: string | null;
+  answers: string;
+  debts: string | null;
+}
+
+function parseJson<T>(raw: string | null, fallback: T): T {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
 }
 
 const COMPONENT_LABELS: Record<string, string> = {
@@ -184,6 +206,14 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   ).all<AssessmentRow>();
   const assessments = assessRes.results ?? [];
 
+  const intakeRes = await env.DB.prepare(
+    `SELECT id, created_at, first_name, last_name, email, phone, business, answers, debts
+       FROM intakes
+      ORDER BY created_at DESC
+      LIMIT 200`
+  ).all<IntakeRow>();
+  const intakes = intakeRes.results ?? [];
+
   if (url.pathname === '/admin/export.csv') {
     const headers = [
       'received',
@@ -245,6 +275,7 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
     ['Business owners', business],
     ['Individuals', rows.length - business],
     ['Assessments', assessments.length],
+    ['Intakes', intakes.length],
   ];
 
   const body = `<!doctype html>
@@ -309,6 +340,20 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   ol.qa .a{color:var(--ink);font-weight:600}
   @media (max-width:900px){ol.qa li{grid-template-columns:1fr}}
   .score i{font-size:11px;font-style:normal;color:var(--ink4);font-weight:600}
+  .intake{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .intake summary{cursor:pointer;padding:16px 18px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;list-style:none}
+  .intake summary::-webkit-details-marker{display:none}
+  .intake summary .who{font-size:15px}
+  .intake summary .mono{white-space:normal}
+  .intake .body{padding:4px 18px 18px;border-top:1px solid var(--line)}
+  .intake h3{margin:18px 0 8px;font:500 10px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4)}
+  .intake dl{margin:0;display:grid;grid-template-columns:minmax(200px,38%) 1fr;gap:6px 16px;font-size:13.5px}
+  .intake dt{color:var(--ink6)}
+  .intake dd{margin:0;color:var(--ink);font-weight:500;white-space:pre-wrap}
+  .intake .fork{display:inline-block;margin-left:6px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#A8481B;font-weight:600}
+  .intake table{font-size:12.5px}
+  .intake th,.intake td{padding:7px 8px}
+  @media (max-width:700px){.intake dl{grid-template-columns:1fr}}
   @media (max-width:700px){main{padding:16px}td,th{padding:10px}}
 </style>
 </head><body>
@@ -320,6 +365,40 @@ export async function handleAdmin(request: Request, env: AdminEnv, url: URL): Pr
   <div class="stats">
     ${stats.map(([l, v]) => `<div class="stat"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('')}
   </div>
+
+  ${
+    intakes.length
+      ? `<h2 class="sec" id="intakes">Client intakes</h2>
+  ${intakes
+    .map((it) => {
+      const answers = parseJson<Record<string, string>>(it.answers, {});
+      const debts = parseJson<Record<string, string>[]>(it.debts, []);
+      const sections = INTAKE_SECTIONS.map((s) => {
+        const qs = s.questions.filter((q) => answers[q.id]);
+        if (!qs.length) return '';
+        return `<h3>${esc(s.title)}</h3><dl>${qs
+          .map((q) => `<dt>${esc(q.label)}${q.fork ? '<span class="fork">forks</span>' : ''}</dt><dd>${esc(answers[q.id])}</dd>`)
+          .join('')}</dl>`;
+      }).join('');
+      const debtTable = debts.length
+        ? `<h3>Accounts (${debts.length})</h3><div style="overflow:auto"><table><thead><tr>${DEBT_COLUMNS.map((c) => `<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${debts
+            .map((r) => `<tr>${DEBT_COLUMNS.map((c) => `<td>${esc(r[c.id] || '—')}</td>`).join('')}</tr>`)
+            .join('')}</tbody></table></div>`
+        : '';
+      return `<details class="intake">
+        <summary>
+          <span class="who">${esc(it.first_name)} ${esc(it.last_name)}</span>
+          <span class="mono">${esc(it.business || '')}</span>
+          <span class="mono">${esc(fmtDate(it.created_at))}</span>
+          <span class="mono">${Object.keys(answers).length} answers · ${debts.length} accounts</span>
+          <a href="mailto:${esc(it.email)}">${esc(it.email)}</a>${it.phone ? `<span class="mono">${esc(it.phone)}</span>` : ''}
+        </summary>
+        <div class="body">${sections}${debtTable}</div>
+      </details>`;
+    })
+    .join('')}`
+      : ''
+  }
 
   ${
     assessments.length

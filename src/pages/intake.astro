@@ -1,0 +1,402 @@
+---
+import Base from '../layouts/Base.astro';
+import { SECTIONS, DEBT_COLUMNS, DOCUMENTS } from '../data/intake';
+import { SITE } from '../data/site';
+
+const TOTAL_STEPS = SECTIONS.length + 1; // contact + eight sections
+const FORKS = SECTIONS.flatMap((s) => s.questions.filter((q) => q.fork).map((q) => q.id));
+---
+
+<Base
+  title="Client intake — Kallus Strategic Management"
+  description="The KSM financial position questionnaire for engaged clients."
+  path="/intake"
+  hideMobileCta={true}
+  noindex={true}
+>
+  <!-- ============ INTRO ============ -->
+  <section id="intro" class="relative overflow-hidden border-b border-line bg-white">
+    <div class="grid-bg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div class="wrap relative py-14 md:py-20">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Client intake</p>
+        <h1 class="mt-6 text-[2rem] leading-[1.08] sm:text-[2.75rem]">
+          Your financial position, in your own words.
+        </h1>
+        <p class="mt-6 text-[1.125rem] leading-relaxed text-ink-600">
+          This is the questionnaire we build your profile from. It is organised around the six parts of
+          a financial position and takes twenty to thirty minutes. Rough numbers are fine — we verify
+          from documents afterwards. Your answers save on this device as you go, so you can stop and
+          come back.
+        </p>
+
+        <ul class="mt-9 grid gap-4 sm:grid-cols-3">
+          {
+            [
+              ['Saves as you go', 'Close the tab and pick up where you left off on the same device.'],
+              ['Rough is fine', 'Estimates now, statements later. We reconcile the two.'],
+              ['Confidential', 'Used only to prepare your profile. Never sold or shared.'],
+            ].map(([t, d]) => (
+              <li class="rounded-xl border border-line bg-white p-4">
+                <p class="label text-brand-700">{t}</p>
+                <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-600">{d}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <button type="button" id="i-begin" class="btn btn-primary mt-9 w-full sm:w-auto">
+          Begin <span aria-hidden="true">→</span>
+        </button>
+        <p id="i-resume" class="mt-4 text-[0.875rem] text-ink-500" hidden>
+          A saved draft was found on this device — you will continue from where you stopped.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <section id="form-wrap" class="bg-ink-50 py-12 md:py-16" hidden>
+    <div class="wrap">
+      <form id="intake" class="mx-auto max-w-3xl rounded-2xl border border-line bg-white p-6 sm:p-10" novalidate>
+        <div class="flex items-center justify-between gap-4">
+          <p class="label text-ink-400">Step <span id="i-step-num" class="num">1</span> of {TOTAL_STEPS}</p>
+          <p id="i-step-title" class="label text-brand-700"></p>
+        </div>
+        <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-ink-100" aria-hidden="true">
+          <div id="i-bar" class="h-full rounded-full bg-brand-600 transition-[width] duration-300" style="width: 0%"></div>
+        </div>
+
+        <input type="text" name="company_website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+        <!-- ============ STEP 1: CONTACT ============ -->
+        <fieldset data-step="1" data-title="About you" class="mt-8">
+          <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+            Let's start with who you are.
+          </legend>
+          <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="firstName" class="wiz-label">First name</label>
+              <input id="firstName" name="firstName" type="text" autocomplete="given-name" maxlength="60" class="wiz-input" data-required />
+              <p class="wiz-error" data-error-for="firstName" hidden>Please enter your first name.</p>
+            </div>
+            <div>
+              <label for="lastName" class="wiz-label">Last name</label>
+              <input id="lastName" name="lastName" type="text" autocomplete="family-name" maxlength="60" class="wiz-input" data-required />
+              <p class="wiz-error" data-error-for="lastName" hidden>Please enter your last name.</p>
+            </div>
+            <div>
+              <label for="email" class="wiz-label">Email</label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" class="wiz-input" data-required data-email />
+              <p class="wiz-error" data-error-for="email" hidden>Please enter a valid email address.</p>
+            </div>
+            <div>
+              <label for="phone" class="wiz-label">Phone</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" class="wiz-input" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ============ SECTION STEPS ============ -->
+        {
+          SECTIONS.map((s, i) => (
+            <fieldset data-step={i + 2} data-title={s.title} class="mt-8" hidden>
+              <legend class="font-display text-[1.5rem] font-extrabold leading-snug text-ink-900 sm:text-[1.875rem]">
+                {s.title}
+              </legend>
+              <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-ink-500">{s.why}</p>
+
+              <div class="mt-8 grid gap-6">
+                {s.questions.map((q) => (
+                  <div class:list={['q', q.type === 'textarea' || q.type === 'yesno' ? 'q-wide' : '']}>
+                    <label for={q.id} id={`${q.id}-label`} class="wiz-label">
+                      {q.label}
+                      {q.required && <span class="ml-1 font-normal text-ink-400">(required)</span>}
+                    </label>
+                    {q.help && <p class="-mt-1 mb-2 text-[0.8125rem] leading-relaxed text-ink-500">{q.help}</p>}
+
+                    {q.type === 'text' && (
+                      <input id={q.id} name={q.id} type="text" maxlength="300" class="wiz-input" placeholder={q.placeholder} data-required={q.required || undefined} />
+                    )}
+                    {q.type === 'number' && (
+                      <input id={q.id} name={q.id} type="text" inputmode="numeric" maxlength="12" class="wiz-input max-w-[14rem]" placeholder={q.placeholder} data-required={q.required || undefined} />
+                    )}
+                    {q.type === 'money' && (
+                      <div class="relative max-w-[16rem]">
+                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" aria-hidden="true">$</span>
+                        <input id={q.id} name={q.id} type="text" inputmode="decimal" maxlength="14" class="wiz-input pl-8" placeholder={q.placeholder || '0'} data-required={q.required || undefined} />
+                      </div>
+                    )}
+                    {q.type === 'textarea' && (
+                      <textarea id={q.id} name={q.id} rows="3" maxlength="1500" class="wiz-input" placeholder={q.placeholder} data-required={q.required || undefined} />
+                    )}
+                    {q.type === 'select' && (
+                      <select id={q.id} name={q.id} class="wiz-input" data-required={q.required || undefined}>
+                        <option value="">Select…</option>
+                        {q.options?.map((o) => <option value={o}>{o}</option>)}
+                      </select>
+                    )}
+                    {q.type === 'yesno' && (
+                      <div class="flex flex-wrap gap-2" role="radiogroup" aria-labelledby={`${q.id}-label`} id={q.id} data-required={q.required || undefined}>
+                        {['Yes', 'No', 'Not sure'].map((o) => (
+                          <label class="wiz-pill">
+                            <input type="radio" name={q.id} value={o} class="sr-only" />
+                            <span>{o}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    <p class="wiz-error" data-error-for={q.id} hidden>This one we need.</p>
+                  </div>
+                ))}
+              </div>
+
+              {s.key === 'debt' && (
+                <div class="mt-10 border-t border-line pt-8">
+                  <h3 class="font-display text-[1.125rem] font-bold text-ink-900">Every obligation, one row each</h3>
+                  <p class="mt-2 text-[0.9375rem] text-ink-500">
+                    Business loans, cards, student loans, cars, mortgage, anything co-signed. Add as many rows as you need.
+                  </p>
+                  <div id="debts" class="mt-6 grid gap-4"></div>
+                  <template id="debt-row-tpl">
+                    <div class="debt-row rounded-xl border border-line bg-ink-50/60 p-4">
+                      <div class="flex items-center justify-between">
+                        <p class="label text-ink-400">Account <span class="debt-n num"></span></p>
+                        <button type="button" class="debt-remove text-[0.8125rem] font-medium text-ink-500 underline underline-offset-2 hover:text-ink-900">Remove</button>
+                      </div>
+                      <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                        {DEBT_COLUMNS.map((c) => (
+                          <div>
+                            <label class="wiz-label text-[0.8125rem]">{c.label}</label>
+                            <input type="text" data-col={c.id} maxlength="80" class="wiz-input py-2.5 text-[0.9375rem]" placeholder={c.placeholder} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </template>
+                  <button type="button" id="debt-add" class="btn btn-ghost btn-sm mt-4">+ Add an account</button>
+                </div>
+              )}
+            </fieldset>
+          ))
+        }
+
+        <p id="i-submit-error" class="mt-6 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.875rem] text-ink-800" hidden></p>
+
+        <p class="mt-8 text-[0.8125rem] leading-relaxed text-ink-500" data-step-note>
+          Answers are used only to prepare your financial profile and are covered by your engagement
+          agreement. KSM is not a lender, loan broker, credit repair organization or debt settlement
+          company and does not guarantee any financing outcome.
+        </p>
+
+        <div class="mt-10 flex flex-col-reverse gap-3 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <button type="button" id="i-back" class="btn btn-ghost w-full sm:w-auto" hidden>
+            <span aria-hidden="true">←</span> Back
+          </button>
+          <div class="w-full sm:ml-auto sm:w-auto">
+            <button type="button" id="i-next" class="btn btn-primary w-full sm:w-auto">
+              Continue <span aria-hidden="true">→</span>
+            </button>
+            <button type="submit" id="i-submit" class="btn btn-primary w-full sm:w-auto" hidden>
+              <span id="i-submit-label">Send to KSM</span> <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ DONE ============ -->
+  <section id="done" class="bg-white py-14 md:py-20" hidden>
+    <div class="wrap">
+      <div class="mx-auto max-w-2xl">
+        <p class="eyebrow">Received</p>
+        <h2 class="mt-6 text-[2rem] leading-[1.08] sm:text-[2.5rem]">Thank you. One more step.</h2>
+        <p class="mt-6 text-[1.0625rem] leading-relaxed text-ink-600">
+          Your answers are with us. Documents let us verify the position the way a lender would — please
+          email the following to <a href={`mailto:${SITE.email}`} class="font-medium text-brand-700 underline underline-offset-2">{SITE.email}</a>,
+          or reply to the confirmation you will receive.
+        </p>
+        <ul class="mt-8 grid gap-2">
+          {
+            DOCUMENTS.map(([t, d]) => (
+              <li class="flex gap-3 rounded-xl border border-line bg-white px-4 py-3">
+                <span class="mt-1 inline-block h-4 w-4 flex-none rounded border-[1.5px] border-ink-300" aria-hidden="true" />
+                <span>
+                  <span class="text-[0.9375rem] font-medium text-ink-900">{t}</span>
+                  {d && <span class="block text-[0.8125rem] text-ink-500">{d}</span>}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-8 text-[0.875rem] text-ink-500">
+          Motti will be in touch once the documents are in. If anything is hard to get, say so — partial is
+          better than delayed.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="intake-config" set:html={JSON.stringify({ total: TOTAL_STEPS, forks: FORKS })} />
+
+  <script is:inline>
+    (function () {
+      var cfg = JSON.parse(document.getElementById('intake-config').textContent);
+      var KEY = 'ksm-intake-draft';
+      var form = document.getElementById('intake');
+      var intro = document.getElementById('intro');
+      var wrap = document.getElementById('form-wrap');
+      var done = document.getElementById('done');
+      var steps = Array.prototype.slice.call(form.querySelectorAll('fieldset[data-step]'));
+      var back = document.getElementById('i-back');
+      var next = document.getElementById('i-next');
+      var submit = document.getElementById('i-submit');
+      var submitLabel = document.getElementById('i-submit-label');
+      var err = document.getElementById('i-submit-error');
+      var bar = document.getElementById('i-bar');
+      var num = document.getElementById('i-step-num');
+      var title = document.getElementById('i-step-title');
+      var debts = document.getElementById('debts');
+      var tpl = document.getElementById('debt-row-tpl');
+      var current = 1;
+
+      // ---- draft --------------------------------------------------------
+      function readDraft() {
+        try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; }
+      }
+      function collect() {
+        var data = { step: current, fields: {}, debts: [] };
+        Array.prototype.forEach.call(form.elements, function (el) {
+          if (!el.name || el.name === 'company_website') return;
+          if (el.type === 'radio') { if (el.checked) data.fields[el.name] = el.value; return; }
+          if (el.closest('.debt-row')) return;
+          data.fields[el.name] = el.value;
+        });
+        Array.prototype.forEach.call(debts.querySelectorAll('.debt-row'), function (row) {
+          var r = {};
+          Array.prototype.forEach.call(row.querySelectorAll('[data-col]'), function (i) { r[i.getAttribute('data-col')] = i.value.trim(); });
+          if (Object.keys(r).some(function (k) { return r[k]; })) data.debts.push(r);
+        });
+        return data;
+      }
+      function save() { try { localStorage.setItem(KEY, JSON.stringify(collect())); } catch (e) {} }
+      function restore(d) {
+        Object.keys(d.fields || {}).forEach(function (k) {
+          var els = form.querySelectorAll('[name="' + k + '"]');
+          Array.prototype.forEach.call(els, function (el) {
+            if (el.type === 'radio') el.checked = el.value === d.fields[k];
+            else el.value = d.fields[k];
+          });
+        });
+        (d.debts || []).forEach(function (r) { addDebt(r); });
+        if (d.step) current = Math.min(Math.max(1, d.step), cfg.total);
+      }
+
+      // ---- debts --------------------------------------------------------
+      function addDebt(values) {
+        var node = tpl.content.firstElementChild.cloneNode(true);
+        if (values) Array.prototype.forEach.call(node.querySelectorAll('[data-col]'), function (i) { i.value = values[i.getAttribute('data-col')] || ''; });
+        node.querySelector('.debt-remove').addEventListener('click', function () { node.remove(); renumber(); save(); });
+        debts.appendChild(node);
+        renumber();
+      }
+      function renumber() {
+        Array.prototype.forEach.call(debts.querySelectorAll('.debt-n'), function (n, i) { n.textContent = i + 1; });
+      }
+      document.getElementById('debt-add').addEventListener('click', function () { addDebt(); });
+
+      // ---- navigation ---------------------------------------------------
+      function show(n) {
+        current = n;
+        steps.forEach(function (fs) { fs.hidden = Number(fs.getAttribute('data-step')) !== n; });
+        var fs = steps[n - 1];
+        num.textContent = n;
+        title.textContent = fs.getAttribute('data-title') || '';
+        bar.style.width = Math.round(((n - 1) / cfg.total) * 100) + '%';
+        back.hidden = n === 1;
+        next.hidden = n === cfg.total;
+        submit.hidden = n !== cfg.total;
+        err.hidden = true;
+        if (fs.contains(debts) && !debts.children.length) { addDebt(); addDebt(); }
+        save();
+        var top = form.getBoundingClientRect().top + window.scrollY - 24;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+      function setError(id, on) {
+        var msg = form.querySelector('[data-error-for="' + id + '"]');
+        var el = document.getElementById(id);
+        if (msg) msg.hidden = !on;
+        if (el && el.setAttribute) el.setAttribute('aria-invalid', on ? 'true' : 'false');
+      }
+      function validate(n) {
+        var fs = steps[n - 1];
+        var ok = true;
+        Array.prototype.forEach.call(fs.querySelectorAll('[data-required]'), function (el) {
+          var id = el.id || el.name;
+          var val;
+          if (el.getAttribute('role') === 'radiogroup') {
+            var checked = el.querySelector('input:checked');
+            val = checked ? checked.value : '';
+          } else val = (el.value || '').trim();
+          var bad = !val || (el.hasAttribute('data-email') && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val));
+          setError(id, bad);
+          if (bad) ok = false;
+        });
+        if (!ok) {
+          var first = fs.querySelector('[aria-invalid="true"]');
+          if (first && first.focus) first.focus();
+        }
+        return ok;
+      }
+      next.addEventListener('click', function () { if (validate(current)) show(current + 1); });
+      back.addEventListener('click', function () { show(current - 1); });
+      form.addEventListener('input', save);
+      form.addEventListener('change', save);
+
+      // ---- begin --------------------------------------------------------
+      var draft = readDraft();
+      if (draft && draft.fields && Object.keys(draft.fields).some(function (k) { return draft.fields[k]; })) {
+        document.getElementById('i-resume').hidden = false;
+      }
+      document.getElementById('i-begin').addEventListener('click', function () {
+        if (draft) restore(draft);
+        intro.hidden = true;
+        wrap.hidden = false;
+        show(current);
+        if (window.ksm) window.ksm.track('intake_begin');
+      });
+
+      // ---- submit -------------------------------------------------------
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!validate(current)) return;
+        var data = collect();
+        var payload = {
+          firstName: data.fields.firstName, lastName: data.fields.lastName,
+          email: data.fields.email, phone: data.fields.phone,
+          company_website: form.elements.company_website.value,
+          answers: {}, debts: data.debts, referrer: document.referrer || ''
+        };
+        Object.keys(data.fields).forEach(function (k) {
+          if (['firstName', 'lastName', 'email', 'phone'].indexOf(k) === -1 && data.fields[k]) payload.answers[k] = data.fields[k];
+        });
+        submit.disabled = true; submitLabel.textContent = 'Sending…'; err.hidden = true;
+        fetch('/api/intake', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.body.ok) throw new Error(res.body && res.body.error ? res.body.error : 'Something went wrong.');
+            try { localStorage.removeItem(KEY); } catch (e) {}
+            wrap.hidden = true; done.hidden = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.ksm) window.ksm.track('intake_submit');
+          })
+          .catch(function (ex) {
+            err.textContent = ex.message + ' Your answers are still saved on this device.';
+            err.hidden = false;
+            submit.disabled = false; submitLabel.textContent = 'Send to KSM';
+          });
+      });
+    })();
+  </script>
+</Base>

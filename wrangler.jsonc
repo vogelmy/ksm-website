@@ -23,7 +23,8 @@
     "LEAD_BCC": "mottikallus@gmail.com,tzviafischer@gmail.com,moishyv@gmail.com",
     "LEAD_FROM_NAME": "KSM Website",
     "SITE_NAME": "Kallus Strategic Management",
-    "ADMIN_USER": "ksm"
+    "ADMIN_USER": "ksm",
+    "SHEET_ID": "1rJ3CFQDBTfqZ7lI9wbtQmk08VxD4lwLv3kTJXUeD428"
   },
   "d1_databases": [
     {
