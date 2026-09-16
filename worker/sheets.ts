@@ -81,8 +81,14 @@ async function accessToken(keyJson: string): Promise<string> {
   return ((await res.json()) as { access_token: string }).access_token;
 }
 
-const fmtDate = (d: Date): string =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/New_York' });
+// Hand-rolled so Sheets always parses it: Intl gives "Sept" for September, which Sheets rejects.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fmtDate = (d: Date): string => {
+  const ny = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  return `${ny.getDate()} ${MONTHS[ny.getMonth()]} ${ny.getFullYear()}`;
+};
+// Leading apostrophe keeps phone numbers as text under USER_ENTERED ("000" would become 0).
+const asText = (v: string): string => (v && /^[\d+\s()-]+$/.test(v) ? `'${v}` : v);
 
 /** Add or update the pipeline row for this email. */
 export async function upsertSheetLead(env: SheetsEnv, lead: SheetLead): Promise<void> {
@@ -123,7 +129,7 @@ export async function upsertSheetLead(env: SheetsEnv, lead: SheetLead): Promise<
       data.push({ range: `${TAB}!N${sheetRow}`, values: [[notes.slice(0, 4000)]] });
       if (lead.score != null && lead.score !== '') data.push({ range: `${TAB}!H${sheetRow}`, values: [[String(lead.score)]] });
       if (lead.business && !(existing[1] || '').trim()) data.push({ range: `${TAB}!B${sheetRow}`, values: [[lead.business]] });
-      if (lead.phone && !(existing[5] || '').trim()) data.push({ range: `${TAB}!F${sheetRow}`, values: [[lead.phone]] });
+      if (lead.phone && !(existing[5] || '').trim()) data.push({ range: `${TAB}!F${sheetRow}`, values: [[asText(lead.phone)]] });
       if (lead.nextAction) {
         data.push({ range: `${TAB}!K${sheetRow}`, values: [[lead.nextAction]] });
         if (due) data.push({ range: `${TAB}!L${sheetRow}`, values: [[due]] });
@@ -134,7 +140,7 @@ export async function upsertSheetLead(env: SheetsEnv, lead: SheetLead): Promise<
         range: `${TAB}!A${sheetRow}:L${sheetRow}`,
         values: [[
           lead.name, lead.business || '', lead.source, lead.stage, 'Motti',
-          lead.phone || '', lead.email, lead.score != null ? String(lead.score) : '',
+          asText(lead.phone || ''), lead.email, lead.score != null ? String(lead.score) : '',
           dateStr, dateStr, lead.nextAction || '', due,
         ]],
       });

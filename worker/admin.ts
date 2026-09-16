@@ -113,7 +113,7 @@ const esc = (v: unknown): string =>
   );
 
 /** Length-independent comparison so a wrong password leaks no timing signal. */
-function safeEqual(a: string, b: string): boolean {
+export function safeEqual(a: string, b: string): boolean {
   const enc = new TextEncoder();
   const x = enc.encode(a);
   const y = enc.encode(b);

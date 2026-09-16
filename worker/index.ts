@@ -13,6 +13,7 @@ import { handleAdmin } from './admin';
 import { handleAssessment } from './assessment';
 import { handleIntake } from './intake';
 import { upsertSheetLead } from './sheets';
+import { handleIntakeGate, intakeUnlocked } from './gate';
 
 interface Env {
   ASSETS: Fetcher;
@@ -29,6 +30,8 @@ interface Env {
   /** Google service-account JSON key (secret) + pipeline sheet id (var) */
   GOOGLE_SA_KEY?: string;
   SHEET_ID?: string;
+  /** Access code for /intake (secret) */
+  INTAKE_CODE?: string;
 }
 
 interface LeadPayload {
@@ -353,7 +356,21 @@ export default {
     }
 
     if (url.pathname === '/api/intake') {
+      if (!(await intakeUnlocked(request, env))) {
+        return json({ ok: false, error: 'Please reload the page and enter the access code again.' }, 401);
+      }
       return handleIntake(request, env, ctx);
+    }
+
+    // Client questionnaire sits behind an access code and is never indexed.
+    if (url.pathname === '/intake' || url.pathname === '/intake/') {
+      const gate = await handleIntakeGate(request, env);
+      if (gate) return gate;
+      const page = withSecurityHeaders(await env.ASSETS.fetch(request), url);
+      const h = new Headers(page.headers);
+      h.set('x-robots-tag', 'noindex, nofollow');
+      h.set('cache-control', 'private, no-store');
+      return new Response(page.body, { status: page.status, headers: h });
     }
 
     if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {
